@@ -1,4 +1,6 @@
 import type { MetaFunction } from "@netlify/remix-runtime";
+import { useTranslation } from "react-i18next";
+import { redirect } from "~/utils/data";
 
 export const meta: MetaFunction = () => {
   return [
@@ -8,12 +10,17 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+export function loader() {
+  return redirect("/events");
+}
+
 export default function Index() {
+  const { t } = useTranslation();
   return (
     <div className="flex h-screen v-screem" style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
       <div className="m-auto text-center flex flex-col gap-2">
-      <h1 className="text-white text-3xl">Worldwide salsa, bachata and kizomba events!</h1>
-      <h2 className="text-gray-400 text-2xl m-auto">Coming soon...</h2>
+      <h1 className="text-white text-3xl">{t("worldWideSbkEvents")}</h1>
+      <h2 className="text-gray-400 text-2xl m-auto">{t("comingSoon")}</h2>
       </div>
     </div>
   );

@@ -1,31 +1,73 @@
+import { LinksFunction } from "@netlify/remix-runtime";
+import { LoaderFunctionArgs, json } from "@remix-run/node";
 import {
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData, useRouteError,
+  useRouteLoaderData
 } from "@remix-run/react";
-import { LinksFunction } from "@netlify/remix-runtime";
-import stylesheet from "~/styles/tailwind.css?url";
+import { useChangeLanguage } from "remix-i18next/react";
 
-export const links: LinksFunction = () => [
+import i18nServer, { localeCookie } from "./modules/i18n.server";
+
+import stylesheet from "~/styles/tailwind.css?url";
+import { useEffect } from "react";
+
+export const handle = { i18n: ["translation"] };
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const locale = await i18nServer.getLocale(request);
+  return json(
+    { locale },
+    { headers: { "Set-Cookie": await localeCookie.serialize(locale) } }
+  );
+}
+export const links: LinksFunction = () => {return [
   { rel: "stylesheet", href: stylesheet },
-];
+]};
+
+export function Layout({ children }: { children: React.ReactNode }) {
+  const loaderData = useRouteLoaderData<typeof loader>("root");
+
+  return (
+    <html lang={loaderData?.locale ?? "en"}>
+    <head>
+      <meta charSet="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <Meta />
+      <Links />
+    </head>
+    <body>
+    {children}
+    <ScrollRestoration />
+    <Scripts />
+    </body>
+    </html>
+  );
+}
 
 export default function App() {
+  const { locale } = useLoaderData<typeof loader>();
+  useChangeLanguage(locale);
+  return <Outlet />;
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  // When NODE_ENV=production:
+  // error.message = "Unexpected Server Error"
+  // error.stack = undefined
+  useEffect(() => {
+    console.log("error", error);
+  }, [error]);
+
   return (
-    <html lang="en">
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <Meta />
-        <Links />
-      </head>
-      <body className="bg-black">
-        <Outlet />
-        <ScrollRestoration />
-        <Scripts />
-      </body>
-    </html>
+    <div>
+      <h1>Unexpected Error</h1>
+      <p>{error.message}</p>
+    </div>
   );
 }
