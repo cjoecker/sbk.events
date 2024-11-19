@@ -60,7 +60,6 @@ async function handleBotRequest(
 ) {
   return new Promise((resolve, reject) => {
     let shellRendered = false;
-    console.log("Server", Server);
     const { pipe, abort } = renderToPipeableStream(
       <I18nextProvider i18n={i18next}>
         <RemixServer
