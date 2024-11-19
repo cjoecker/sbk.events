@@ -10,8 +10,7 @@ import { I18nextProvider, initReactI18next } from "react-i18next";
 
 import * as i18n from "./config/i18n";
 import i18nServer from "./modules/i18n.server";
-import { renderToPipeableStream } from "react-dom/server";
-import * as Server from "react-dom/server";
+import * as ReactDOMServer from "react-dom/server";
 
 const ABORT_DELAY = 5000;
 
@@ -60,7 +59,7 @@ async function handleBotRequest(
 ) {
   return new Promise((resolve, reject) => {
     let shellRendered = false;
-    const { pipe, abort } = renderToPipeableStream(
+    const { pipe, abort } = ReactDOMServer.renderToPipeableStream(
       <I18nextProvider i18n={i18next}>
         <RemixServer
           context={remixContext}
@@ -114,7 +113,7 @@ async function handleBrowserRequest(
 ) {
   return new Promise((resolve, reject) => {
     let shellRendered = false;
-    const { pipe, abort } = renderToPipeableStream(
+    const { pipe, abort } = ReactDOMServer.renderToPipeableStream(
       <I18nextProvider i18n={i18next}>
         <RemixServer
           context={remixContext}
