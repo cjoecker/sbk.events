@@ -36,8 +36,8 @@
     "isbot": "^4.1.0",
     "lucide-react": "^0.460.0",
     "pretty-cache-header": "^1.0.0",
-    "react": "18.3.0-canary-3d9b20132-20240124",
-    "react-dom": "18.3.0-canary-3d9b20132-20240124",
+    "react": "18.3.0-canary-a870b2d54-20240314",
+    "react-dom": "18.3.0-canary-a870b2d54-20240314",
     "react-i18next": "^15.1.1",
     "remix-i18next": "^6.4.1",
     "superjson": "^2.2.1",
@@ -78,7 +78,7 @@
     "vitest": "^2.1.5"
   },
   "overrides": {
-    "react": "18.3.0-canary-3d9b20132-20240124",
-    "react-dom": "18.3.0-canary-3d9b20132-20240124"
+    "react": "18.3.0-canary-a870b2d54-20240314",
+    "react-dom": "18.3.0-canary-a870b2d54-20240314"
   }
 }
