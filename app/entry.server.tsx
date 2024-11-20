@@ -1,29 +1,26 @@
-// This is mostly copied from the Remix Deno template
-// https://github.com/remix-run/remix/blob/main/templates/classic-remix-compiler/deno/app/entry.server.tsx
+import { PassThrough } from "node:stream";
 
-// When using the classic Remix compiler, this is imported directly from the site's `app/entry.server`.
-// When using Vite, we load this as a virtual module, so that it can be loaded conditionally
-// depending on whether we are in dev mode or not. This file is only loaded in production.
-// We need to do this because in dev mode we are going through Vite which does not yet suport
-// Deno and thus uses Node.js. See https://github.com/vitejs/vite/discussions/16358.
-
-import type { AppLoadContext, EntryContext } from '@netlify/remix-runtime'
-import { RemixServer } from '@remix-run/react'
-import { isbot } from 'isbot'
-import * as ReactDOMServer from 'react-dom/server'
-import { createInstance } from "i18next";
-import i18nServer from "~/modules/i18n.server";
+import type { AppLoadContext, EntryContext } from "@remix-run/node";
+import { createReadableStreamFromReadable } from "@remix-run/node";
+import { RemixServer } from "@remix-run/react";
+import { isbot } from "isbot";
+import { renderToPipeableStream } from "react-dom/server";
+import { createInstance, i18n as i18next } from "i18next";
+import i18nServer from "./modules/i18n.server";
 import { I18nextProvider, initReactI18next } from "react-i18next";
-import * as i18n from "~/config/i18n";
+import * as i18n from "./config/i18n";
 
-const ABORT_DELAY = 5000;
+const ABORT_DELAY = 5_000;
 
 export default async function handleRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
   remixContext: EntryContext,
-  _loadContext: AppLoadContext,
+  // This is ignored so we can keep it in the template for visibility.  Feel
+  // free to delete this parameter in your app if you're not using it!
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  loadContext: AppLoadContext
 ) {
   const instance = createInstance();
   const lng = await i18nServer.getLocale(request);
@@ -31,37 +28,129 @@ export default async function handleRequest(
 
   await instance.use(initReactI18next).init({ ...i18n, lng, ns });
 
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), ABORT_DELAY);
+  return isbot(request.headers.get("user-agent") || "")
+    ? handleBotRequest(
+      request,
+      responseStatusCode,
+      responseHeaders,
+      remixContext,
+      loadContext,
+      instance
+    )
+    : handleBrowserRequest(
+      request,
+      responseStatusCode,
+      responseHeaders,
+      remixContext,
+      loadContext,
+      instance
+    );
+}
 
-  const body = await ReactDOMServer.renderToReadableStream(
-    <I18nextProvider i18n={instance}>
-      <RemixServer
-        context={remixContext}
-        url={request.url}
-        abortDelay={ABORT_DELAY}
-      /></I18nextProvider>,
-    {
-      signal: controller.signal,
-      onError(error: unknown) {
-        if (!controller.signal.aborted) {
-          // Log streaming rendering errors from inside the shell
-          console.error(error);
-        }
-        responseStatusCode = 500;
-      },
-    }
-  );
+async function handleBotRequest(
+  request: Request,
+  responseStatusCode: number,
+  responseHeaders: Headers,
+  remixContext: EntryContext,
+  _loadContext: AppLoadContext,
+  i18next: i18next
+) {
+  return new Promise((resolve, reject) => {
+    let shellRendered = false;
+    const { pipe, abort } = renderToPipeableStream(
+      <I18nextProvider i18n={i18next}>
+        <RemixServer
+          context={remixContext}
+          url={request.url}
+          abortDelay={ABORT_DELAY}
+        />
+      </I18nextProvider>,
+      {
+        onAllReady() {
+          shellRendered = true;
+          const body = new PassThrough();
+          const stream = createReadableStreamFromReadable(body);
 
-  body.allReady.then(() => clearTimeout(timeoutId));
+          responseHeaders.set("Content-Type", "text/html");
 
-  if (isbot(request.headers.get("user-agent") || "")) {
-    await body.allReady;
-  }
+          resolve(
+            new Response(stream, {
+              headers: responseHeaders,
+              status: responseStatusCode,
+            })
+          );
 
-  responseHeaders.set("Content-Type", "text/html");
-  return new Response(body, {
-    headers: responseHeaders,
-    status: responseStatusCode,
+          pipe(body);
+        },
+        onShellError(error: unknown) {
+          reject(error);
+        },
+        onError(error: unknown) {
+          responseStatusCode = 500;
+          // Log streaming rendering errors from inside the shell.  Don't log
+          // errors encountered during initial shell rendering since they'll
+          // reject and get logged in handleDocumentRequest.
+          if (shellRendered) {
+            console.error(error);
+          }
+        },
+      }
+    );
+
+    setTimeout(abort, ABORT_DELAY);
+  });
+}
+
+async function handleBrowserRequest(
+  request: Request,
+  responseStatusCode: number,
+  responseHeaders: Headers,
+  remixContext: EntryContext,
+  _loadContext: AppLoadContext,
+  i18next: i18next
+) {
+  return new Promise((resolve, reject) => {
+    let shellRendered = false;
+    const { pipe, abort } = renderToPipeableStream(
+      <I18nextProvider i18n={i18next}>
+        <RemixServer
+          context={remixContext}
+          url={request.url}
+          abortDelay={ABORT_DELAY}
+        />
+      </I18nextProvider>,
+      {
+        onShellReady() {
+          shellRendered = true;
+          const body = new PassThrough();
+          const stream = createReadableStreamFromReadable(body);
+
+          responseHeaders.set("Content-Type", "text/html");
+
+          resolve(
+            new Response(stream, {
+              headers: responseHeaders,
+              status: responseStatusCode,
+            })
+          );
+
+          pipe(body);
+        },
+        onShellError(error: unknown) {
+          reject(error);
+        },
+        onError(error: unknown) {
+          responseStatusCode = 500;
+          // Log streaming rendering errors from inside the shell.  Don't log
+          // errors encountered during initial shell rendering since they'll
+          // reject and get logged in handleDocumentRequest.
+          if (shellRendered) {
+            console.error(error);
+          }
+        },
+      }
+    );
+
+    setTimeout(abort, ABORT_DELAY);
   });
 }

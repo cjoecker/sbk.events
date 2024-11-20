@@ -1,5 +1,4 @@
-import { LinksFunction } from "@netlify/remix-runtime";
-import { LoaderFunctionArgs, json } from "@remix-run/node";
+import { LoaderFunctionArgs, json, LinksFunction } from "@remix-run/node";
 import {
   Links,
   Meta,
@@ -9,10 +8,8 @@ import {
   useLoaderData, useRouteError,
   useRouteLoaderData
 } from "@remix-run/react";
-import { useChangeLanguage } from "remix-i18next/react";
-
 import i18nServer, { localeCookie } from "./modules/i18n.server";
-
+import { useChangeLanguage } from "remix-i18next/react";
 import stylesheet from "~/styles/tailwind.css?url";
 import { useEffect } from "react";
 
@@ -22,7 +19,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const locale = await i18nServer.getLocale(request);
   return json(
     { locale },
-    { headers: { "Set-Cookie": await localeCookie.serialize(locale) } }
+    { headers: { "Set-Cookie": await localeCookie.serialize(locale) } },
   );
 }
 export const links: LinksFunction = () => {return [

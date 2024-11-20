@@ -6,11 +6,10 @@ import { startTransition, StrictMode } from "react";
 import { hydrateRoot } from "react-dom/client";
 import { I18nextProvider, initReactI18next } from "react-i18next";
 import { getInitialNamespaces } from "remix-i18next/client";
-
 import { defaultNS, fallbackLng, supportedLngs } from "~/config/i18n";
 
 async function main() {
-   
+  // eslint-disable-next-line import/no-named-as-default-member
   await i18next
     .use(initReactI18next) // Tell i18next to use the react-i18next plugin
     .use(Fetch) // Tell i18next to use the Fetch backend
@@ -48,4 +47,4 @@ async function main() {
   });
 }
 
-main().catch((error) => { console.error(error); });
+main().catch((error) => console.error(error));
