@@ -11,6 +11,12 @@ import type { AppLoadContext, EntryContext } from '@netlify/remix-runtime'
 import { RemixServer } from '@remix-run/react'
 import { isbot } from 'isbot'
 import * as ReactDOMServer from 'react-dom/server'
+import { createInstance } from "i18next";
+import i18nServer from "~/modules/i18n.server";
+import { I18nextProvider, initReactI18next } from "react-i18next";
+import * as i18n from "~/config/i18n";
+
+const ABORT_DELAY = 5000;
 
 export default async function handleRequest(
   request: Request,
@@ -19,43 +25,43 @@ export default async function handleRequest(
   remixContext: EntryContext,
   _loadContext: AppLoadContext,
 ) {
-  let isStreamClosing = false
+  const instance = createInstance();
+  const lng = await i18nServer.getLocale(request);
+  const ns = i18nServer.getRouteNamespaces(remixContext);
 
-  const abortController = new AbortController()
-  request.signal.addEventListener('abort', () => {
-    if (!isStreamClosing) {
-      // only signal the abort if the stream is not already closing
-      abortController.abort(request.signal.reason)
-    }
-  })
+  await instance.use(initReactI18next).init({ ...i18n, lng, ns });
 
-  // The main difference between this and the default Node.js entrypoint is
-  // this use of web streams as opposed to Node.js streams.
-  const body = await ReactDOMServer.renderToReadableStream(<RemixServer context={remixContext} url={request.url} />, {
-    signal: abortController.signal,
-    onError(error: unknown) {
-      // Log streaming rendering errors from inside the shell
-      console.error(error)
-      responseStatusCode = 500
-    },
-  })
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), ABORT_DELAY);
 
-  // identity transform just to be able to listen for the flush event
-  const transformedBody = body.pipeThrough(
-    new TransformStream({
-      flush() {
-        isStreamClosing = true
+  const body = await ReactDOMServer.renderToReadableStream(
+    <I18nextProvider i18n={instance}>
+      <RemixServer
+        context={remixContext}
+        url={request.url}
+        abortDelay={ABORT_DELAY}
+      /></I18nextProvider>,
+    {
+      signal: controller.signal,
+      onError(error: unknown) {
+        if (!controller.signal.aborted) {
+          // Log streaming rendering errors from inside the shell
+          console.error(error);
+        }
+        responseStatusCode = 500;
       },
-    }),
-  )
+    }
+  );
 
-  if (isbot(request.headers.get('user-agent') || '')) {
-    await body.allReady
+  body.allReady.then(() => clearTimeout(timeoutId));
+
+  if (isbot(request.headers.get("user-agent") || "")) {
+    await body.allReady;
   }
 
-  responseHeaders.set('Content-Type', 'text/html')
-  return new Response(transformedBody, {
+  responseHeaders.set("Content-Type", "text/html");
+  return new Response(body, {
     headers: responseHeaders,
     status: responseStatusCode,
-  })
+  });
 }
