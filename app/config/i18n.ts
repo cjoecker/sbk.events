@@ -15,6 +15,6 @@ export const fallbackLng = "en";
 export const defaultNS = "translation";
 
 export const resources = serverOnly$({
-  en: { translation: enTranslation },
-  es: { translation: esTranslation },
+	en: { translation: enTranslation },
+	es: { translation: esTranslation },
 });

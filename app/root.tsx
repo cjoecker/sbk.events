@@ -1,70 +1,70 @@
-import { LoaderFunctionArgs, json, LinksFunction } from "@remix-run/node";
+import { LoaderFunctionArgs, LinksFunction } from "@remix-run/node";
 import {
-  Links,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-  useLoaderData, useRouteError,
-  useRouteLoaderData
+	Links,
+	Meta,
+	Outlet,
+	Scripts,
+	ScrollRestoration,
+	useLoaderData,
+	useRouteError,
 } from "@remix-run/react";
-import i18nServer, { localeCookie } from "./modules/i18n.server";
-import { useChangeLanguage } from "remix-i18next/react";
-import stylesheet from "~/styles/tailwind.css?url";
 import { useEffect } from "react";
+import { useChangeLanguage } from "remix-i18next/react";
+
+import i18nServer, { localeCookie } from "./modules/i18n.server";
+
+import stylesheet from "~/styles/tailwind.css?url";
+import { json } from "~/utils/remix";
 
 export const handle = { i18n: ["translation"] };
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const locale = await i18nServer.getLocale(request);
-  return json(
-    { locale },
-    { headers: { "Set-Cookie": await localeCookie.serialize(locale) } },
-  );
+	const locale = await i18nServer.getLocale(request);
+	return json(
+		{ locale },
+		{ headers: { "Set-Cookie": await localeCookie.serialize(locale) } }
+	);
 }
-export const links: LinksFunction = () => {return [
-  { rel: "stylesheet", href: stylesheet },
-]};
+
+export const links: LinksFunction = () => {
+	return [{ rel: "stylesheet", href: stylesheet }];
+};
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const loaderData = useRouteLoaderData<typeof loader>("root");
-
-  return (
-    <html lang={loaderData?.locale ?? "en"}>
-    <head>
-      <meta charSet="utf-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <Meta />
-      <Links />
-    </head>
-    <body>
-    {children}
-    <ScrollRestoration />
-    <Scripts />
-    </body>
-    </html>
-  );
+	const loaderData = useLoaderData<typeof loader>();
+	return (
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+		<html lang={loaderData.locale ?? "en"}>
+			<head>
+				<meta charSet="utf-8" />
+				<meta name="viewport" content="width=device-width, initial-scale=1" />
+				<Meta />
+				<Links />
+			</head>
+			<body>
+				{children}
+				<ScrollRestoration />
+				<Scripts />
+			</body>
+		</html>
+	);
 }
 
 export default function App() {
-  const { locale } = useLoaderData<typeof loader>();
-  useChangeLanguage(locale);
-  return <Outlet />;
+	const { locale } = useLoaderData<typeof loader>();
+	useChangeLanguage(locale);
+	return <Outlet />;
 }
 
 export function ErrorBoundary() {
-  const error = useRouteError();
-  // When NODE_ENV=production:
-  // error.message = "Unexpected Server Error"
-  // error.stack = undefined
-  useEffect(() => {
-    console.log("error", error);
-  }, [error]);
+	const error = useRouteError();
+	useEffect(() => {
+		console.error("error", error);
+	}, [error]);
 
-  return (
-    <div>
-      <h1>Unexpected Error</h1>
-      <p>{error.message}</p>
-    </div>
-  );
+	return (
+		<div>
+			<h1>Unexpected Error</h1>
+		</div>
+	);
 }
