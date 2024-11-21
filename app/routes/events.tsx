@@ -13,52 +13,20 @@ export function loader() {
 	return { eventDays };
 }
 
-const items = [
-	{
-		id: 1,
-		text: "Lorem",
-		list: ["one", "two", "three", "four"],
-	},
-	{
-		id: 2,
-		text: "ipsum",
-		list: ["one", "two", "three", "four"],
-	},
-	{
-		id: 3,
-		text: "dolor",
-		list: ["one", "two", "three", "four"],
-	},
-	{
-		id: 4,
-		text: "sit",
-		list: ["one", "two", "three", "four"],
-	},
-	{
-		id: 5,
-		text: "amet",
-		list: ["one", "two", "three", "four"],
-	},
-	{
-		id: 6,
-		text: "consectetur",
-		list: ["one", "two", "three", "four"],
-	},
-];
-
-const container = {
-	show: {
+const containerAnimationVariants = {
+	visible: {
 		transition: {
-			duration: 2,
 			staggerChildren: 0.2,
-			ease: "easeOut",
 		},
 	},
 };
-
-const listItem = {
-	hidden: { opacity: 0, x: -200 },
-	show: { opacity: 1, x:0 },
+const childAnimationVariants = {
+	hidden: { opacity: 0, x: -20 },
+	visible: {
+		opacity: 1,
+		x: 0,
+		transition: { duration: 0.7, ease: "easeOut" },
+	},
 };
 
 export default function Events() {
@@ -78,10 +46,11 @@ export default function Events() {
 			</div>
 			{isHydrated && (
 				<motion.ul
-					variants={container}
-					initial="hidden"
-					whileInView="show"
 					className="flex flex-col gap-y-2 p-2 pl-3"
+					initial="hidden"
+					animate="visible"
+					variants={containerAnimationVariants}
+					viewport={{ once: true, amount: 0.3 }}
 				>
 					{eventDays.map((eventDay, index) => {
 						const dayBefore =
@@ -92,7 +61,7 @@ export default function Events() {
 							index === 0;
 
 						return (
-							<motion.li key={eventDay.date} variants={listItem} >
+							<motion.li key={eventDay.date} variants={childAnimationVariants}>
 								{isNextMonth && <MonthName date={eventDay.date} />}
 								<EventDayItem
 									key={eventDay.date}
@@ -146,7 +115,7 @@ export interface MonthNameProps {
 export const MonthName = ({ date }: MonthNameProps) => {
 	const month = format(date, "MMMM");
 	return (
-		<h3 className="mb-1 -ml-2 mt-3 text-xl font-bold capitalize">{month}</h3>
+		<h3 className="-ml-2 mb-1 mt-3 text-xl font-bold capitalize">{month}</h3>
 	);
 };
 
