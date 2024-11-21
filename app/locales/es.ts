@@ -1,4 +1,4 @@
 export default {
-	worldWideSbkEvents: "Eventos mundiales de salsa, bachata y kizomba!",
-	comingSoon: "Próximamente...",
+	socials: "Sociales",
+	salsaBachataKizomba: "Salsa Bachata Kizomba",
 };

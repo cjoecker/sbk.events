@@ -22,6 +22,7 @@ export const handle = { i18n: ["translation"] };
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	const locale = await i18nServer.getLocale(request);
+	console.log("locale", locale);
 	return json(
 		{ locale },
 		{ headers: { "Set-Cookie": await localeCookie.serialize(locale) } }

@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import { Fragment } from "react";
 
 import { getEventsByDay } from "~/modules/events.server";
+import { useTranslation } from "react-i18next";
 
 export function loader() {
 	const eventDays = getEventsByDay();
@@ -12,12 +13,13 @@ export function loader() {
 
 export default function Events() {
 	const { eventDays } = useLoaderData<typeof loader>();
+	const {t} = useTranslation();
 	return (
 		<div>
 			<div className="flex w-full justify-between">
 				<h1 className="flex w-48 flex-col font-bold">
-					<span className="text-4xl">Sociales</span>
-					<span className="-mt-2">Salsa Bachata Kizomba</span>
+					<span className="text-4xl uppercase">{t("socials")}</span>
+					<span className="-mt-2">{t("salsaBachataKizomba")}</span>
 				</h1>
 				<h2 className="my-auto mr-4 flex text-xl">
 					<SewingPinIcon className="mr-0.5 mt-1.5" />
@@ -54,7 +56,7 @@ export interface MonthNameProps {
 }
 export const MonthName = ({ date }: MonthNameProps) => {
 	const month = format(date, "MMMM");
-	return <h3 className="-mb-1 -ml-2 mt-2 text-xl font-bold">{month}</h3>;
+	return <h3 className="-mb-1 -ml-2 mt-2 text-xl font-bold capitalize">{month}</h3>;
 };
 
 export interface EventDayItemProps {
@@ -65,11 +67,13 @@ export interface EventDayItemProps {
 export const EventDayItem = ({ events, date }: EventDayItemProps) => {
 	const weekday = format(date, "EEE");
 	const day = format(date, "d");
+	const isToday = new Date(date).toDateString() === new Date().toDateString();
+	const todayTextColor = isToday ? "text-red-700" : "text-gray-800";
 	return (
 		<div className="flex w-full rounded border border-gray-400">
 			<div className="w-14 bg-gray-200 pt-1 text-center">
-				<div className="text-md">{weekday}</div>
-				<div className="-mt-1 text-3xl">{day}</div>
+				<div className={`text-md ${todayTextColor} capitalize`}>{weekday}</div>
+				<div className={`-mt-1 text-3xl ${todayTextColor}`}>{day}</div>
 			</div>
 			<div className="flex flex-1 flex-col gap-y-3 divide-y p-2">
 				{events.map((event) => {
@@ -126,7 +130,7 @@ export const EventItem = ({
 	return (
 		<div className="flex flex-col">
 			<h3 className="flex-1 text-lg font-bold">
-				<a href={url} className="hover:underline">
+				<a href={url} className="underline hover:text-gray-700">
 					{name}
 				</a>
 			</h3>
@@ -136,7 +140,7 @@ export const EventItem = ({
 					<ClockIcon className="my-auto mr-1" />
 					{startTime} – {endTime}
 				</div>
-				<a href={locationUrl} className="flex hover:underline">
+				<a href={locationUrl} className="flex underline hover:text-gray-700">
 					<SewingPinIcon className="-mx-0.5 my-auto" />
 					{location}
 				</a>

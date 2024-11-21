@@ -13,7 +13,6 @@ export interface Event {
 	salsaPercentage: number;
 	bachataPercentage: number;
 	kizombaPercentage: number;
-	price: number;
 }
 
 export interface EventDay {
@@ -24,17 +23,16 @@ export interface EventDay {
 export const events: Event[] = [
 	{
 		url: "https://www.facebook.com/photo?fbid=10234030217327462&set=a.2201661251525",
-		name: "Kizombera -special night",
+		name: "Kizombera - special night",
 		organizer: "Maguana",
 		startDate: new Date("2024-11-22T22:00:00"),
 		endDate: new Date("2024-11-23T04:00:00"),
 		city: "Valencia",
 		location: "Maguana Club",
-		locationUrl: "https://g.co/kgs/v2Brsuj",
+		locationUrl: "https://maps.app.goo.gl/XXm2ZBqddqz78xo9A",
 		salsaPercentage: 0,
 		bachataPercentage: 0,
 		kizombaPercentage: 100,
-		price: 12,
 	},
 	{
 		url: "https://www.facebook.com/photo?fbid=10234030217327462&set=a.2201661251525",
@@ -44,11 +42,10 @@ export const events: Event[] = [
 		endDate: new Date("2024-11-22T01:00:00"),
 		city: "Valencia",
 		location: "Asucar",
-		locationUrl: "https://g.co/kgs/JNharuF",
+		locationUrl: "https://maps.app.goo.gl/mtek962hcDLDoKb49",
 		salsaPercentage: 50,
 		bachataPercentage: 50,
 		kizombaPercentage: 0,
-		price: 6,
 	},
 	{
 		url: "https://chat.whatsapp.com/CxHE71Fq0whE7d6oe8KfzT",
@@ -62,7 +59,6 @@ export const events: Event[] = [
 		salsaPercentage: 0,
 		bachataPercentage: 100,
 		kizombaPercentage: 0,
-		price: 0,
 	},
 	{
 		url: "https://chat.whatsapp.com/CxHE71Fq0whE7d6oe8KfzT",
@@ -76,7 +72,6 @@ export const events: Event[] = [
 		salsaPercentage: 80,
 		bachataPercentage: 20,
 		kizombaPercentage: 0,
-		price: 0,
 	},
 	{
 		url: "https://chat.whatsapp.com/CxHE71Fq0whE7d6oe8KfzT",
@@ -90,7 +85,6 @@ export const events: Event[] = [
 		salsaPercentage: 100,
 		bachataPercentage: 0,
 		kizombaPercentage: 0,
-		price: 0,
 	},
 	{
 		url: "https://www.facebook.com/photo?fbid=9241266345897376&set=gm.3800887160164353",
@@ -100,11 +94,10 @@ export const events: Event[] = [
 		endDate: new Date("2024-12-01T22:30"),
 		city: "Valencia",
 		location: "Bailósophy",
-		locationUrl: "https://g.co/kgs/hKTjEE2",
+		locationUrl: "https://maps.app.goo.gl/NjNtXPj8AAyiJfbQ6",
 		salsaPercentage: 50,
 		bachataPercentage: 50,
 		kizombaPercentage: 0,
-		price: 0,
 	},
 	{
 		url: "https://www.facebook.com/photo/?fbid=9093980540652034&set=p.9093980540652034",
@@ -118,7 +111,6 @@ export const events: Event[] = [
 		salsaPercentage: 40,
 		bachataPercentage: 60,
 		kizombaPercentage: 0,
-		price: 0,
 	},
 	{
 		url: "https://nochesdebohemia.es/event/sabados-salsa-bachata-valencia/",
@@ -132,6 +124,5 @@ export const events: Event[] = [
 		salsaPercentage: 40,
 		bachataPercentage: 60,
 		kizombaPercentage: 0,
-		price: 0,
 	},
 ];
