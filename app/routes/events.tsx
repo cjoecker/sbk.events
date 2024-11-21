@@ -55,7 +55,7 @@ export interface MonthNameProps {
 	date: string;
 }
 export const MonthName = ({ date }: MonthNameProps) => {
-	const month = format(new Date(date), "MMMM");
+	const month = format(date, "MMMM");
 	return <h3 className="-mb-1 -ml-2 mt-2 text-xl font-bold capitalize">{month}</h3>;
 };
 
@@ -65,8 +65,8 @@ export interface EventDayItemProps {
 }
 
 export const EventDayItem = ({ events, date }: EventDayItemProps) => {
-	const weekday = format(new Date(date), "EEE");
-	const day = format(new Date(date), "d");
+	const weekday = format(date, "EEE");
+	const day = format(date, "d");
 	const isToday = new Date(date).toDateString() === new Date().toDateString();
 	const todayTextColor = isToday ? "text-red-700" : "text-gray-800";
 	return (
@@ -123,8 +123,8 @@ export const EventItem = ({
 	bachataPercentage,
 	kizombaPercentage,
 }: EventItemProps) => {
-	const startTime = format(new Date(startDate), "HH:mm");
-	const endTime = format(new Date(endDate), "HH:mm");
+	const startTime = format(startDate, "HH:mm");
+	const endTime = format(endDate, "HH:mm");
 	const sbk = `${salsaPercentage}-${bachataPercentage}-${kizombaPercentage}`;
 
 	return (
