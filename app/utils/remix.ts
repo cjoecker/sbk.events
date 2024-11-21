@@ -6,8 +6,3 @@ import { useHydrated } from "remix-utils/use-hydrated";
 
 // eslint-disable-next-line @typescript-eslint/no-deprecated, unicorn/prefer-export-from
 export const json = DeprecatedJSON;
-
-export function useDateFormat(){
-  const isHydrated = useHydrated();
-
-}

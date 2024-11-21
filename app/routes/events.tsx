@@ -5,6 +5,7 @@ import { Fragment } from "react";
 
 import { getEventsByDay } from "~/modules/events.server";
 import { useTranslation } from "react-i18next";
+import { useHydrated } from "remix-utils/use-hydrated";
 
 export function loader() {
 	const eventDays = getEventsByDay();
@@ -14,6 +15,10 @@ export function loader() {
 export default function Events() {
 	const { eventDays } = useLoaderData<typeof loader>();
 	const {t} = useTranslation();
+
+	const isHydrated = useHydrated();
+	if(!isHydrated) return null;
+
 	return (
 		<div>
 			<div className="flex w-full justify-between">
