@@ -120,4 +120,18 @@ export const events: Event[] = [
 		kizombaPercentage: 0,
 		price: 0,
 	},
+	{
+		url: "https://nochesdebohemia.es/event/sabados-salsa-bachata-valencia/",
+		name: "Sábados de salsa y bachata",
+		organizer: "Noches de Bohemia",
+		startDate: new Date("2024-11-23T23:00:00"),
+		endDate: new Date("2024-11-24T03:00"),
+		city: "Valencia",
+		location: "Noches de Bohemia",
+		locationUrl: "https://maps.app.goo.gl/9o7Md3zzshtf81Dk7",
+		salsaPercentage: 40,
+		bachataPercentage: 60,
+		kizombaPercentage: 0,
+		price: 0,
+	},
 ];
