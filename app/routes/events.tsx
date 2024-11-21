@@ -35,10 +35,10 @@ export default function Events() {
 
 					return (
 						<Fragment key={eventDay.date}>
-							{isNextMonth && <MonthName date={new Date(eventDay.date)} />}
+							{isNextMonth && <MonthName date={eventDay.date} />}
 							<EventDayItem
 								key={eventDay.date}
-								date={new Date(eventDay.date)}
+								date={eventDay.date}
 								events={eventDay.events}
 							/>
 						</Fragment>
@@ -50,7 +50,7 @@ export default function Events() {
 }
 
 export interface MonthNameProps {
-	date: Date;
+	date: string;
 }
 export const MonthName = ({ date }: MonthNameProps) => {
 	const month = format(date, "MMMM");
@@ -58,7 +58,7 @@ export const MonthName = ({ date }: MonthNameProps) => {
 };
 
 export interface EventDayItemProps {
-	date: Date;
+	date: string;
 	events: EventItemProps[];
 }
 

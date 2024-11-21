@@ -1,3 +1,4 @@
+import { es, de, enUS, Locale } from "date-fns/locale";
 import { serverOnly$ } from "vite-env-only/macros";
 
 import enTranslation from "~/locales/en";
@@ -18,3 +19,9 @@ export const resources = serverOnly$({
 	en: { translation: enTranslation },
 	es: { translation: esTranslation },
 });
+
+export const dateFnsLocales: Record<string, Locale> = {
+	es,
+	de,
+	en: enUS,
+};

@@ -8,11 +8,13 @@ import {
 	useLoaderData,
 	useRouteError,
 } from "@remix-run/react";
+import { setDefaultOptions } from "date-fns";
 import { useEffect } from "react";
 import { useChangeLanguage } from "remix-i18next/react";
 
 import i18nServer, { localeCookie } from "./modules/i18n.server";
 
+import { dateFnsLocales } from "~/config/i18n";
 import stylesheet from "~/styles/tailwind.css?url";
 import { json } from "~/utils/remix";
 
@@ -32,9 +34,15 @@ export const links: LinksFunction = () => {
 
 export function Layout({ children }: { children: React.ReactNode }) {
 	const loaderData = useLoaderData<typeof loader>();
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+	const locale = loaderData?.locale ?? "en";
+	useEffect(() => {
+		const dateFnsLocale = dateFnsLocales[locale];
+		setDefaultOptions({ locale: dateFnsLocale });
+	}, [locale]);
+
 	return (
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-		<html lang={loaderData.locale ?? "en"}>
+		<html lang={locale}>
 			<head>
 				<meta charSet="utf-8" />
 				<meta name="viewport" content="width=device-width, initial-scale=1" />

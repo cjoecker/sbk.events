@@ -157,7 +157,10 @@ export default tseslint.config(
 				"error",
 				{
 					case: "kebabCase",
-					ignore: [/\.\$[a-z]/], // ignore files with URL variables .$var - they need to be in camelCase for Remix
+					ignore: [
+						/\.\$[a-z]/, // ignore files with URL variables .$var - they need to be in camelCase for Remix
+						/_\./, // ignore files _. for remix routes
+					],
 				},
 			],
 			"@typescript-eslint/prefer-nullish-coalescing": [
