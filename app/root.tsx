@@ -98,9 +98,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				className="font-body h-[100svh] w-[100svw] overflow-hidden bg-black bg-cover bg-right text-base font-normal text-white sm:bg-center "
 			>
 				<main
-					className="h-full overflow-y-auto overflow-x-hidden px-2 sm:px-0 safe-area-padding"
+					className="h-full overflow-y-auto overflow-x-hidden safe-area-padding"
 				>
-					<div className="mx-auto max-w-2xl">
+					<div className="mx-auto max-w-2xl p-2">
 						{/*<div className="clouds" />*/}
 						{children}
 					</div>
