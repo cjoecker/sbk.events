@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import { Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { useHydrated } from "remix-utils/use-hydrated";
+import { AnimatePresence, motion } from "framer-motion";
 
 import { getEventsByDay } from "~/modules/events.server";
 
@@ -11,6 +12,54 @@ export function loader() {
 	const eventDays = getEventsByDay();
 	return { eventDays };
 }
+
+const items = [
+	{
+		id: 1,
+		text: "Lorem",
+		list: ["one", "two", "three", "four"],
+	},
+	{
+		id: 2,
+		text: "ipsum",
+		list: ["one", "two", "three", "four"],
+	},
+	{
+		id: 3,
+		text: "dolor",
+		list: ["one", "two", "three", "four"],
+	},
+	{
+		id: 4,
+		text: "sit",
+		list: ["one", "two", "three", "four"],
+	},
+	{
+		id: 5,
+		text: "amet",
+		list: ["one", "two", "three", "four"],
+	},
+	{
+		id: 6,
+		text: "consectetur",
+		list: ["one", "two", "three", "four"],
+	},
+];
+
+const container = {
+	hidden: { opacity: 0 },
+	show: {
+		opacity: 1,
+		transition: {
+			staggerChildren: 0.5,
+		},
+	},
+};
+
+const listItem = {
+	hidden: { opacity: 0 },
+	show: { opacity: 1 },
+};
 
 export default function Events() {
 	const { eventDays } = useLoaderData<typeof loader>();
@@ -28,7 +77,12 @@ export default function Events() {
 				</h2>
 			</div>
 			{isHydrated && (
-				<div className="flex flex-col gap-y-2 p-2 pl-3">
+				<motion.ul
+					variants={container}
+					initial="hidden"
+					animate="show"
+					className="flex flex-col gap-y-2 p-2 pl-3"
+				>
 					{eventDays.map((eventDay, index) => {
 						const dayBefore =
 							index > 0 ? new Date(eventDays[index - 1].date) : null;
@@ -38,17 +92,17 @@ export default function Events() {
 							index === 0;
 
 						return (
-							<Fragment key={eventDay.date}>
+							<motion.li key={eventDay.date} variants={listItem}>
 								{isNextMonth && <MonthName date={eventDay.date} />}
 								<EventDayItem
 									key={eventDay.date}
 									date={eventDay.date}
 									events={eventDay.events}
 								/>
-							</Fragment>
+							</motion.li>
 						);
 					})}
-				</div>
+				</motion.ul>
 			)}
 		</>
 	);
