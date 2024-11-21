@@ -80,3 +80,19 @@
 	font-weight: 100;
 	src: url('/fonts/roboto-flex-v26-latin-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 }
+
+.glass-s-black{
+	background: rgba(0, 0, 0, 0.5);
+	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+	backdrop-filter: blur(7.2px);
+	-webkit-backdrop-filter: blur(7.2px);
+}
+.glass-s-grey{
+	background: rgba(50, 50, 50, 0.4);
+	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+	backdrop-filter: blur(7.2px);
+	-webkit-backdrop-filter: blur(7.2px);
+}
+.border-05{
+	border-width: 0.5px;
+}

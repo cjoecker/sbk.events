@@ -9,7 +9,7 @@ export default {
 		},
 		fontWeight: {
 			normal: "100",
-			bold: "400",
+			bold: "300",
 		},
 		extend: {
 			borderRadius: {

@@ -75,14 +75,14 @@ export const EventDayItem = ({ events, date }: EventDayItemProps) => {
 	const weekday = format(date, "EEE");
 	const day = format(date, "d");
 	const isToday = new Date(date).toDateString() === new Date().toDateString();
-	const todayTextColor = isToday ? "text-red-700" : "text-gray-800";
+	const todayTextColor = isToday ? "text-orange-300" : "text-white";
 	return (
-		<div className="flex w-full rounded border border-gray-400">
-			<div className="w-14 bg-gray-200 pt-1 text-center">
+		<div className="flex w-full rounded border-05 border-gray-400">
+			<div className="w-14 pt-1 text-center rounded-l glass-s-grey">
 				<div className={`text-md ${todayTextColor} capitalize`}>{weekday}</div>
 				<div className={`-mt-1 text-3xl ${todayTextColor}`}>{day}</div>
 			</div>
-			<div className="flex flex-1 flex-col gap-y-3 divide-y p-2">
+			<div className="flex flex-1 flex-col gap-y-3 divide-y p-2 glass-s-black rounded-r">
 				{events.map((event) => {
 					return (
 						<EventItem
@@ -135,7 +135,7 @@ export const EventItem = ({
 	const sbk = `${salsaPercentage}-${bachataPercentage}-${kizombaPercentage}`;
 
 	return (
-		<div className="flex flex-col">
+		<div className="flex flex-col ">
 			<h3 className="flex-1 text-lg font-bold">
 				<a href={url} className="underline hover:text-gray-700">
 					{name}

@@ -50,7 +50,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       paddingBottom: "env(safe-area-inset-bottom)"
     }} className="bg-cover bg-center bg-black h-screen w-screen text-white font-normal">
     <div className="max-w-2xl mx-auto">
-    {children}
+      {children}
     </div>
     <ScrollRestoration />
     <Scripts />
