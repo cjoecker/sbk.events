@@ -172,7 +172,7 @@ export const Footer = () => {
 					</a>
 				</span>
 			</div>
-			<div className="mx-auto text-xs text-gray-300 mt-0.5 italic">
+			<div className="mx-auto text-xs text-gray-300 mt-0.5 italic text-center">
 				{t("thisIsAnOpenSourceProject")}{" "}
 				<a className="underline hover:text-gray-400" href={"https://github.com/cjoecker/sbk.events"}>
 					{t("contributions")}
