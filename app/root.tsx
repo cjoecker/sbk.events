@@ -104,7 +104,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 			>
 				<main className="safe-area-padding h-full overflow-y-auto overflow-x-hidden">
 					<div className="mx-auto max-w-2xl p-2 h-full flex flex-col">
-						<div className="h-full mb-16">
+						<div className="flex-1 mb-8">
 							{children}
 						</div>
 						<Footer />
