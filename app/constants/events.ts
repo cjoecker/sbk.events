@@ -1,7 +1,6 @@
-
 export type City = "Valencia"
-export const cities:City[] = [
-  "Valencia"]
+export const cities: City[] = [
+  "Valencia"];
 
 export type Event = {
   url: string;
@@ -25,7 +24,7 @@ export type EventDay = {
 
 export const events: Event[] = [
   {
-    url:"https://www.facebook.com/photo?fbid=10234030217327462&set=a.2201661251525",
+    url: "https://www.facebook.com/photo?fbid=10234030217327462&set=a.2201661251525",
     name: "Kizombera -special night",
     organizer: "Maguana",
     startDate: new Date("2024-11-22T22:00:00"),
@@ -39,7 +38,7 @@ export const events: Event[] = [
     price: 12
   },
   {
-    url:"https://www.facebook.com/photo?fbid=10234030217327462&set=a.2201661251525",
+    url: "https://www.facebook.com/photo?fbid=10234030217327462&set=a.2201661251525",
     name: "Juernes night",
     organizer: "Asucar",
     startDate: new Date("2024-11-21T23:00:00"),
@@ -53,7 +52,7 @@ export const events: Event[] = [
     price: 6
   },
   {
-    url:"https://chat.whatsapp.com/CxHE71Fq0whE7d6oe8KfzT",
+    url: "https://chat.whatsapp.com/CxHE71Fq0whE7d6oe8KfzT",
     name: "Street bachata en el río",
     organizer: "Dame",
     startDate: new Date("2024-11-22T19:30:00"),
@@ -67,7 +66,7 @@ export const events: Event[] = [
     price: 0
   },
   {
-    url:"https://chat.whatsapp.com/CxHE71Fq0whE7d6oe8KfzT",
+    url: "https://chat.whatsapp.com/CxHE71Fq0whE7d6oe8KfzT",
     name: "Miércoles de juerga",
     organizer: "Dame",
     startDate: new Date("2024-11-20T20:30:00"),
@@ -81,7 +80,7 @@ export const events: Event[] = [
     price: 0
   },
   {
-    url:"https://chat.whatsapp.com/CxHE71Fq0whE7d6oe8KfzT",
+    url: "https://chat.whatsapp.com/CxHE71Fq0whE7d6oe8KfzT",
     name: "Domingo de salsa cubana",
     organizer: "Dame",
     startDate: new Date("2024-11-24T12:00:00"),
@@ -95,7 +94,7 @@ export const events: Event[] = [
     price: 0
   },
   {
-    url:"https://www.facebook.com/photo?fbid=9241266345897376&set=gm.3800887160164353",
+    url: "https://www.facebook.com/photo?fbid=9241266345897376&set=gm.3800887160164353",
     name: "Somos solidarios",
     organizer: "Varios",
     startDate: new Date("2024-12-01T17:30:00"),
@@ -108,4 +107,18 @@ export const events: Event[] = [
     kizombaPercentage: 0,
     price: 0
   },
-  ]
+  {
+    url: "https://www.facebook.com/photo/?fbid=9093980540652034&set=p.9093980540652034",
+    name: "Bachata lovers party",
+    organizer: "Supersalseros",
+    startDate: new Date("2024-11-24T21:00:00"),
+    endDate: new Date("2024-11-25T01:00"),
+    city: "Valencia",
+    location: "Moon",
+    locationUrl: "https://maps.app.goo.gl/32UhxCW1brN2D2HaA",
+    salsaPercentage: 40,
+    bachataPercentage: 60,
+    kizombaPercentage: 0,
+    price: 0
+  }
+];
