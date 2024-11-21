@@ -94,9 +94,6 @@
 	backdrop-filter: blur(15px);
 	-webkit-backdrop-filter: blur(15px);
 }
-.border-05 {
-	border-width: 0.5px;
-}
 
 ul {
 	list-style-type: none;
