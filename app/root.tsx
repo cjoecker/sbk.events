@@ -95,6 +95,22 @@ export function Layout({ children }: { children: React.ReactNode }) {
 			<head>
 				<Meta />
 				<Links />
+				<script
+					async
+					src={`https://www.googletagmanager.com/gtag/js?id=ID`}
+				></script>
+				<script
+					dangerouslySetInnerHTML={{
+						__html: `
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-942TBH82GN', {
+        page_path: window.location.pathname,
+        });
+    `,
+					}}
+				/>
 			</head>
 			<body
 				style={{
@@ -103,10 +119,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				className="h-[100svh] w-[100svw] overflow-hidden bg-black bg-cover bg-right font-body text-base font-normal text-white sm:bg-center "
 			>
 				<main className="safe-area-padding h-full overflow-y-auto overflow-x-hidden">
-					<div className="mx-auto max-w-2xl p-2 h-full flex flex-col">
-						<div className="flex-1 mb-8">
-							{children}
-						</div>
+					<div className="mx-auto flex h-full max-w-2xl flex-col p-2">
+						<div className="mb-8 flex-1">{children}</div>
 						<Footer />
 					</div>
 				</main>
