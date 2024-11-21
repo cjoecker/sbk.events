@@ -143,7 +143,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				}}
 				className="h-[100svh] w-[100svw] overflow-hidden bg-black bg-cover bg-right font-body text-base font-normal text-white sm:bg-center "
 			>
-				<main className="safe-area-padding h-full overflow-y-auto overflow-x-hidden">
+				<main className="h-full overflow-y-auto overflow-x-hidden">
 					<div className="mx-auto flex h-full max-w-2xl flex-col p-2">
 						<div className="mb-8 flex-1">{children}</div>
 						<Footer />

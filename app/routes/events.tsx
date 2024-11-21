@@ -47,18 +47,18 @@ const items = [
 ];
 
 const container = {
-	hidden: { opacity: 0 },
 	show: {
-		opacity: 1,
 		transition: {
-			staggerChildren: 0.5,
+			duration: 2,
+			staggerChildren: 0.2,
+			ease: "easeOut",
 		},
 	},
 };
 
 const listItem = {
-	hidden: { opacity: 0 },
-	show: { opacity: 1 },
+	hidden: { opacity: 0, x: -200 },
+	show: { opacity: 1, x:0 },
 };
 
 export default function Events() {
@@ -80,7 +80,7 @@ export default function Events() {
 				<motion.ul
 					variants={container}
 					initial="hidden"
-					animate="show"
+					whileInView="show"
 					className="flex flex-col gap-y-2 p-2 pl-3"
 				>
 					{eventDays.map((eventDay, index) => {
@@ -92,7 +92,7 @@ export default function Events() {
 							index === 0;
 
 						return (
-							<motion.li key={eventDay.date} variants={listItem}>
+							<motion.li key={eventDay.date} variants={listItem} >
 								{isNextMonth && <MonthName date={eventDay.date} />}
 								<EventDayItem
 									key={eventDay.date}
@@ -146,7 +146,7 @@ export interface MonthNameProps {
 export const MonthName = ({ date }: MonthNameProps) => {
 	const month = format(date, "MMMM");
 	return (
-		<h3 className="-mb-1 -ml-2 mt-2 text-xl font-bold capitalize">{month}</h3>
+		<h3 className="mb-1 -ml-2 mt-3 text-xl font-bold capitalize">{month}</h3>
 	);
 };
 
