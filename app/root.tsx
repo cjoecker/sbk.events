@@ -35,7 +35,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 	const loaderData = useLoaderData<typeof loader>();
 	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 	const locale = loaderData?.locale ?? "en";
-	//setI18nLocale(locale);
+	setI18nLocale(locale);
 	return (
 		<html lang={locale}>
 			<head>
