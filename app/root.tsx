@@ -13,9 +13,9 @@ import { useChangeLanguage } from "remix-i18next/react";
 
 import i18nServer, { localeCookie } from "./modules/i18n.server";
 
+import { fallbackLng, setI18nLocale } from "~/config/i18n";
 import stylesheet from "~/styles/tailwind.css?url";
 import { json } from "~/utils/remix";
-import { fallbackLng, setI18nLocale } from "~/config/i18n";
 
 export const handle = { i18n: ["translation"] };
 

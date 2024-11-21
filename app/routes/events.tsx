@@ -2,10 +2,10 @@ import { ClockIcon, SewingPinIcon } from "@radix-ui/react-icons";
 import { useLoaderData } from "@remix-run/react";
 import { format } from "date-fns";
 import { Fragment } from "react";
-
-import { getEventsByDay } from "~/modules/events.server";
 import { useTranslation } from "react-i18next";
 import { useHydrated } from "remix-utils/use-hydrated";
+
+import { getEventsByDay } from "~/modules/events.server";
 
 export function loader() {
 	const eventDays = getEventsByDay();
@@ -14,10 +14,10 @@ export function loader() {
 
 export default function Events() {
 	const { eventDays } = useLoaderData<typeof loader>();
-	const {t} = useTranslation();
+	const { t } = useTranslation();
 
 	const isHydrated = useHydrated();
-	if(!isHydrated) return null;
+	if (!isHydrated) return null;
 
 	return (
 		<div>
@@ -61,7 +61,9 @@ export interface MonthNameProps {
 }
 export const MonthName = ({ date }: MonthNameProps) => {
 	const month = format(date, "MMMM");
-	return <h3 className="-mb-1 -ml-2 mt-2 text-xl font-bold capitalize">{month}</h3>;
+	return (
+		<h3 className="-mb-1 -ml-2 mt-2 text-xl font-bold capitalize">{month}</h3>
+	);
 };
 
 export interface EventDayItemProps {

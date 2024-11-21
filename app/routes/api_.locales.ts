@@ -13,7 +13,6 @@ export function loader({ request }: LoaderFunctionArgs) {
 	// avoid TS errors below
 	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 	const languages = resources!;
-	console.log("lng",url.searchParams.get("lng")  );
 	const lng = z
 		.string()
 		.refine((lng): lng is keyof typeof languages => {

@@ -1,10 +1,10 @@
+import { setDefaultOptions } from "date-fns";
 import { es, de, enUS, Locale } from "date-fns/locale";
 import { serverOnly$ } from "vite-env-only/macros";
 
 import enTranslation from "~/locales/en";
 import esTranslation from "~/locales/es";
 import deTranslation from "~/locales/es";
-import { setDefaultOptions } from "date-fns";
 
 export const supportedLngs = ["es", "en", "de"];
 
