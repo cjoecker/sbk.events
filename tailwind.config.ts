@@ -4,6 +4,13 @@ export default {
 	darkMode: ["class"],
 	content: ["./app/**/*.{js,jsx,ts,tsx}"],
 	theme: {
+		fontFamily: {
+			body: ["Libre Franklin", "Calibri", "Arial"],
+		},
+		fontWeight: {
+			normal: "200",
+			bold: "400",
+		},
 		extend: {
 			borderRadius: {
 				lg: "var(--radius)",

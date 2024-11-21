@@ -64,3 +64,37 @@
 		@apply bg-background text-foreground;
 	}
 }
+
+/* libre-franklin-200 - latin */
+@font-face {
+	font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+	font-family: "Libre Franklin";
+	font-style: normal;
+	font-weight: 200;
+	src: url("/fonts/libre-franklin-v18-latin-200.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* libre-franklin-regular - latin */
+@font-face {
+	font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+	font-family: "Libre Franklin";
+	font-style: normal;
+	font-weight: 400;
+	src: url("/fonts/libre-franklin-v18-latin-regular.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+.glass-s-black {
+	background: rgba(0, 0, 0, 0.7);
+	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+	backdrop-filter: blur(15px);
+	-webkit-backdrop-filter: blur(15px);
+}
+.glass-s-grey {
+	background: rgba(40, 40, 40, 0.6);
+	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+	backdrop-filter: blur(15px);
+	-webkit-backdrop-filter: blur(15px);
+}
+
+ul {
+	list-style-type: none;
+}
