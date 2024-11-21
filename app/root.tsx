@@ -13,17 +13,17 @@ import {
 	useRouteError,
 } from "@remix-run/react";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useChangeLanguage } from "remix-i18next/react";
-import Background from "~/images/background.jpg";
-import LibreFranklinNormalFont from "~/fonts/libre-franklin-v18-latin-200.woff2";
-import LibreFranklinBoldFont from "~/fonts/libre-franklin-v18-latin-regular.woff2";
 
 import i18nServer, { localeCookie } from "./modules/i18n.server";
 
 import { fallbackLng, setI18nLocale } from "~/config/i18n";
+import LibreFranklinNormalFont from "~/fonts/libre-franklin-v18-latin-200.woff2";
+import LibreFranklinBoldFont from "~/fonts/libre-franklin-v18-latin-regular.woff2";
+import Background from "~/images/background.jpg";
 import stylesheet from "~/styles/tailwind.css?url";
 import { json } from "~/utils/remix";
-import { useTranslation } from "react-i18next";
 
 export const handle = { i18n: ["translation"] };
 
@@ -122,7 +122,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				<Links />
 				<script
 					async
-					src={`https://www.googletagmanager.com/gtag/js?id=ID`}
+					src={"https://www.googletagmanager.com/gtag/js?id=ID"}
 				></script>
 				<script
 					dangerouslySetInnerHTML={{
@@ -159,7 +159,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export const Footer = () => {
 	const { t } = useTranslation();
 	return (
-		<div className="mt-10 flex w-full flex-col text-sm pb-2">
+		<div className="mt-10 flex w-full flex-col pb-2 text-sm">
 			<div className="mx-auto">
 				{t("madeWith")}{" "}
 				<span aria-label={t("love")}>
@@ -172,11 +172,15 @@ export const Footer = () => {
 					</a>
 				</span>
 			</div>
-			<div className="mx-auto text-xs text-gray-300 mt-0.5 italic text-center">
+			<div className="mx-auto mt-0.5 text-center text-xs italic text-gray-300">
 				{t("thisIsAnOpenSourceProject")}{" "}
-				<a className="underline hover:text-gray-400" href={"https://github.com/cjoecker/sbk.events"}>
+				<a
+					className="underline hover:text-gray-400"
+					href={"https://github.com/cjoecker/sbk.events"}
+				>
 					{t("contributions")}
-				</a>{" "}{t("areWelcome")}
+				</a>{" "}
+				{t("areWelcome")}
 			</div>
 		</div>
 	);

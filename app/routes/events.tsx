@@ -1,10 +1,10 @@
 import { ClockIcon, SewingPinIcon } from "@radix-ui/react-icons";
 import { useLoaderData } from "@remix-run/react";
 import { format } from "date-fns";
+import { motion } from "framer-motion";
 import { Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { useHydrated } from "remix-utils/use-hydrated";
-import { AnimatePresence, motion } from "framer-motion";
 
 import { getEventsByDay } from "~/modules/events.server";
 
@@ -31,7 +31,6 @@ const childAnimationVariants = {
 
 export default function Events() {
 	const { eventDays } = useLoaderData<typeof loader>();
-	const { t } = useTranslation();
 
 	const isHydrated = useHydrated();
 

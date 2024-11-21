@@ -5,7 +5,7 @@ export default {
 	content: ["./app/**/*.{js,jsx,ts,tsx}"],
 	theme: {
 		fontFamily: {
-			'body': ['Libre Franklin',"Calibri", "Arial"],
+			body: ["Libre Franklin", "Calibri", "Arial"],
 		},
 		fontWeight: {
 			normal: "200",

@@ -176,5 +176,5 @@ export const events: Event[] = [
 		salsaPercentage: 40,
 		bachataPercentage: 60,
 		kizombaPercentage: 0,
-	}
+	},
 ];
