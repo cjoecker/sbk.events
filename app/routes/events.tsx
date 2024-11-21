@@ -1,16 +1,16 @@
 import { ClockIcon, SewingPinIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import { getEventsByDay } from "~/modules/events.server";
-import { Event, EventDay } from "~/constants/events";
-import { superjson, useSuperLoaderData } from "~/utils/data";
+import { useLoaderData } from "@remix-run/react";
+import { Fragment } from "react";
 
 export function loader() {
   const eventDays = getEventsByDay();
-  return superjson({ eventDays });
+  return { eventDays };
 }
 
 export default function Events() {
-  const { eventDays } = useSuperLoaderData<typeof loader>();
+  const { eventDays } = useLoaderData<typeof loader>();
   return (
     <div>
       <div className="w-full flex justify-between">
@@ -25,16 +25,16 @@ export default function Events() {
       </div>
       <div className="flex p-2 flex-col gap-y-2 pl-3">
         {eventDays.map((eventDay, index) => {
-          const dayBefore = index > 0 ? eventDays[index - 1].date : null;
+          const dayBefore = index > 0 ? new Date(eventDays[index - 1].date) : null;
           const isNextMonth =
-            (dayBefore && dayBefore.getMonth() !== eventDay.date.getMonth()) ||
+            (dayBefore && dayBefore.getMonth() !== new Date(eventDay.date).getMonth()) ||
             index === 0;
 
           return (
-            <>
-              {isNextMonth && <MonthName date={eventDay.date} />}
-              <EventDayItem key={eventDay.date.toString()} {...eventDay} />
-            </>
+            <Fragment key={eventDay.date}>
+              {isNextMonth && <MonthName date={new Date(eventDay.date)} />}
+              <EventDayItem key={eventDay.date} date={new Date(eventDay.date)} events={eventDay.events} />
+            </Fragment>
           );
         })}
       </div>
@@ -42,15 +42,20 @@ export default function Events() {
   );
 }
 
-export type MonthName = {
+export type MonthNameProps = {
   date: Date;
 };
-export const MonthName = ({ date }: MonthName) => {
+export const MonthName = ({ date }: MonthNameProps) => {
   const month = format(date, "MMMM");
   return <h3 className="font-bold text-xl mt-2 -mb-1 -ml-2">{month}</h3>;
 };
 
-export const EventDayItem = ({ events, date }: EventDay) => {
+export type EventDayItemProps = {
+  date: Date;
+  events: EventItemProps[];
+};
+
+export const EventDayItem = ({ events, date }: EventDayItemProps) => {
   const weekday = format(date, "EEE");
   const day = format(date, "d");
   return (
@@ -61,31 +66,56 @@ export const EventDayItem = ({ events, date }: EventDay) => {
       </div>
       <div className="flex-1 p-2 gap-y-3 flex flex-col divide-y">
         {events.map((event) => {
-          return <EventItem key={event.name} {...event} />;
+          return <EventItem key={event.name}
+                            name={event.name}
+                            url={event.url}
+                            organizer={event.organizer}
+                            startDate={event.startDate}
+                            endDate={event.endDate}
+                            location={event.location}
+                            locationUrl={event.locationUrl}
+                            salsaPercentage={event.salsaPercentage}
+                            bachataPercentage={event.bachataPercentage}
+                            kizombaPercentage={event.kizombaPercentage}
+          />;
         })}
       </div>
     </div>
   );
 };
+
+type EventItemProps = {
+  name: string;
+  url: string;
+  organizer: string;
+  startDate: string;
+  endDate: string;
+  location: string;
+  locationUrl: string;
+  salsaPercentage: number;
+  bachataPercentage: number;
+  kizombaPercentage: number;
+}
+
 export const EventItem = ({
-  name,
-  url,
-  organizer,
-  startDate,
-  endDate,
-  location,
-  locationUrl,
-  salsaPercentage,
-  bachataPercentage,
-  kizombaPercentage,
-}: Event) => {
+                            name,
+                            url,
+                            organizer,
+                            startDate,
+                            endDate,
+                            location,
+                            locationUrl,
+                            salsaPercentage,
+                            bachataPercentage,
+                            kizombaPercentage
+                          }: EventItemProps) => {
   const startTime = format(startDate, "HH:mm");
   const endTime = format(endDate, "HH:mm");
   const sbk = `${salsaPercentage}-${bachataPercentage}-${kizombaPercentage}`;
 
   return (
     <div className="flex flex-col">
-      <h3 className="flex-1 font-bold text-lg">  <a href={url} className="hover:underline">
+      <h3 className="flex-1 font-bold text-lg"><a href={url} className="hover:underline">
         {name}
       </a></h3>
       <div className="flex flex-1 gap-x-4 flex-wrap leading-snug">

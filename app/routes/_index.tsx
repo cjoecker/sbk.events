@@ -1,6 +1,5 @@
-import type { MetaFunction } from "@netlify/remix-runtime";
 import { useTranslation } from "react-i18next";
-import { redirect } from "~/utils/data";
+import { MetaFunction, redirect } from "@remix-run/node";
 
 export const meta: MetaFunction = () => {
   return [
