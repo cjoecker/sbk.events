@@ -22,28 +22,28 @@ import { json } from "~/utils/remix";
 
 export const handle = { i18n: ["translation"] };
 
-export const meta: MetaFunction = ({ data }) => {	return [
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+	return [
 		{
-			title:
-				data.pageTitle,
+			title: data?.pageTitle,
 		},
-		{ charset: 'utf-8' },
+		{ charset: "utf-8" },
 		{
-			name: 'description',
-			content:data.pageDescription,
-		},
-		{
-			name: 'keywords',
-			content: data.pageKeywords,
+			name: "description",
+			content: data?.pageDescription,
 		},
 		{
-			name: 'viewport',
+			name: "keywords",
+			content: data?.pageKeywords,
+		},
+		{
+			name: "viewport",
 			content:
-				'width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1',
+				"width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1",
 		},
 		{
-			name: 'theme-color',
-			content: '#000a1d',
+			name: "theme-color",
+			content: "#000a1d",
 		},
 	];
 };
