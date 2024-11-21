@@ -107,27 +107,30 @@ export const EventDayItem = ({ events, date }: EventDayItemProps) => {
 	const isToday = new Date(date).toDateString() === new Date().toDateString();
 	const todayTextColor = isToday ? "text-orange-200" : "text-white";
 	return (
-		<div className="border-05 flex w-full rounded border-gray-400">
+		<div className="flex w-full rounded border border-gray-400">
 			<div className="glass-s-grey w-14 rounded-l pt-1 text-center">
 				<div className={`text-md ${todayTextColor} capitalize`}>{weekday}</div>
 				<div className={`-mt-1 text-3xl ${todayTextColor}`}>{day}</div>
 			</div>
-			<div className="glass-s-black flex flex-1 flex-col gap-y-3 divide-y rounded-r p-2">
+			<div className="glass-s-black flex flex-1 flex-col gap-y-3 rounded-r p-2">
 				{events.map((event) => {
+					const isLast = events.indexOf(event) === events.length - 1;
 					return (
-						<EventItem
-							key={event.name}
-							name={event.name}
-							url={event.url}
-							organizer={event.organizer}
-							startDate={event.startDate}
-							endDate={event.endDate}
-							location={event.location}
-							locationUrl={event.locationUrl}
-							salsaPercentage={event.salsaPercentage}
-							bachataPercentage={event.bachataPercentage}
-							kizombaPercentage={event.kizombaPercentage}
-						/>
+						<Fragment key={event.name}>
+							<EventItem
+								name={event.name}
+								url={event.url}
+								organizer={event.organizer}
+								startDate={event.startDate}
+								endDate={event.endDate}
+								location={event.location}
+								locationUrl={event.locationUrl}
+								salsaPercentage={event.salsaPercentage}
+								bachataPercentage={event.bachataPercentage}
+								kizombaPercentage={event.kizombaPercentage}
+							/>
+							{!isLast && <Separator />}
+						</Fragment>
 					);
 				})}
 			</div>
@@ -188,4 +191,8 @@ export const EventItem = ({
 			</div>
 		</div>
 	);
+};
+
+export const Separator = () => {
+	return <span className="h-[1px] w-full bg-gray-500" />;
 };
