@@ -15,7 +15,7 @@ import i18nServer, { localeCookie } from "./modules/i18n.server";
 
 import stylesheet from "~/styles/tailwind.css?url";
 import { json } from "~/utils/remix";
-import { setI18nLocale } from "~/config/i18n";
+import { fallbackLng, setI18nLocale } from "~/config/i18n";
 
 export const handle = { i18n: ["translation"] };
 
@@ -34,7 +34,7 @@ export const links: LinksFunction = () => {
 export function Layout({ children }: { children: React.ReactNode }) {
 	const loaderData = useLoaderData<typeof loader>();
 	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-	const locale = loaderData?.locale ?? "en";
+	const locale = loaderData?.locale ?? fallbackLng;
 	setI18nLocale(locale);
 	return (
 		<html lang={locale}>
