@@ -8,21 +8,19 @@ import {
 	useLoaderData,
 	useRouteError,
 } from "@remix-run/react";
-import { setDefaultOptions } from "date-fns";
 import { useEffect } from "react";
 import { useChangeLanguage } from "remix-i18next/react";
 
 import i18nServer, { localeCookie } from "./modules/i18n.server";
 
-import { dateFnsLocales } from "~/config/i18n";
 import stylesheet from "~/styles/tailwind.css?url";
 import { json } from "~/utils/remix";
+import { setI18nLocale } from "~/config/i18n";
 
 export const handle = { i18n: ["translation"] };
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	const locale = await i18nServer.getLocale(request);
-	console.log("locale", locale);
 	return json(
 		{ locale },
 		{ headers: { "Set-Cookie": await localeCookie.serialize(locale) } }
@@ -37,11 +35,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 	const loaderData = useLoaderData<typeof loader>();
 	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 	const locale = loaderData?.locale ?? "en";
-	useEffect(() => {
-		const dateFnsLocale = dateFnsLocales[locale];
-		setDefaultOptions({ locale: dateFnsLocale });
-	}, [locale]);
-
+	setI18nLocale(locale);
 	return (
 		<html lang={locale}>
 			<head>
