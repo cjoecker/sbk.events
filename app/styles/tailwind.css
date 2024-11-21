@@ -63,4 +63,20 @@
 	body {
 		@apply bg-background text-foreground;
 	}
+	@font-face {
+		font-family: 'Roboto';
+		font-style: normal;
+		font-weight: 100;
+		font-display: swap;
+		src: url(/fonts/roboto-flex-v26-latin-regular.woff2) format('woff2');
+	}
+}
+
+/* roboto-flex-regular - latin */
+@font-face {
+	font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+	font-family: 'Roboto Flex';
+	font-style: normal;
+	font-weight: 100;
+	src: url('/fonts/roboto-flex-v26-latin-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 }
