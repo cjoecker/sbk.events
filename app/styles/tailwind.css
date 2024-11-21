@@ -63,22 +63,23 @@
 	body {
 		@apply bg-background text-foreground;
 	}
-	@font-face {
-		font-family: 'Roboto';
-		font-style: normal;
-		font-weight: 100;
-		font-display: swap;
-		src: url(/fonts/roboto-flex-v26-latin-regular.woff2) format('woff2');
-	}
 }
 
-/* roboto-flex-regular - latin */
+/* libre-franklin-200 - latin */
 @font-face {
 	font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
-	font-family: 'Roboto Flex';
+	font-family: 'Libre Franklin';
 	font-style: normal;
-	font-weight: 100;
-	src: url('/fonts/roboto-flex-v26-latin-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+	font-weight: 200;
+	src: url('/fonts/libre-franklin-v18-latin-200.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* libre-franklin-regular - latin */
+@font-face {
+	font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+	font-family: 'Libre Franklin';
+	font-style: normal;
+	font-weight: 400;
+	src: url('/fonts/libre-franklin-v18-latin-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 }
 
 .glass-s-black{
@@ -95,59 +96,6 @@
 }
 .border-05{
 	border-width: 0.5px;
-}
-
-.clouds{
-	width:10000px;
-	height: 100%;
-	background: transparent url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1231630/clouds_repeat.png") repeat;
-	background-size: 1000px 1000px;
-	position: absolute;
-	right: 0;
-	top: 0;
-	bottom: 0;
-	z-index: 3;
-
-	-moz-animation:move-background 150s linear infinite;
-	-ms-animation:move-background 150s linear infinite;
-	-o-animation:move-background 150s linear infinite;
-	-webkit-animation:move-background 150s linear infinite;
-	animation:move-background 150s linear infinite;
-}
-
-@keyframes move-background {
-	from {
-		-webkit-transform: translate3d(0px, 0px, 0px);
-	}
-	to {
-		-webkit-transform: translate3d(1000px, 0px, 0px);
-	}
-}
-@-webkit-keyframes move-background {
-	from {
-		-webkit-transform: translate3d(0px, 0px, 0px);
-	}
-	to {
-		-webkit-transform: translate3d(1000px, 0px, 0px);
-	}
-}
-
-@-moz-keyframes move-background {
-	from {
-		-webkit-transform: translate3d(0px, 0px, 0px);
-	}
-	to {
-		-webkit-transform: translate3d(1000px, 0px, 0px);
-	}
-}
-
-@-webkit-keyframes move-background {
-	from {
-		-webkit-transform: translate3d(0px, 0px, 0px);
-	}
-	to {
-		-webkit-transform: translate3d(1000px, 0px, 0px);
-	}
 }
 
 .safe-area-padding {

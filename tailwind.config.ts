@@ -5,11 +5,11 @@ export default {
 	content: ["./app/**/*.{js,jsx,ts,tsx}"],
 	theme: {
 		fontFamily: {
-			'body': ['Roboto',"Calibri", "Arial"],
+			'body': ['Libre Franklin',"Calibri", "Arial"],
 		},
 		fontWeight: {
-			normal: "100",
-			bold: "300",
+			normal: "200",
+			bold: "400",
 		},
 		extend: {
 			borderRadius: {

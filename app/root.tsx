@@ -11,7 +11,8 @@ import {
 import { useEffect } from "react";
 import { useChangeLanguage } from "remix-i18next/react";
 import Background from "~/images/background.jpg";
-import RobotoFontRegularWoff2 from "~/fonts/roboto-flex-v26-latin-regular.woff2";
+import LibreFranklinNormalFont from "~/fonts/libre-franklin-v18-latin-200.woff2";
+import LibreFranklinBoldFont from "~/fonts/libre-franklin-v18-latin-regular.woff2";
 
 import i18nServer, { localeCookie } from "./modules/i18n.server";
 
@@ -21,7 +22,7 @@ import { json } from "~/utils/remix";
 
 export const handle = { i18n: ["translation"] };
 
-export const meta: MetaFunction = ({ data }: { data: { pageDescription: string, pageTitle:string, pageKeywords:string } }) => {	return [
+export const meta: MetaFunction = ({ data }) => {	return [
 		{
 			title:
 				data.pageTitle,
@@ -42,7 +43,7 @@ export const meta: MetaFunction = ({ data }: { data: { pageDescription: string, 
 		},
 		{
 			name: 'theme-color',
-			content: '#0F0823',
+			content: '#000a1d',
 		},
 	];
 };
@@ -65,7 +66,14 @@ export const links: LinksFunction = () => {
 		{
 			rel: "preload",
 			as: "font",
-			href: RobotoFontRegularWoff2,
+			href: LibreFranklinNormalFont,
+			type: "font/woff",
+			crossOrigin: "anonymous",
+		},
+		{
+			rel: "preload",
+			as: "font",
+			href: LibreFranklinBoldFont,
 			type: "font/woff",
 			crossOrigin: "anonymous",
 		},
@@ -87,7 +95,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				style={{
 					backgroundImage: `url(${Background})`,
 				}}
-				className="h-[100svh] w-[100svw] overflow-hidden bg-black bg-cover bg-right text-base font-normal text-white sm:bg-center "
+				className="font-body h-[100svh] w-[100svw] overflow-hidden bg-black bg-cover bg-right text-base font-normal text-white sm:bg-center "
 			>
 				<main
 					className="h-full overflow-y-auto overflow-x-hidden px-2 sm:px-0 safe-area-padding"
