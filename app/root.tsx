@@ -1,4 +1,8 @@
-import { LoaderFunctionArgs, LinksFunction, MetaFunction } from "@remix-run/node";
+import {
+	LoaderFunctionArgs,
+	LinksFunction,
+	MetaFunction,
+} from "@remix-run/node";
 import {
 	Links,
 	Meta,
@@ -19,6 +23,7 @@ import i18nServer, { localeCookie } from "./modules/i18n.server";
 import { fallbackLng, setI18nLocale } from "~/config/i18n";
 import stylesheet from "~/styles/tailwind.css?url";
 import { json } from "~/utils/remix";
+import { useTranslation } from "react-i18next";
 
 export const handle = { i18n: ["translation"] };
 
@@ -95,14 +100,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				style={{
 					backgroundImage: `url(${Background})`,
 				}}
-				className="font-body h-[100svh] w-[100svw] overflow-hidden bg-black bg-cover bg-right text-base font-normal text-white sm:bg-center "
+				className="h-[100svh] w-[100svw] overflow-hidden bg-black bg-cover bg-right font-body text-base font-normal text-white sm:bg-center "
 			>
-				<main
-					className="h-full overflow-y-auto overflow-x-hidden safe-area-padding"
-				>
-					<div className="mx-auto max-w-2xl p-2">
-						{/*<div className="clouds" />*/}
-						{children}
+				<main className="safe-area-padding h-full overflow-y-auto overflow-x-hidden">
+					<div className="mx-auto max-w-2xl p-2 h-full flex flex-col">
+						<div className="h-full mb-16">
+							{children}
+						</div>
+						<Footer />
 					</div>
 				</main>
 				<ScrollRestoration />
@@ -111,6 +116,32 @@ export function Layout({ children }: { children: React.ReactNode }) {
 		</html>
 	);
 }
+
+export const Footer = () => {
+	const { t } = useTranslation();
+	return (
+		<div className="mt-10 flex w-full flex-col text-sm pb-2">
+			<div className="mx-auto">
+				{t("madeWith")}{" "}
+				<span aria-label={t("love")}>
+					♡ {t("by")}{" "}
+					<a
+						className="text-green-200 underline hover:text-green-400"
+						href={"https://jocker.dev/"}
+					>
+						Christian Jöcker
+					</a>
+				</span>
+			</div>
+			<div className="mx-auto text-xs text-gray-300 mt-0.5 italic">
+				{t("thisIsAnOpenSourceProject")}{" "}
+				<a className="underline hover:text-gray-400" href={"https://github.com/cjoecker/sbk.events"}>
+					{t("contributions")}
+				</a>{" "}{t("areWelcome")}
+			</div>
+		</div>
+	);
+};
 
 export default function App() {
 	const { locale } = useLoaderData<typeof loader>();

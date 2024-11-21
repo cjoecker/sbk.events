@@ -17,10 +17,9 @@ export default function Events() {
 	const { t } = useTranslation();
 
 	const isHydrated = useHydrated();
-	if (!isHydrated) return null;
 
 	return (
-		<div>
+		<>
 			<div className="flex w-full justify-between">
 				<Title />
 				<h2 className="my-auto mr-4 flex text-xl">
@@ -28,28 +27,30 @@ export default function Events() {
 					Valencia
 				</h2>
 			</div>
-			<div className="flex flex-col gap-y-2 p-2 pl-3">
-				{eventDays.map((eventDay, index) => {
-					const dayBefore =
-						index > 0 ? new Date(eventDays[index - 1].date) : null;
-					const isNextMonth =
-						(dayBefore &&
-							dayBefore.getMonth() !== new Date(eventDay.date).getMonth()) ||
-						index === 0;
+			{isHydrated && (
+				<div className="flex flex-col gap-y-2 p-2 pl-3">
+					{eventDays.map((eventDay, index) => {
+						const dayBefore =
+							index > 0 ? new Date(eventDays[index - 1].date) : null;
+						const isNextMonth =
+							(dayBefore &&
+								dayBefore.getMonth() !== new Date(eventDay.date).getMonth()) ||
+							index === 0;
 
-					return (
-						<Fragment key={eventDay.date}>
-							{isNextMonth && <MonthName date={eventDay.date} />}
-							<EventDayItem
-								key={eventDay.date}
-								date={eventDay.date}
-								events={eventDay.events}
-							/>
-						</Fragment>
-					);
-				})}
-			</div>
-		</div>
+						return (
+							<Fragment key={eventDay.date}>
+								{isNextMonth && <MonthName date={eventDay.date} />}
+								<EventDayItem
+									key={eventDay.date}
+									date={eventDay.date}
+									events={eventDay.events}
+								/>
+							</Fragment>
+						);
+					})}
+				</div>
+			)}
+		</>
 	);
 }
 
@@ -71,15 +72,15 @@ export const Title = () => {
 					);
 				})}
 			</span>
-			<span className="-mt-2 flex justify-between">{
-				sbkArray.map((word, index) => {
+			<span className="-mt-2 flex justify-between">
+				{sbkArray.map((word, index) => {
 					return (
 						<span key={index} className="inline-block">
 							{word}
 						</span>
 					);
-				})
-			}</span>
+				})}
+			</span>
 		</h1>
 	);
 };

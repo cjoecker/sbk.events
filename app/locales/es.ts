@@ -1,6 +1,12 @@
 export default {
 	socials: "Sociales",
 	salsaBachataKizomba: "Salsa Bachata Kizomba",
+	madeWith: "Hecho con",
+	love: "amor",
+	by: "por",
+	thisIsAnOpenSourceProject: "Este es un proyecto open-source.",
+	contributions: "Contribuciones",
+	areWelcome: "son bienvenidas.",
 	pageTitle: "Sociales SBK",
 	pageDescription:
 		"Todos los sociales de Bachata, Salsa y Kizomba cerca de ti en un solo lugar. ¡Deja de buscar en múltiples grupos y encuentra aquí el social de SBK perfecto para ti!",
