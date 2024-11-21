@@ -1,4 +1,4 @@
-import { LoaderFunctionArgs, LinksFunction } from "@remix-run/node";
+import { LoaderFunctionArgs, LinksFunction, MetaFunction } from "@remix-run/node";
 import {
 	Links,
 	Meta,
@@ -21,10 +21,40 @@ import { json } from "~/utils/remix";
 
 export const handle = { i18n: ["translation"] };
 
+export const meta: MetaFunction = ({ data }: { data: { pageDescription: string, pageTitle:string, pageKeywords:string } }) => {	return [
+		{
+			title:
+				data.pageTitle,
+		},
+		{ charset: 'utf-8' },
+		{
+			name: 'description',
+			content:data.pageDescription,
+		},
+		{
+			name: 'keywords',
+			content: data.pageKeywords,
+		},
+		{
+			name: 'viewport',
+			content:
+				'width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1',
+		},
+		{
+			name: 'theme-color',
+			content: '#0F0823',
+		},
+	];
+};
+
 export async function loader({ request }: LoaderFunctionArgs) {
 	const locale = await i18nServer.getLocale(request);
+	const t = await i18nServer.getFixedT(request);
+	const pageTitle = t("pageTitle");
+	const pageDescription = t("pageDescription");
+	const pageKeywords = t("pageKeywords");
 	return json(
-		{ locale },
+		{ locale, pageTitle, pageDescription, pageKeywords },
 		{ headers: { "Set-Cookie": await localeCookie.serialize(locale) } }
 	);
 }
@@ -50,19 +80,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
 	return (
 		<html lang={locale}>
 			<head>
-				<meta charSet="utf-8" />
-				<meta name="viewport" content="width=device-width, initial-scale=1" />
 				<Meta />
 				<Links />
 			</head>
 			<body
 				style={{
 					backgroundImage: `url(${Background})`,
-					paddingBottom: "env(safe-area-inset-bottom)",
 				}}
-				className="h-screen w-screen overflow-hidden bg-black bg-cover sm:bg-center bg-right text-base font-normal text-white"
+				className="h-[100svh] w-[100svw] overflow-hidden bg-black bg-cover bg-right text-base font-normal text-white sm:bg-center "
 			>
-				<main className=" h-full overflow-y-auto overflow-x-hidden sm:p-0 p-2">
+				<main
+					className="h-full overflow-y-auto overflow-x-hidden px-2 sm:px-0 safe-area-padding"
+				>
 					<div className="mx-auto max-w-2xl">
 						{/*<div className="clouds" />*/}
 						{children}
