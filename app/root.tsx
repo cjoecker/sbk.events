@@ -63,7 +63,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				className="h-screen w-screen overflow-hidden bg-black bg-cover bg-center text-base font-normal text-white"
 			>
 				<main className=" h-full overflow-y-auto overflow-x-hidden">
-					<div className=" max-w-2xl mx-auto">
+					<div className=" mx-auto max-w-2xl">
+						{/*<div className="clouds" />*/}
 						{children}
 					</div>
 				</main>

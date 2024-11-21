@@ -75,7 +75,7 @@ export const EventDayItem = ({ events, date }: EventDayItemProps) => {
 	const weekday = format(date, "EEE");
 	const day = format(date, "d");
 	const isToday = new Date(date).toDateString() === new Date().toDateString();
-	const todayTextColor = isToday ? "text-orange-300" : "text-white";
+	const todayTextColor = isToday ? "text-orange-200" : "text-white";
 	return (
 		<div className="flex w-full rounded border-05 border-gray-400">
 			<div className="w-14 pt-1 text-center rounded-l glass-s-grey">
@@ -135,19 +135,19 @@ export const EventItem = ({
 	const sbk = `${salsaPercentage}-${bachataPercentage}-${kizombaPercentage}`;
 
 	return (
-		<div className="flex flex-col ">
+		<div className="flex flex-col">
 			<h3 className="flex-1 text-lg font-bold">
-				<a href={url} className="underline hover:text-gray-700">
+				<a href={url} className="underline decoration-1 hover:text-gray-300">
 					{name}
 				</a>
 			</h3>
-			<div className="flex flex-1 flex-wrap gap-x-4 leading-snug">
+			<div className="flex flex-1 flex-wrap gap-x-4 leading-snug -mt-0.5 text-gray-200">
 				<div>{organizer}</div>
 				<div className="flex">
 					<ClockIcon className="my-auto mr-1" />
 					{startTime} – {endTime}
 				</div>
-				<a href={locationUrl} className="flex underline hover:text-gray-700">
+				<a href={locationUrl} className="flex underline decoration-1 hover:text-gray-300">
 					<SewingPinIcon className="-mx-0.5 my-auto" />
 					{location}
 				</a>
