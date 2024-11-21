@@ -60,10 +60,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 					backgroundImage: `url(${Background})`,
 					paddingBottom: "env(safe-area-inset-bottom)",
 				}}
-				className="h-screen w-screen overflow-hidden bg-black bg-cover bg-center text-base font-normal text-white"
+				className="h-screen w-screen overflow-hidden bg-black bg-cover sm:bg-center bg-right text-base font-normal text-white"
 			>
-				<main className=" h-full overflow-y-auto overflow-x-hidden">
-					<div className=" mx-auto max-w-2xl">
+				<main className=" h-full overflow-y-auto overflow-x-hidden sm:p-0 p-2">
+					<div className="mx-auto max-w-2xl">
 						{/*<div className="clouds" />*/}
 						{children}
 					</div>
