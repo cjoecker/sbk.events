@@ -177,4 +177,17 @@ export const events: Event[] = [
 		bachataPercentage: 60,
 		kizombaPercentage: 0,
 	},
+	{
+		url: "https://www.instagram.com/galaxydance_vlc/profilecard/?igsh=Nnh2OXc3amlicm44",
+		name: "Galaxy Dance",
+		organizer: "Kevin y Lucia",
+		startDate: new Date("2024-11-27T19:00:00Z"),
+		endDate: new Date("2024-11-28T00:30Z"),
+		city: "Valencia",
+		location: "White House",
+		locationUrl: "https://maps.app.goo.gl/9r4ZYJfDmfXFWNBY7",
+		salsaPercentage: 80,
+		bachataPercentage: 20,
+		kizombaPercentage: 0,
+	},
 ];
