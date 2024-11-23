@@ -1,6 +1,3 @@
-import { NetlifyPlugin } from '@netlify/build';
-
-
 export const onPreBuild = async ({ utils }) => {
 	try {
 		console.log("Running Prisma migrations...");
