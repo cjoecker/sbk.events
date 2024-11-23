@@ -1,9 +1,9 @@
 export const onPreBuild = async ({ utils }) => {
 	try {
-		console.log("Running Prisma migrations...");
+		console.info("Running Prisma migrations...");
 		await utils.run.command("npx prisma migrate deploy");
-		console.log("Prisma migrations completed.");
+		console.info("Prisma migrations completed.");
 	} catch (error) {
 		utils.build.failBuild("Failed to run Prisma migrations", { error });
 	}
-}
+};

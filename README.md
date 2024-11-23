@@ -10,5 +10,6 @@ An open source project to see the salsa bachata and kizomba socials in your city
 4. Run `npm run dev` to start the app in development mode
 
 ## Edit database
+
 1. Run `npx prisma studio` to open the database editor
 2. Go to `http://localhost:5555/` in your browser
