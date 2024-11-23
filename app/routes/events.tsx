@@ -10,7 +10,7 @@ import { getEventsByDay } from "~/modules/events.server";
 
 export async function loader() {
 	const eventDays = await getEventsByDay("Valencia");
-	return { eventDays };
+	return { eventDays: [] };
 }
 
 const containerAnimationVariants = {
