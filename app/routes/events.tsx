@@ -6,9 +6,11 @@ import { Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { useHydrated } from "remix-utils/use-hydrated";
 
-export async function loader() {
+import { getEventsByDay } from "~/modules/events.server";
 
-	return { eventDays: [] };
+export async function loader() {
+	const eventDays = await getEventsByDay("Valencia");
+	return { eventDays };
 }
 
 const containerAnimationVariants = {
