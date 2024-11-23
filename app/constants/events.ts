@@ -229,4 +229,17 @@ export const events: Event[] = [
 		bachataPercentage: 50,
 		kizombaPercentage: 0,
 	},
+	{
+		url: "https://www.instagram.com/p/DCsGjpUtMlb/",
+		name: "Social Miky House",
+		organizer: "Miky House",
+		startDate: new Date("2024-11-28T20:00:00"),
+		endDate: new Date("2024-11-28T23:00:00"),
+		city: "Valencia",
+		location: "Miky House",
+		locationUrl: "https://maps.app.goo.gl/4sdegJDrxfNHWsP37",
+		salsaPercentage: 50,
+		bachataPercentage: 50,
+		kizombaPercentage: 0,
+	},
 ];
