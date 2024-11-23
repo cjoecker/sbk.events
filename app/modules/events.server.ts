@@ -4,7 +4,6 @@ import { db } from "~/modules/db.server";
 
 export async function getEventsByDay(city: string): Promise<EventDayDb[]> {
 	const events = await getUnfinishedEventsAndAfterNow(city);
-	console.log("events", events);
 	const eventDays: EventDayDb[] = [];
 	for (const event of events) {
 		const eventDate = startOfDay(event.startDate);
@@ -84,6 +83,7 @@ export async function getUnfinishedEventsAndAfterNow(city: string) {
 			salsaPercentage: true,
 			bachataPercentage: true,
 			kizombaPercentage: true,
+			likes: true,
 		},
 	});
 }

@@ -4,6 +4,7 @@ export default {
 	madeWith: "Hecho con",
 	love: "amor",
 	by: "por",
+	like: "me gusta",
 	thisIsAnOpenSourceProject: "Este es un proyecto open-source.",
 	contributions: "Contribuciones",
 	areWelcome: "son bienvenidas.",

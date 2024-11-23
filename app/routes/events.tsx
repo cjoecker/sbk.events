@@ -1,4 +1,4 @@
-import { Location03Icon, Clock01Icon, Location01Icon } from "hugeicons-react";
+import { Location03Icon, Clock01Icon, Location01Icon, FireIcon } from "hugeicons-react";
 import { useLoaderData } from "@remix-run/react";
 import { format } from "date-fns";
 import { motion } from "framer-motion";
@@ -151,6 +151,7 @@ export const EventDayItem = ({ events, date }: EventDayItemProps) => {
 								salsaPercentage={event.salsaPercentage}
 								bachataPercentage={event.bachataPercentage}
 								kizombaPercentage={event.kizombaPercentage}
+								likes={event.likes}
 							/>
 							{!isLast && <Separator />}
 						</Fragment>
@@ -177,6 +178,7 @@ interface EventItemProps {
 	salsaPercentage: number;
 	bachataPercentage: number;
 	kizombaPercentage: number;
+	likes:number
 }
 
 export const EventItem = ({
@@ -190,6 +192,7 @@ export const EventItem = ({
 	salsaPercentage,
 	bachataPercentage,
 	kizombaPercentage,
+	likes
 }: EventItemProps) => {
 	const startTime = format(startDate, "HH:mm");
 	const endTime = format(endDate, "HH:mm");
@@ -219,8 +222,22 @@ export const EventItem = ({
 					{location.name}
 				</a>
 				<div>SBK {sbk}</div>
+				<LikeButton likes={likes}/>
 			</div>
 		</div>
+	);
+};
+
+export type LikeButtonProps = {
+	likes: number;
+};
+export const LikeButton = ({likes}: LikeButtonProps) => {
+	const { t } = useTranslation();
+	return (
+
+		<button aria-label={t("like")} className="flex">
+			<FireIcon size={ICON_SIZE} className="mr-0.5" />{likes}
+		</button>
 	);
 };
 
