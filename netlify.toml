@@ -3,7 +3,7 @@ command = "npm run build"
 publish = "build/client"
 
 [[plugins]]
-  package = "./netlify-plugin-prisma-migrate"
+  package = "./netlify-plugin-prisma-migrate.ts"
 
 [dev]
 command = "npm run dev"
