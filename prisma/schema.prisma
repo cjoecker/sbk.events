@@ -8,7 +8,46 @@ datasource db {
 }
 
 model Event {
+  id                Int       @id @default(autoincrement())
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  infoUrl           String
+  name              String
+  organizer         Organizer @relation(fields: [organizerId], references: [id])
+  organizerId       Int
+  startDate         DateTime
+  endDate           DateTime
+  location          Location  @relation(fields: [locationId], references: [id])
+  locationId        Int
+  salsaPercentage   Int
+  bachataPercentage Int
+  kizombaPercentage Int
+}
+
+model Organizer {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  name      String
+  website   String
+  events    Event[]
+}
+
+model Location {
+  id            Int      @id @default(autoincrement())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  name          String
+  city          City     @relation(fields: [cityId], references: [id])
+  cityId        Int
+  googleMapsUrl String
+  events        Event[]
+}
+
+model City {
+  id        Int        @id @default(autoincrement())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  name      String
+  locations Location[]
 }
