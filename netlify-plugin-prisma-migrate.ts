@@ -1,5 +1,6 @@
+
 module.exports = {
-	onPreBuild: async ({ utils }) => {
+	onPreBuild: async ({ utils }:any) => {
 		try {
 			console.log("Running Prisma migrations...");
 			await utils.run.command("npx prisma migrate deploy");
