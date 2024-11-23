@@ -32,6 +32,9 @@ export async function getUnfinishedEventsAndAfterNow(city: string) {
 	const startOfToday = startOfDay(new Date());
 	const now = new Date();
 	return db.event.findMany({
+		orderBy: {
+			startDate: "asc",
+		},
 		where: {
 			location: {
 				city: {

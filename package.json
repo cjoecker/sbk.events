@@ -17,8 +17,7 @@
 		"format:all": "pnpm format --write .",
 		"test": "vitest run --silent --bail 1",
 		"setup": "prisma generate && prisma migrate deploy",
-		"migrate:db": "prisma generate && prisma migrate dev --create-only",
-		"fill-data": "tsx fill-data.ts"
+		"migrate:db": "prisma generate && prisma migrate dev --create-only"
 	},
 	"dependencies": {
 		"@epic-web/remember": "^1.1.0",
