@@ -217,7 +217,7 @@ export const events: Event[] = [
 		kizombaPercentage: 0,
 	},
 	{
-		url: "https://www.facebook.com/photo/?fbid=3990587561186771&set=pcb.1270718374177590",
+		url: "https://www.facebook.com/photo?fbid=1361423725178815&set=a.770130337641493&locale=es_ES",
 		name: "Fiesta Caribeña",
 		organizer: "Tulum",
 		startDate: new Date("2024-11-24T17:00:00"),
