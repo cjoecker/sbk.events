@@ -2,6 +2,9 @@
 command = "npm run build"
 publish = "build/client"
 
+[[plugins]]
+  package = "./netlify-plugin-prisma-migrate"
+
 [dev]
 command = "npm run dev"
 framework = "vite"
