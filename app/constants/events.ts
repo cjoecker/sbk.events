@@ -229,4 +229,17 @@ export const events: Event[] = [
 		bachataPercentage: 50,
 		kizombaPercentage: 0,
 	},
+	{
+		url: "https://www.facebook.com/photo/?fbid=1139989227481475&set=a.649760493171020",
+		name: "Latin Soul Party",
+		organizer: "Asucar",
+		startDate: new Date("2024-11-24T22:00:00Z"),
+		endDate: new Date("2024-11-23T02:00:00Z"),
+		city: "Valencia",
+		location: "Asucar",
+		locationUrl: "https://maps.app.goo.gl/mtek962hcDLDoKb49",
+		salsaPercentage: 50,
+		bachataPercentage: 50,
+		kizombaPercentage: 0,
+	},
 ];
