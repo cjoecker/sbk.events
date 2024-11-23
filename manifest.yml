@@ -1,2 +1,1 @@
 name: netlify-plugin-prisma-migrate
-description: A plugin to run Prisma migrations during the Netlify build process.
