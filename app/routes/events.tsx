@@ -1,4 +1,4 @@
-import { ClockIcon, SewingPinIcon } from "@radix-ui/react-icons";
+import { Location03Icon, Clock01Icon, Location01Icon } from "hugeicons-react";
 import { useLoaderData } from "@remix-run/react";
 import { format } from "date-fns";
 import { motion } from "framer-motion";
@@ -7,6 +7,8 @@ import { useTranslation } from "react-i18next";
 import { useHydrated } from "remix-utils/use-hydrated";
 
 import { getEventsByDay } from "~/modules/events.server";
+
+const ICON_SIZE = 18;
 
 export async function loader() {
 	const eventDays = await getEventsByDay("Valencia");
@@ -39,7 +41,7 @@ export default function Events() {
 			<div className="flex w-full justify-between">
 				<Title />
 				<h2 className="my-auto mr-4 flex text-xl">
-					<SewingPinIcon className="mr-0.5 mt-1.5" />
+					<Location01Icon size={25} className=" mt-0.5" />
 					Valencia
 				</h2>
 			</div>
@@ -206,14 +208,14 @@ export const EventItem = ({
 			<div className="-mt-0.5 flex flex-1 flex-wrap gap-x-4 leading-snug text-gray-200">
 				<div>{organizer.name}</div>
 				<div className="flex">
-					<ClockIcon className="my-auto mr-1" />
+					<Clock01Icon size={ICON_SIZE} className="my-auto mr-1" />
 					{startTime} – {endTime}
 				</div>
 				<a
 					href={location.googleMapsUrl}
 					className="flex underline decoration-1 hover:text-gray-300"
 				>
-					<SewingPinIcon className="-mx-0.5 my-auto" />
+					<Location03Icon size={ICON_SIZE} className="my-auto" />
 					{location.name}
 				</a>
 				<div>SBK {sbk}</div>
