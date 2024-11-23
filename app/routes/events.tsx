@@ -6,10 +6,8 @@ import { Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { useHydrated } from "remix-utils/use-hydrated";
 
-import { getEventsByDay } from "~/modules/events.server";
-
 export async function loader() {
-	const eventDays = await getEventsByDay("Valencia");
+
 	return { eventDays: [] };
 }
 
