@@ -8,8 +8,8 @@ import { useHydrated } from "remix-utils/use-hydrated";
 
 import { getEventsByDay } from "~/modules/events.server";
 
-export function loader() {
-	const eventDays = getEventsByDay();
+export async function loader() {
+	const eventDays = await getEventsByDay("Valencia");
 	return { eventDays };
 }
 
@@ -141,12 +141,11 @@ export const EventDayItem = ({ events, date }: EventDayItemProps) => {
 						<Fragment key={event.name}>
 							<EventItem
 								name={event.name}
-								url={event.url}
+								infoUrl={event.infoUrl}
 								organizer={event.organizer}
 								startDate={event.startDate}
 								endDate={event.endDate}
 								location={event.location}
-								locationUrl={event.locationUrl}
 								salsaPercentage={event.salsaPercentage}
 								bachataPercentage={event.bachataPercentage}
 								kizombaPercentage={event.kizombaPercentage}
@@ -161,26 +160,31 @@ export const EventDayItem = ({ events, date }: EventDayItemProps) => {
 };
 
 interface EventItemProps {
+	infoUrl: string;
 	name: string;
-	url: string;
-	organizer: string;
+	organizer: {
+		name: string;
+		website: string;
+	};
 	startDate: string;
 	endDate: string;
-	location: string;
-	locationUrl: string;
+	location: {
+		name: string;
+		googleMapsUrl: string;
+	};
 	salsaPercentage: number;
 	bachataPercentage: number;
 	kizombaPercentage: number;
 }
 
 export const EventItem = ({
+	infoUrl,
 	name,
-	url,
+
 	organizer,
 	startDate,
 	endDate,
 	location,
-	locationUrl,
 	salsaPercentage,
 	bachataPercentage,
 	kizombaPercentage,
@@ -192,22 +196,25 @@ export const EventItem = ({
 	return (
 		<div className="flex flex-col">
 			<h3 className="flex-1 text-lg font-bold">
-				<a href={url} className="underline decoration-1 hover:text-gray-300">
+				<a
+					href={infoUrl}
+					className="underline decoration-1 hover:text-gray-300"
+				>
 					{name}
 				</a>
 			</h3>
 			<div className="-mt-0.5 flex flex-1 flex-wrap gap-x-4 leading-snug text-gray-200">
-				<div>{organizer}</div>
+				<div>{organizer.name}</div>
 				<div className="flex">
 					<ClockIcon className="my-auto mr-1" />
 					{startTime} – {endTime}
 				</div>
 				<a
-					href={locationUrl}
+					href={location.googleMapsUrl}
 					className="flex underline decoration-1 hover:text-gray-300"
 				>
 					<SewingPinIcon className="-mx-0.5 my-auto" />
-					{location}
+					{location.name}
 				</a>
 				<div>SBK {sbk}</div>
 			</div>
