@@ -22,6 +22,7 @@ model Event {
   salsaPercentage   Int
   bachataPercentage Int
   kizombaPercentage Int
+  likes             Int
 }
 
 model Organizer {
