@@ -25,14 +25,17 @@ export async function loader() {
 
 export async function action({ request }: ActionFunctionArgs) {
 	const body = new URLSearchParams(await request.text());
-	const likes = Number(body.get("newLikes"));
+	let likesIncrement = Number(body.get("likesIncrement"));
 	const eventId = Number(body.get("eventId"));
+
+	// avoid overuse of likes
+	likesIncrement = Math.min(30, likesIncrement);
 
 	const newEvent = await db.event.update({
 		where: { id: eventId },
 		data: {
 			likes: {
-				increment: likes,
+				increment: likesIncrement,
 			},
 		},
 	});
@@ -270,7 +273,7 @@ export const LikeButton = ({ initialLikes, eventId }: LikeButtonProps) => {
 	const { t } = useTranslation();
 	const [fireIcons, setFireIcons] = useState<{ id: number; x: number }[]>([]);
 	const [likes, setLikes] = useState(initialLikes);
-	const newLikes = useRef(0);
+	const likesIncrement = useRef(0);
 	const debouncedLikes = useDebounce(likes, 250);
 	const submit = useSubmit();
 
@@ -279,13 +282,13 @@ export const LikeButton = ({ initialLikes, eventId }: LikeButtonProps) => {
 	useEffect(() => {
 		if (debouncedLikes > 0) {
 			submit(
-				{ newLikes: newLikes.current, eventId },
+				{ likesIncrement: likesIncrement.current, eventId },
 				{
 					method: "POST",
 					fetcherKey: "like",
 				}
 			);
-			newLikes.current = 0;
+			likesIncrement.current = 0;
 		}
 	}, [debouncedLikes, eventId, submit]);
 
@@ -310,7 +313,7 @@ export const LikeButton = ({ initialLikes, eventId }: LikeButtonProps) => {
 		setLikes((prev) => {
 			return prev + 1;
 		});
-		newLikes.current += 1;
+		likesIncrement.current += 1;
 
 		setTimeout(() => {
 			setFireIcons((prev) => {
