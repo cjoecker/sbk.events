@@ -64,6 +64,7 @@ export async function getUnfinishedEventsAndAfterNow(city: string) {
 			],
 		},
 		select: {
+			id: true,
 			infoUrl: true,
 			name: true,
 			organizer: {

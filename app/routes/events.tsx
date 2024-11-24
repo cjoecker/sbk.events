@@ -1,4 +1,4 @@
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, useSubmit } from "@remix-run/react";
 import { format } from "date-fns";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -12,12 +12,30 @@ import { useTranslation } from "react-i18next";
 import { useHydrated } from "remix-utils/use-hydrated";
 
 import { getEventsByDay } from "~/modules/events.server";
+import { ActionFunction, ActionFunctionArgs } from "@remix-run/node";
+import { db } from "~/modules/db.server";
+import { useDebounceSubmit } from "remix-utils/use-debounce-submit";
 
 const ICON_SIZE = 18;
 
 export async function loader() {
 	const eventDays = await getEventsByDay("Valencia");
 	return { eventDays };
+}
+
+export async function action({ request }: ActionFunctionArgs) {
+	const body = new URLSearchParams(await request.text());
+	const likes = Number(body.get("likes"));
+	const eventId = Number(body.get("eventId"));
+
+	await db.event.update({
+		where: { id: eventId },
+		data: {
+			likes,
+		},
+	});
+
+	return new Response(null, { status: 200 });
 }
 
 const containerAnimationVariants = {
@@ -147,6 +165,7 @@ export const EventDayItem = ({ events, date }: EventDayItemProps) => {
 					return (
 						<Fragment key={event.name}>
 							<EventItem
+								id={event.id}
 								name={event.name}
 								infoUrl={event.infoUrl}
 								organizer={event.organizer}
@@ -168,6 +187,7 @@ export const EventDayItem = ({ events, date }: EventDayItemProps) => {
 };
 
 interface EventItemProps {
+	id: number;
 	infoUrl: string;
 	name: string;
 	organizer: {
@@ -187,9 +207,9 @@ interface EventItemProps {
 }
 
 export const EventItem = ({
+	id,
 	infoUrl,
 	name,
-
 	organizer,
 	startDate,
 	endDate,
@@ -227,24 +247,51 @@ export const EventItem = ({
 					{location.name}
 				</a>
 				<div>SBK {sbk}</div>
-				<LikeButton likes={likes} />
+				<LikeButton likes={likes} eventId={id} />
 			</div>
 		</div>
 	);
 };
 
+export const Separator = () => {
+	return <span className="h-[1px] w-full bg-gray-500" />;
+};
+
+
 export interface LikeButtonProps {
 	likes: number;
+	eventId: number;
 }
-export const LikeButton = ({ likes }: LikeButtonProps) => {
+
+export const LikeButton = ({ likes, eventId }: LikeButtonProps) => {
 	const { t } = useTranslation();
 	const [fireIcons, setFireIcons] = useState<{ id: number; x: number }[]>([]);
+	const [newLikes, setNewLikes] = useState(likes);
+	const submit = useDebounceSubmit();
+
+	const submitLikes = (likes: number) => {
+		submit(
+			{ likes, eventId },
+			{
+				method: "POST",
+				navigate: false,
+				fetcherKey: "like",
+				debounceTimeout: 100,
+			}
+		);
+	};
 
 	const handleClick = () => {
 		const newIconId = Date.now();
-		const randomX = Math.floor(Math.random() * 50) - 25; // Random x value between -50 and 50
+		const xRange = 25;
+		const randomX = Math.floor(Math.random() * xRange * 2) - xRange;
 		setFireIcons((prev) => {
 			return [...prev, { id: newIconId, x: randomX }];
+		});
+		setNewLikes(prev => {
+			const newValue = prev + 1;
+			submitLikes(newValue);
+			return newValue
 		});
 
 		setTimeout(() => {
@@ -253,13 +300,13 @@ export const LikeButton = ({ likes }: LikeButtonProps) => {
 					return icon.id !== newIconId;
 				});
 			});
-		}, 1000); // Remove the icon after 1 second
+		}, 1000);
 	};
 
 	return (
 		<button aria-label={t("like")} className="flex" onClick={handleClick}>
 			<FireIcon size={ICON_SIZE} className="mr-0.5" />
-			{likes}
+			{newLikes}
 			<AnimatePresence>
 				{fireIcons.map((icon) => {
 					return (
@@ -278,8 +325,4 @@ export const LikeButton = ({ likes }: LikeButtonProps) => {
 			</AnimatePresence>
 		</button>
 	);
-};
-
-export const Separator = () => {
-	return <span className="h-[1px] w-full bg-gray-500" />;
 };
