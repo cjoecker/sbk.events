@@ -1,4 +1,6 @@
+import { ActionFunctionArgs } from "@remix-run/node";
 import { useActionData, useLoaderData, useSubmit } from "@remix-run/react";
+import { useDebounce } from "@uidotdev/usehooks";
 import { format } from "date-fns";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -11,10 +13,8 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHydrated } from "remix-utils/use-hydrated";
 
-import { getEventsByDay } from "~/modules/events.server";
-import { ActionFunctionArgs } from "@remix-run/node";
 import { db } from "~/modules/db.server";
-import { useDebounce } from "@uidotdev/usehooks";
+import { getEventsByDay } from "~/modules/events.server";
 
 const ICON_SIZE = 18;
 
@@ -226,7 +226,7 @@ export const EventItem = ({
 	const sbk = `${salsaPercentage}-${bachataPercentage}-${kizombaPercentage}`;
 
 	return (
-		<div className="flex flex-col">
+		<div className="flex flex-col gap-y-0.5">
 			<h3 className="flex-1 text-lg font-bold">
 				<a
 					href={infoUrl}
@@ -235,7 +235,7 @@ export const EventItem = ({
 					{name}
 				</a>
 			</h3>
-			<div className="-mt-0.5 flex flex-1 flex-wrap gap-x-4 leading-snug text-gray-200">
+			<div className="-mt-0.5 flex flex-1 flex-wrap gap-x-4 gap-y-0.5 leading-snug text-gray-200">
 				<div>{organizer.name}</div>
 				<div className="flex">
 					<Clock01Icon size={ICON_SIZE} className="my-auto mr-1" />
@@ -268,14 +268,14 @@ export const LikeButton = ({ initialLikes, eventId }: LikeButtonProps) => {
 	const { t } = useTranslation();
 	const [fireIcons, setFireIcons] = useState<{ id: number; x: number }[]>([]);
 	const [likes, setLikes] = useState(initialLikes);
-	const newLikes = useRef(0)
+	const newLikes = useRef(0);
 	const debouncedLikes = useDebounce(likes, 250);
 	const submit = useSubmit();
 
 	const actionData = useActionData<typeof action>();
 
 	useEffect(() => {
-		if(debouncedLikes > 0){
+		if (debouncedLikes > 0) {
 			submit(
 				{ newLikes: newLikes.current, eventId },
 				{
@@ -287,14 +287,16 @@ export const LikeButton = ({ initialLikes, eventId }: LikeButtonProps) => {
 		}
 	}, [debouncedLikes, eventId, submit]);
 
-
 	useEffect(() => {
-		if (actionData && actionData.actionLikes >= likes && actionData.eventId === eventId) {
+		// update likes in case another use liked at the same time
+		if (
+			actionData &&
+			actionData.actionLikes >= likes &&
+			actionData.eventId === eventId
+		) {
 			setLikes(actionData.actionLikes);
 		}
 	}, [actionData, eventId, likes]);
-
-
 
 	const handleClick = () => {
 		const newIconId = Date.now();
@@ -304,9 +306,9 @@ export const LikeButton = ({ initialLikes, eventId }: LikeButtonProps) => {
 			return [...prev, { id: newIconId, x: randomX }];
 		});
 		setLikes((prev) => {
-			return prev + 1
+			return prev + 1;
 		});
-		newLikes.current += 1
+		newLikes.current += 1;
 
 		setTimeout(() => {
 			setFireIcons((prev) => {
