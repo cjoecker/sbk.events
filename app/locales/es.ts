@@ -8,9 +8,9 @@ export default {
 	thisIsAnOpenSourceProject: "Este es un proyecto open-source.",
 	contributions: "Contribuciones",
 	areWelcome: "son bienvenidas.",
-	pageTitle: "Sociales SBK",
+	pageTitle: "Sociales y Clases de Bachata y Salsa Cerca de Ti | SBK Hoy",
 	pageDescription:
-		"Todos los sociales de Bachata, Salsa y Kizomba cerca de ti en un solo lugar. ¡Deja de buscar en múltiples grupos y encuentra aquí el social de SBK perfecto para ti!",
+		"Todos los sociales y las mejores clases de bachata y clases de salsa cerca de ti. ¡Deja de buscar en múltiples grupos y encuentra aquí el social de SBK para hoy con un solo clic!",
 	pageKeywords:
-		"Social de Salsa, Social de Bachata, Social de Kizomba, Social SBK, Sociales de baile latino, Eventos de Salsa, Eventos de Bachata, Eventos de Kizomba, Eventos SBK, Noches de Salsa, Noches de Bachata, Noches de Kizomba, Fiesta de Salsa, Fiesta de Bachata, Fiesta de Kizomba",
+		"clases de bachata, clases de salsa, academias de baile cerca de mí, clases de baile cerca de mi, clases de bachata cerca de mi, academia baile cerca de mi, clase de baile cerca de mi, fiestas de salsa, fiestas de bachata",
 };
