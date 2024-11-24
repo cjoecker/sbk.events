@@ -4,7 +4,7 @@ export default {
 	pageTitle: "SBK Socials",
 	madeWith: "Gemacht mit",
 	love: "Liebe",
-	like: "Gefällt mir",
+	like: "gefällt mir",
 	by: "von",
 	thisIsAnOpenSourceProject: "Dies ist ein Open-Source-Projekt.",
 	contributions: "Beiträge",
