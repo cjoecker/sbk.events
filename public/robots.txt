@@ -1,4 +1,4 @@
 User-agent: *
-Disallow:
+Allow: /
 
-  Sitemap: https://sbk.events/sitemap.xml
+Sitemap: https://sbk.events/sitemap.xml
