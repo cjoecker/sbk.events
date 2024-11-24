@@ -259,6 +259,8 @@ export const Separator = () => {
 	return <span className="h-[1px] w-full bg-gray-500" />;
 };
 
+const FIRE_ANIMATION_TIME = 1000;
+
 export interface LikeButtonProps {
 	initialLikes: number;
 	eventId: number;
@@ -316,7 +318,7 @@ export const LikeButton = ({ initialLikes, eventId }: LikeButtonProps) => {
 					return icon.id !== newIconId;
 				});
 			});
-		}, 1000);
+		}, FIRE_ANIMATION_TIME);
 	};
 
 	return (
@@ -331,7 +333,7 @@ export const LikeButton = ({ initialLikes, eventId }: LikeButtonProps) => {
 							initial={{ opacity: 1, y: 0 }}
 							animate={{ opacity: 0, y: -50, x: icon.x }}
 							exit={{ opacity: 0 }}
-							transition={{ duration: 1 }}
+							transition={{ duration: FIRE_ANIMATION_TIME / 1000 }}
 							className="absolute"
 						>
 							<FireIcon size={ICON_SIZE} className="mr-0.5" />
