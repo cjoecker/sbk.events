@@ -1,10 +1,9 @@
 import { PrismaClient } from "@prisma/client";
-import { db } from "~/modules/db.server";
 import { addDays, addHours, addMonths, addYears } from "date-fns";
 
-const prisma = new PrismaClient();
+import { db } from "~/modules/db.server";
 
-const devEmails = ["c.jocker@hotmail.com"];
+const prisma = new PrismaClient();
 
 async function main() {
 	console.info("seeding... 🪹");
@@ -193,6 +192,7 @@ main()
 		console.error(error);
 		throw error;
 	})
+	// eslint-disable-next-line unicorn/prefer-top-level-await, @typescript-eslint/no-misused-promises
 	.finally(async () => {
 		await prisma.$disconnect();
 	});

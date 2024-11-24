@@ -1,8 +1,13 @@
-import { Location03Icon, Clock01Icon, Location01Icon, FireIcon } from "hugeicons-react";
 import { useLoaderData } from "@remix-run/react";
 import { format } from "date-fns";
-import { motion } from "framer-motion";
-import { Fragment } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+	Location03Icon,
+	Clock01Icon,
+	Location01Icon,
+	FireIcon,
+} from "hugeicons-react";
+import { Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHydrated } from "remix-utils/use-hydrated";
 
@@ -178,7 +183,7 @@ interface EventItemProps {
 	salsaPercentage: number;
 	bachataPercentage: number;
 	kizombaPercentage: number;
-	likes:number
+	likes: number;
 }
 
 export const EventItem = ({
@@ -192,7 +197,7 @@ export const EventItem = ({
 	salsaPercentage,
 	bachataPercentage,
 	kizombaPercentage,
-	likes
+	likes,
 }: EventItemProps) => {
 	const startTime = format(startDate, "HH:mm");
 	const endTime = format(endDate, "HH:mm");
@@ -222,21 +227,55 @@ export const EventItem = ({
 					{location.name}
 				</a>
 				<div>SBK {sbk}</div>
-				<LikeButton likes={likes}/>
+				<LikeButton likes={likes} />
 			</div>
 		</div>
 	);
 };
 
-export type LikeButtonProps = {
+export interface LikeButtonProps {
 	likes: number;
-};
-export const LikeButton = ({likes}: LikeButtonProps) => {
+}
+export const LikeButton = ({ likes }: LikeButtonProps) => {
 	const { t } = useTranslation();
-	return (
+	const [fireIcons, setFireIcons] = useState<{ id: number; x: number }[]>([]);
 
-		<button aria-label={t("like")} className="flex">
-			<FireIcon size={ICON_SIZE} className="mr-0.5" />{likes}
+	const handleClick = () => {
+		const newIconId = Date.now();
+		const randomX = Math.floor(Math.random() * 50) - 25; // Random x value between -50 and 50
+		setFireIcons((prev) => {
+			return [...prev, { id: newIconId, x: randomX }];
+		});
+
+		setTimeout(() => {
+			setFireIcons((prev) => {
+				return prev.filter((icon) => {
+					return icon.id !== newIconId;
+				});
+			});
+		}, 1000); // Remove the icon after 1 second
+	};
+
+	return (
+		<button aria-label={t("like")} className="flex" onClick={handleClick}>
+			<FireIcon size={ICON_SIZE} className="mr-0.5" />
+			{likes}
+			<AnimatePresence>
+				{fireIcons.map((icon) => {
+					return (
+						<motion.div
+							key={icon.id}
+							initial={{ opacity: 1, y: 0 }}
+							animate={{ opacity: 0, y: -50, x: icon.x }}
+							exit={{ opacity: 0 }}
+							transition={{ duration: 1 }}
+							className="absolute"
+						>
+							<FireIcon size={ICON_SIZE} className="mr-0.5" />
+						</motion.div>
+					);
+				})}
+			</AnimatePresence>
 		</button>
 	);
 };
