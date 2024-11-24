@@ -1,4 +1,4 @@
-import { useLoaderData, useSubmit } from "@remix-run/react";
+import { useActionData, useLoaderData, useSubmit } from "@remix-run/react";
 import { format } from "date-fns";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -7,14 +7,14 @@ import {
 	Location01Icon,
 	FireIcon,
 } from "hugeicons-react";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHydrated } from "remix-utils/use-hydrated";
 
 import { getEventsByDay } from "~/modules/events.server";
-import { ActionFunction, ActionFunctionArgs } from "@remix-run/node";
+import { ActionFunctionArgs } from "@remix-run/node";
 import { db } from "~/modules/db.server";
-import { useDebounceSubmit } from "remix-utils/use-debounce-submit";
+import { useDebounce } from "@uidotdev/usehooks";
 
 const ICON_SIZE = 18;
 
@@ -25,17 +25,19 @@ export async function loader() {
 
 export async function action({ request }: ActionFunctionArgs) {
 	const body = new URLSearchParams(await request.text());
-	const likes = Number(body.get("likes"));
+	const likes = Number(body.get("newLikes"));
 	const eventId = Number(body.get("eventId"));
 
-	await db.event.update({
+	const newEvent = await db.event.update({
 		where: { id: eventId },
 		data: {
-			likes,
+			likes: {
+				increment: likes,
+			},
 		},
 	});
 
-	return new Response(null, { status: 200 });
+	return { actionLikes: newEvent.likes, eventId };
 }
 
 const containerAnimationVariants = {
@@ -247,7 +249,7 @@ export const EventItem = ({
 					{location.name}
 				</a>
 				<div>SBK {sbk}</div>
-				<LikeButton likes={likes} eventId={id} />
+				<LikeButton initialLikes={likes} eventId={id} />
 			</div>
 		</div>
 	);
@@ -257,29 +259,42 @@ export const Separator = () => {
 	return <span className="h-[1px] w-full bg-gray-500" />;
 };
 
-
 export interface LikeButtonProps {
-	likes: number;
+	initialLikes: number;
 	eventId: number;
 }
 
-export const LikeButton = ({ likes, eventId }: LikeButtonProps) => {
+export const LikeButton = ({ initialLikes, eventId }: LikeButtonProps) => {
 	const { t } = useTranslation();
 	const [fireIcons, setFireIcons] = useState<{ id: number; x: number }[]>([]);
-	const [newLikes, setNewLikes] = useState(likes);
-	const submit = useDebounceSubmit();
+	const [likes, setLikes] = useState(initialLikes);
+	const newLikes = useRef(0)
+	const debouncedLikes = useDebounce(likes, 250);
+	const submit = useSubmit();
 
-	const submitLikes = (likes: number) => {
-		submit(
-			{ likes, eventId },
-			{
-				method: "POST",
-				navigate: false,
-				fetcherKey: "like",
-				debounceTimeout: 100,
-			}
-		);
-	};
+	const actionData = useActionData<typeof action>();
+
+	useEffect(() => {
+		if(debouncedLikes > 0){
+			submit(
+				{ newLikes: newLikes.current, eventId },
+				{
+					method: "POST",
+					fetcherKey: "like",
+				}
+			);
+			newLikes.current = 0;
+		}
+	}, [debouncedLikes, eventId, submit]);
+
+
+	useEffect(() => {
+		if (actionData && actionData.actionLikes >= likes && actionData.eventId === eventId) {
+			setLikes(actionData.actionLikes);
+		}
+	}, [actionData, eventId, likes]);
+
+
 
 	const handleClick = () => {
 		const newIconId = Date.now();
@@ -288,11 +303,10 @@ export const LikeButton = ({ likes, eventId }: LikeButtonProps) => {
 		setFireIcons((prev) => {
 			return [...prev, { id: newIconId, x: randomX }];
 		});
-		setNewLikes(prev => {
-			const newValue = prev + 1;
-			submitLikes(newValue);
-			return newValue
+		setLikes((prev) => {
+			return prev + 1
 		});
+		newLikes.current += 1
 
 		setTimeout(() => {
 			setFireIcons((prev) => {
@@ -306,7 +320,7 @@ export const LikeButton = ({ likes, eventId }: LikeButtonProps) => {
 	return (
 		<button aria-label={t("like")} className="flex" onClick={handleClick}>
 			<FireIcon size={ICON_SIZE} className="mr-0.5" />
-			{newLikes}
+			{likes}
 			<AnimatePresence>
 				{fireIcons.map((icon) => {
 					return (
