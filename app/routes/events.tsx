@@ -325,7 +325,7 @@ export const LikeButton = ({ initialLikes, eventId }: LikeButtonProps) => {
 	};
 
 	return (
-		<button aria-label={t("like")} className="flex" onClick={handleClick}>
+		<button aria-label={t("like")} className="flex select-none" onClick={handleClick}>
 			<FireIcon size={ICON_SIZE} className="mr-0.5" />
 			{likes}
 			<AnimatePresence>
