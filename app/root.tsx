@@ -143,12 +143,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				}}
 				className="h-[100svh] w-[100svw] overflow-hidden bg-black bg-cover bg-right font-body text-base font-normal text-white sm:bg-center "
 			>
-				<main className="h-full overflow-y-auto overflow-x-hidden">
+				<div className="h-full overflow-y-auto overflow-x-hidden">
 					<div className="mx-auto flex h-full max-w-2xl flex-col p-2">
-						<div className="mb-8 flex-1">{children}</div>
+						<main className="mb-8 flex-1">{children}</main>
 						<Footer />
 					</div>
-				</main>
+				</div>
 				<ScrollRestoration />
 				<Scripts />
 			</body>
@@ -159,7 +159,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export const Footer = () => {
 	const { t } = useTranslation();
 	return (
-		<div className="mt-10 flex w-full flex-col pb-2 text-sm">
+		<footer className="mt-10 flex w-full flex-col pb-2 text-sm">
 			<div className="mx-auto">
 				{t("madeWith")}{" "}
 				<span aria-label={t("love")}>
@@ -182,7 +182,7 @@ export const Footer = () => {
 				</a>{" "}
 				{t("areWelcome")}
 			</div>
-		</div>
+		</footer>
 	);
 };
 
