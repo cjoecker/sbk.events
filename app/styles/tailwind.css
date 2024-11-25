@@ -98,3 +98,7 @@
 ul {
 	list-style-type: none;
 }
+
+:root {
+	color-scheme: dark;
+}
