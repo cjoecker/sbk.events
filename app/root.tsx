@@ -21,7 +21,7 @@ import i18nServer, { localeCookie } from "./modules/i18n.server";
 import { fallbackLng, setI18nLocale } from "~/config/i18n";
 import LibreFranklinNormalFont from "~/fonts/libre-franklin-v18-latin-200.woff2";
 import LibreFranklinBoldFont from "~/fonts/libre-franklin-v18-latin-regular.woff2";
-import Background from "~/images/background.jpg";
+import Background from "~/images/background.webp";
 import stylesheet from "~/styles/tailwind.css?url";
 import { json } from "~/utils/remix";
 
@@ -68,6 +68,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export const links: LinksFunction = () => {
 	return [
 		{ rel: "stylesheet", href: stylesheet },
+		{
+			rel: "preload",
+			as: "image/webp",
+			href: Background,
+		},
 		{
 			rel: "preload",
 			as: "font",
