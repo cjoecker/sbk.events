@@ -15,6 +15,7 @@ import { useHydrated } from "remix-utils/use-hydrated";
 
 import { db } from "~/modules/db.server";
 import { getEventsByDay } from "~/modules/events.server";
+import { SEOHandle } from "@nasa-gcn/remix-seo";
 
 const ICON_SIZE = 18;
 
@@ -42,6 +43,12 @@ export async function action({ request }: ActionFunctionArgs) {
 
 	return { actionLikes: newEvent.likes, eventId };
 }
+
+export const handle: SEOHandle = {
+	getSitemapEntries: () => {
+		return [{ route: `/events`, priority: 1, changefreq: "hourly" }];
+	},
+};
 
 const containerAnimationVariants = {
 	visible: {
@@ -325,7 +332,11 @@ export const LikeButton = ({ initialLikes, eventId }: LikeButtonProps) => {
 	};
 
 	return (
-		<button aria-label={t("like")} className="flex select-none" onClick={handleClick}>
+		<button
+			aria-label={t("like")}
+			className="flex select-none"
+			onClick={handleClick}
+		>
 			<FireIcon size={ICON_SIZE} className="mr-0.5" />
 			{likes}
 			<AnimatePresence>

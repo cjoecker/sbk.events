@@ -1,5 +1,6 @@
 import { MetaFunction, redirect } from "@remix-run/node";
 import { useTranslation } from "react-i18next";
+import { SEOHandle } from "@nasa-gcn/remix-seo";
 
 export const meta: MetaFunction = () => {
 	return [
@@ -16,6 +17,12 @@ export const meta: MetaFunction = () => {
 export function loader() {
 	return redirect("/events");
 }
+
+export const handle: SEOHandle = {
+	getSitemapEntries: () => {
+		return null;
+	},
+};
 
 export default function Index() {
 	const { t } = useTranslation();
