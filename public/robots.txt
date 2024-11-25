@@ -1,4 +1,0 @@
-User-agent: *
-Disallow:
-
-  Sitemap: https://sbk.events/sitemap.xml

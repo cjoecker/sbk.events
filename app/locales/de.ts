@@ -1,16 +1,18 @@
 export default {
 	socials: "socials",
 	salsaBachataKizomba: "Salsa Bachata Kizomba",
-	pageTitle: "SBK Socials",
+	pageTitle:
+		"Bachata- und Salsa-Socials und Kurse in deiner Nähe | SBK Heute Finden",
 	madeWith: "Gemacht mit",
 	love: "Liebe",
 	like: "gefällt mir",
 	by: "von",
 	thisIsAnOpenSourceProject: "Dies ist ein Open-Source-Projekt.",
+	salsaBachataKizombaSocials: "Salsa Bachata Kizomba Socials",
 	contributions: "Beiträge",
 	areWelcome: "sind willkommen.",
 	pageDescription:
-		"Alle Bachata-, Salsa- und Kizomba-Socials in deiner Nähe an einem Ort. Hör auf, in vielen Gruppen zu suchen – finde hier das perfekte SBK-Social für dich!",
+		"Alle Socials und die besten Bachata-Kurse und Salsa-Kurse in deiner Nähe. Hör auf, in verschiedenen Gruppen zu suchen, und finde das heutige SBK-Social hier mit nur einem Klick!",
 	pageKeywords:
-		"Salsa Social, Bachata Social, Kizomba Social, SBK Social, Lateinamerikanische Tanz-Events, Salsa Veranstaltungen, Bachata Veranstaltungen, Kizomba Veranstaltungen, SBK Events, Salsa Abende, Bachata Abende, Kizomba Abende, Salsa Party, Bachata Party, Kizomba Party",
+		"Bachata-Kurse, Salsa-Kurse, Tanzschulen in meiner Nähe, Tanzkurse in meiner Nähe, Bachata-Kurse in meiner Nähe, Tanzakademie in meiner Nähe, Tanzkurs in meiner Nähe, Salsa-Partys, Bachata-Partys",
 };

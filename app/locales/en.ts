@@ -8,9 +8,11 @@ export default {
 	thisIsAnOpenSourceProject: "This is an open-source project.",
 	contributions: "Contributions",
 	areWelcome: "are welcome.",
-	pageTitle: "SBK Socials",
+	pageTitle:
+		"Bachata and Salsa Socials and Classes Near You | Find SBK Events Today",
+	salsaBachataKizombaSocials: "Salsa Bachata Kizomba Socials",
 	pageDescription:
-		"All Bachata, Salsa, and Kizomba socials near you in one place. Stop searching through multiple groups—find the perfect SBK social for you here!",
+		"All the socials and the best bachata classes and salsa classes near you. Stop searching through multiple groups and find today’s SBK social here with just one click!",
 	pageKeywords:
-		"Salsa social, Bachata social, Kizomba social, SBK social, Latin dance socials, Salsa events, Bachata events, Kizomba events, SBK events, Salsa nights, Bachata nights, Kizomba nights, Salsa party, Bachata party, Kizomba party",
+		"Bachata classes, Salsa classes, Dance schools near me, Dance classes near me, Bachata classes near me, Dance academy near me, Dance class near me, Salsa parties, Bachata parties",
 };

@@ -1,3 +1,4 @@
+import { SEOHandle } from "@nasa-gcn/remix-seo";
 import { ActionFunctionArgs } from "@remix-run/node";
 import { useActionData, useLoaderData, useSubmit } from "@remix-run/react";
 import { useDebounce } from "@uidotdev/usehooks";
@@ -7,7 +8,7 @@ import {
 	Location03Icon,
 	Clock01Icon,
 	Location01Icon,
-	FireIcon,
+	FavouriteIcon,
 } from "hugeicons-react";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -43,6 +44,12 @@ export async function action({ request }: ActionFunctionArgs) {
 	return { actionLikes: newEvent.likes, eventId };
 }
 
+export const handle: SEOHandle = {
+	getSitemapEntries: () => {
+		return [{ route: "/events", priority: 1, changefreq: "hourly" }];
+	},
+};
+
 const containerAnimationVariants = {
 	visible: {
 		transition: {
@@ -68,14 +75,14 @@ export default function Events() {
 		<>
 			<div className="flex w-full justify-between">
 				<Title />
-				<h2 className="my-auto mr-4 flex text-xl">
+				<h2 className="my-auto flex text-xl">
 					<Location01Icon size={25} className=" mt-0.5" />
 					Valencia
 				</h2>
 			</div>
 			{isHydrated && (
 				<motion.ul
-					className="flex flex-col gap-y-2 p-2 pl-3"
+					className="mt-2 flex flex-col gap-y-2"
 					initial="hidden"
 					animate="visible"
 					variants={containerAnimationVariants}
@@ -108,7 +115,7 @@ export default function Events() {
 
 export const Title = () => {
 	const { t } = useTranslation();
-	const ariaLabel = t("pageTitle");
+	const ariaLabel = t("salsaBachataKizombaSocials");
 	const socials = t("socials");
 	const socialsArray = [...socials];
 	const sbk = t("salsaBachataKizomba");
@@ -120,6 +127,8 @@ export const Title = () => {
 					return (
 						<span key={index} className="inline-block">
 							{letter}
+							{/*TODO check if google adds space after Socials with &#8203; */}
+							{index === socialsArray.length - 1 && <>&#8203;</>}
 						</span>
 					);
 				})}
@@ -143,9 +152,7 @@ export interface MonthNameProps {
 
 export const MonthName = ({ date }: MonthNameProps) => {
 	const month = format(date, "MMMM");
-	return (
-		<h3 className="-ml-2 mb-1 mt-3 text-xl font-bold capitalize">{month}</h3>
-	);
+	return <h3 className=" mb-1 mt-3 text-xl font-bold capitalize">{month}</h3>;
 };
 
 export interface EventDayItemProps {
@@ -229,16 +236,16 @@ export const EventItem = ({
 	const sbk = `${salsaPercentage}-${bachataPercentage}-${kizombaPercentage}`;
 
 	return (
-		<div className="flex flex-col gap-y-0.5">
-			<h3 className="flex-1 text-lg font-bold">
+		<div className="flex flex-col gap-y-1">
+			<h4 className="flex-1 text-xl font-bold">
 				<a
 					href={infoUrl}
-					className="underline decoration-1 hover:text-gray-300"
+					className="flex h-6 underline decoration-1 hover:text-gray-300"
 				>
 					{name}
 				</a>
-			</h3>
-			<div className="-mt-0.5 flex flex-1 flex-wrap gap-x-4 gap-y-0.5 leading-snug text-gray-200">
+			</h4>
+			<div className="-mt-0.5 flex flex-1 flex-wrap gap-x-4 gap-y-1 leading-snug text-gray-200">
 				<div>{organizer.name}</div>
 				<div className="flex">
 					<Clock01Icon size={ICON_SIZE} className="my-auto mr-1" />
@@ -246,7 +253,7 @@ export const EventItem = ({
 				</div>
 				<a
 					href={location.googleMapsUrl}
-					className="flex underline decoration-1 hover:text-gray-300"
+					className="flex flex h-6 underline decoration-1 hover:text-gray-300"
 				>
 					<Location03Icon size={ICON_SIZE} className="my-auto" />
 					{location.name}
@@ -325,8 +332,12 @@ export const LikeButton = ({ initialLikes, eventId }: LikeButtonProps) => {
 	};
 
 	return (
-		<button aria-label={t("like")} className="flex select-none" onClick={handleClick}>
-			<FireIcon size={ICON_SIZE} className="mr-0.5" />
+		<button
+			aria-label={t("like")}
+			className="flex h-6 select-none"
+			onClick={handleClick}
+		>
+			<FavouriteIcon size={ICON_SIZE} className="mr-1 mt-0.5" />
 			{likes}
 			<AnimatePresence>
 				{fireIcons.map((icon) => {
@@ -339,7 +350,7 @@ export const LikeButton = ({ initialLikes, eventId }: LikeButtonProps) => {
 							transition={{ duration: FIRE_ANIMATION_TIME / 1000 }}
 							className="absolute"
 						>
-							<FireIcon size={ICON_SIZE} className="mr-0.5" />
+							<FavouriteIcon size={ICON_SIZE} className="mr-1 mt-0.5" />
 						</motion.div>
 					);
 				})}

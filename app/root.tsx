@@ -21,7 +21,7 @@ import i18nServer, { localeCookie } from "./modules/i18n.server";
 import { fallbackLng, setI18nLocale } from "~/config/i18n";
 import LibreFranklinNormalFont from "~/fonts/libre-franklin-v18-latin-200.woff2";
 import LibreFranklinBoldFont from "~/fonts/libre-franklin-v18-latin-regular.woff2";
-import Background from "~/images/background.jpg";
+import Background from "~/images/background.webp";
 import stylesheet from "~/styles/tailwind.css?url";
 import { json } from "~/utils/remix";
 
@@ -43,8 +43,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 		},
 		{
 			name: "viewport",
-			content:
-				"width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1",
+			content: "width=device-width,initial-scale=1,viewport-fit=cover",
 		},
 		{
 			name: "theme-color",
@@ -68,6 +67,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export const links: LinksFunction = () => {
 	return [
 		{ rel: "stylesheet", href: stylesheet },
+		{
+			rel: "preload",
+			as: "image/webp",
+			href: Background,
+		},
 		{
 			rel: "preload",
 			as: "font",
@@ -143,12 +147,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				}}
 				className="h-[100svh] w-[100svw] overflow-hidden bg-black bg-cover bg-right font-body text-base font-normal text-white sm:bg-center "
 			>
-				<main className="h-full overflow-y-auto overflow-x-hidden">
+				<div className="h-full overflow-y-auto overflow-x-hidden">
 					<div className="mx-auto flex h-full max-w-2xl flex-col p-2">
-						<div className="mb-8 flex-1">{children}</div>
+						<main className="mx-2 mb-8 flex-1">{children}</main>
 						<Footer />
 					</div>
-				</main>
+				</div>
 				<ScrollRestoration />
 				<Scripts />
 			</body>
@@ -159,7 +163,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export const Footer = () => {
 	const { t } = useTranslation();
 	return (
-		<div className="mt-10 flex w-full flex-col pb-2 text-sm">
+		<footer className="mt-10 flex w-full flex-col pb-2 text-sm">
 			<div className="mx-auto">
 				{t("madeWith")}{" "}
 				<span aria-label={t("love")}>
@@ -182,7 +186,7 @@ export const Footer = () => {
 				</a>{" "}
 				{t("areWelcome")}
 			</div>
-		</div>
+		</footer>
 	);
 };
 
