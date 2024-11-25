@@ -115,7 +115,7 @@ export default function Events() {
 
 export const Title = () => {
 	const { t } = useTranslation();
-	const ariaLabel = t("pageTitle");
+	const ariaLabel = t("salsaBachataKizombaSocials");
 	const socials = t("socials");
 	const socialsArray = [...socials];
 	const sbk = t("salsaBachataKizomba");
@@ -127,6 +127,8 @@ export const Title = () => {
 					return (
 						<span key={index} className="inline-block">
 							{letter}
+							{/*TODO check if google adds space after Socials with &#8203; */}
+							{index === socialsArray.length - 1 && <>&#8203;</>}
 						</span>
 					);
 				})}

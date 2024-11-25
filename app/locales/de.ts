@@ -7,6 +7,7 @@ export default {
 	like: "gefällt mir",
 	by: "von",
 	thisIsAnOpenSourceProject: "Dies ist ein Open-Source-Projekt.",
+	salsaBachataKizombaSocials: "Salsa Bachata Kizomba Socials",
 	contributions: "Beiträge",
 	areWelcome: "sind willkommen.",
 	pageDescription:
