@@ -1,6 +1,6 @@
+import { SEOHandle } from "@nasa-gcn/remix-seo";
 import { MetaFunction, redirect } from "@remix-run/node";
 import { useTranslation } from "react-i18next";
-import { SEOHandle } from "@nasa-gcn/remix-seo";
 
 export const meta: MetaFunction = () => {
 	return [

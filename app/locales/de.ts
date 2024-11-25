@@ -1,7 +1,8 @@
 export default {
 	socials: "socials",
 	salsaBachataKizomba: "Salsa Bachata Kizomba",
-	pageTitle: "Bachata- und Salsa-Socials und Kurse in deiner Nähe | SBK Heute Finden",
+	pageTitle:
+		"Bachata- und Salsa-Socials und Kurse in deiner Nähe | SBK Heute Finden",
 	madeWith: "Gemacht mit",
 	love: "Liebe",
 	like: "gefällt mir",

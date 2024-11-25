@@ -1,3 +1,4 @@
+import { SEOHandle } from "@nasa-gcn/remix-seo";
 import { ActionFunctionArgs } from "@remix-run/node";
 import { useActionData, useLoaderData, useSubmit } from "@remix-run/react";
 import { useDebounce } from "@uidotdev/usehooks";
@@ -7,7 +8,7 @@ import {
 	Location03Icon,
 	Clock01Icon,
 	Location01Icon,
-	FavouriteIcon
+	FavouriteIcon,
 } from "hugeicons-react";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -15,7 +16,6 @@ import { useHydrated } from "remix-utils/use-hydrated";
 
 import { db } from "~/modules/db.server";
 import { getEventsByDay } from "~/modules/events.server";
-import { SEOHandle } from "@nasa-gcn/remix-seo";
 
 const ICON_SIZE = 18;
 
@@ -46,7 +46,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export const handle: SEOHandle = {
 	getSitemapEntries: () => {
-		return [{ route: `/events`, priority: 1, changefreq: "hourly" }];
+		return [{ route: "/events", priority: 1, changefreq: "hourly" }];
 	},
 };
 
@@ -82,7 +82,7 @@ export default function Events() {
 			</div>
 			{isHydrated && (
 				<motion.ul
-					className="flex flex-col gap-y-2 mt-2"
+					className="mt-2 flex flex-col gap-y-2"
 					initial="hidden"
 					animate="visible"
 					variants={containerAnimationVariants}
@@ -152,9 +152,7 @@ export interface MonthNameProps {
 
 export const MonthName = ({ date }: MonthNameProps) => {
 	const month = format(date, "MMMM");
-	return (
-		<h3 className=" mb-1 mt-3 text-xl font-bold capitalize">{month}</h3>
-	);
+	return <h3 className=" mb-1 mt-3 text-xl font-bold capitalize">{month}</h3>;
 };
 
 export interface EventDayItemProps {
@@ -242,7 +240,7 @@ export const EventItem = ({
 			<h4 className="flex-1 text-xl font-bold">
 				<a
 					href={infoUrl}
-					className="underline decoration-1 hover:text-gray-300 h-6 flex"
+					className="flex h-6 underline decoration-1 hover:text-gray-300"
 				>
 					{name}
 				</a>
@@ -255,7 +253,7 @@ export const EventItem = ({
 				</div>
 				<a
 					href={location.googleMapsUrl}
-					className="flex underline decoration-1 hover:text-gray-300 h-6 flex"
+					className="flex flex h-6 underline decoration-1 hover:text-gray-300"
 				>
 					<Location03Icon size={ICON_SIZE} className="my-auto" />
 					{location.name}
@@ -336,7 +334,7 @@ export const LikeButton = ({ initialLikes, eventId }: LikeButtonProps) => {
 	return (
 		<button
 			aria-label={t("like")}
-			className="flex select-none h-6"
+			className="flex h-6 select-none"
 			onClick={handleClick}
 		>
 			<FavouriteIcon size={ICON_SIZE} className="mr-1 mt-0.5" />

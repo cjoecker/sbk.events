@@ -8,7 +8,8 @@ export default {
 	thisIsAnOpenSourceProject: "This is an open-source project.",
 	contributions: "Contributions",
 	areWelcome: "are welcome.",
-	pageTitle: "Bachata and Salsa Socials and Classes Near You | Find SBK Events Today",
+	pageTitle:
+		"Bachata and Salsa Socials and Classes Near You | Find SBK Events Today",
 	salsaBachataKizombaSocials: "Salsa Bachata Kizomba Socials",
 	pageDescription:
 		"All the socials and the best bachata classes and salsa classes near you. Stop searching through multiple groups and find today’s SBK social here with just one click!",
