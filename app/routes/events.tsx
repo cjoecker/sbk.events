@@ -1,6 +1,6 @@
 import { SEOHandle } from "@nasa-gcn/remix-seo";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData, useSubmit } from "@remix-run/react";
+import { Outlet, useLoaderData, useSubmit } from "@remix-run/react";
 import { format } from "date-fns";
 import { motion, useAnimate } from "framer-motion";
 import {
@@ -81,6 +81,7 @@ export default function Events() {
 
 	return (
 		<>
+			<Outlet />
 			<div className="flex w-full justify-between">
 				<Title />
 				<h2 className="my-auto flex text-xl">

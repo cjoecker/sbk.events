@@ -15,4 +15,6 @@ export default {
 		"All the socials and the best bachata classes and salsa classes near you. Stop searching through multiple groups and find today’s SBK social here with just one click!",
 	pageKeywords:
 		"Bachata classes, Salsa classes, Dance schools near me, Dance classes near me, Bachata classes near me, Dance academy near me, Dance class near me, Salsa parties, Bachata parties",
+	eventName: "Event name",
+	eventInformationUrl: "Event information link",
 };
