@@ -1,47 +1,55 @@
 import { SEOHandle } from "@nasa-gcn/remix-seo";
-import { ActionFunctionArgs } from "@remix-run/node";
-import { useActionData, useLoaderData, useSubmit } from "@remix-run/react";
-import { useDebounce } from "@uidotdev/usehooks";
+import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import { useLoaderData, useSubmit } from "@remix-run/react";
 import { format } from "date-fns";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion, useAnimate } from "framer-motion";
 import {
 	Location03Icon,
 	Clock01Icon,
 	Location01Icon,
 	FavouriteIcon,
 } from "hugeicons-react";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHydrated } from "remix-utils/use-hydrated";
 
+import { FavouriteIconFilled } from "~/components/icons/favourite-icon-filled";
 import { db } from "~/modules/db.server";
 import { getEventsByDay } from "~/modules/events.server";
+import { getSession } from "~/modules/session.server";
+import { json } from "~/utils/remix";
 
 const ICON_SIZE = 18;
 
-export async function loader() {
+export async function loader({ request }: LoaderFunctionArgs) {
 	const eventDays = await getEventsByDay("Valencia");
-	return { eventDays };
+	const { getLikedEvents } = await getSession(request);
+	return { eventDays, likedEvents: getLikedEvents() };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
+	const { getHasLikedEvent, likeEvent, getHeaders } = await getSession(request);
+
 	const body = new URLSearchParams(await request.text());
-	let likesIncrement = Number(body.get("likesIncrement"));
 	const eventId = Number(body.get("eventId"));
 
-	// avoid overuse of likes
-	likesIncrement = Math.min(30, likesIncrement);
-
+	const hasLikedEvent = getHasLikedEvent(eventId);
+	const increment = hasLikedEvent ? -1 : 1;
 	const newEvent = await db.event.update({
 		where: { id: eventId },
 		data: {
 			likes: {
-				increment: likesIncrement,
+				increment,
 			},
 		},
 	});
 
-	return { actionLikes: newEvent.likes, eventId };
+	likeEvent(eventId);
+
+	return json(
+		{ actionLikes: newEvent.likes, eventId },
+		{ headers: await getHeaders() }
+	);
 }
 
 export const handle: SEOHandle = {
@@ -234,6 +242,8 @@ export const EventItem = ({
 	const startTime = format(startDate, "HH:mm");
 	const endTime = format(endDate, "HH:mm");
 	const sbk = `${salsaPercentage}-${bachataPercentage}-${kizombaPercentage}`;
+	const { likedEvents } = useLoaderData<typeof loader>();
+	const initialHasLiked = likedEvents.includes(id);
 
 	return (
 		<div className="flex flex-col gap-y-1">
@@ -259,7 +269,11 @@ export const EventItem = ({
 					{location.name}
 				</a>
 				<div>SBK {sbk}</div>
-				<LikeButton initialLikes={likes} eventId={id} />
+				<LikeButton
+					initialLikes={likes}
+					initialHasLiked={initialHasLiked}
+					eventId={id}
+				/>
 			</div>
 		</div>
 	);
@@ -269,66 +283,38 @@ export const Separator = () => {
 	return <span className="h-[1px] w-full bg-gray-500" />;
 };
 
-const FIRE_ANIMATION_TIME = 1000;
-
 export interface LikeButtonProps {
 	initialLikes: number;
+	initialHasLiked: boolean;
 	eventId: number;
 }
 
-export const LikeButton = ({ initialLikes, eventId }: LikeButtonProps) => {
+export const LikeButton = ({
+	initialLikes,
+	initialHasLiked,
+	eventId,
+}: LikeButtonProps) => {
 	const { t } = useTranslation();
-	const [fireIcons, setFireIcons] = useState<{ id: number; x: number }[]>([]);
 	const [likes, setLikes] = useState(initialLikes);
-	const likesIncrement = useRef(0);
-	const debouncedLikes = useDebounce(likes, 250);
+	const [hasLiked, setHasLiked] = useState(initialHasLiked);
 	const submit = useSubmit();
-
-	const actionData = useActionData<typeof action>();
-
-	useEffect(() => {
-		if (debouncedLikes > 0) {
-			submit(
-				{ likesIncrement: likesIncrement.current, eventId },
-				{
-					method: "POST",
-					fetcherKey: "like",
-				}
-			);
-			likesIncrement.current = 0;
-		}
-	}, [debouncedLikes, eventId, submit]);
-
-	useEffect(() => {
-		// update likes in case another use liked at the same time
-		if (
-			actionData &&
-			actionData.actionLikes >= likes &&
-			actionData.eventId === eventId
-		) {
-			setLikes(actionData.actionLikes);
-		}
-	}, [actionData, eventId, likes]);
+	const [scope, animate] = useAnimate();
 
 	const handleClick = () => {
-		const newIconId = Date.now();
-		const xRange = 25;
-		const randomX = Math.floor(Math.random() * xRange * 2) - xRange;
-		setFireIcons((prev) => {
-			return [...prev, { id: newIconId, x: randomX }];
+		submit(
+			{ eventId },
+			{
+				method: "POST",
+				fetcherKey: "like",
+			}
+		);
+		setHasLiked((hasLiked) => {
+			return !hasLiked;
 		});
-		setLikes((prev) => {
-			return prev + 1;
+		const increment = hasLiked ? -1 : 1;
+		setLikes((likes) => {
+			return likes + increment;
 		});
-		likesIncrement.current += 1;
-
-		setTimeout(() => {
-			setFireIcons((prev) => {
-				return prev.filter((icon) => {
-					return icon.id !== newIconId;
-				});
-			});
-		}, FIRE_ANIMATION_TIME);
 	};
 
 	return (
@@ -336,25 +322,20 @@ export const LikeButton = ({ initialLikes, eventId }: LikeButtonProps) => {
 			aria-label={t("like")}
 			className="flex h-6 select-none"
 			onClick={handleClick}
+			onMouseEnter={() => {
+				animate(scope.current, { scale: 1.2 });
+			}}
+			onMouseLeave={() => {
+				animate(scope.current, { scale: 1 });
+			}}
+			onMouseDown={() => {
+				animate(scope.current, { scale: 0.9 });
+			}}
 		>
-			<FavouriteIcon size={ICON_SIZE} className="mr-1 mt-0.5" />
+			<span className="-mt-0.5 mr-0.5 h-full" ref={scope}>
+				{hasLiked ? <FavouriteIconFilled /> : <FavouriteIcon />}
+			</span>
 			{likes}
-			<AnimatePresence>
-				{fireIcons.map((icon) => {
-					return (
-						<motion.div
-							key={icon.id}
-							initial={{ opacity: 1, y: 0 }}
-							animate={{ opacity: 0, y: -50, x: icon.x }}
-							exit={{ opacity: 0 }}
-							transition={{ duration: FIRE_ANIMATION_TIME / 1000 }}
-							className="absolute"
-						>
-							<FavouriteIcon size={ICON_SIZE} className="mr-1 mt-0.5" />
-						</motion.div>
-					);
-				})}
-			</AnimatePresence>
 		</button>
 	);
 };

@@ -14,3 +14,18 @@ export function getDomainUrl(request: Request) {
 	const protocol = request.headers.get("X-Forwarded-Proto") ?? "http";
 	return `${protocol}://${host}`;
 }
+
+export function addCookieToHeaders(
+	headers: ResponseInit["headers"] = new Headers(),
+	value: string | null
+) {
+	if (!value) return headers;
+	if (headers instanceof Headers) {
+		headers.append("Set-Cookie", value);
+	} else if (Array.isArray(headers)) {
+		headers.push(["Set-Cookie", value]);
+	} else {
+		headers["Set-Cookie"] = value;
+	}
+	return headers;
+}
