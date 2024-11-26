@@ -1,6 +1,6 @@
 import { SEOHandle } from "@nasa-gcn/remix-seo";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData, useSubmit } from "@remix-run/react";
+import { useLoaderData, useNavigation, useSubmit } from "@remix-run/react";
 import { format } from "date-fns";
 import { motion, useAnimate } from "framer-motion";
 import {
@@ -43,6 +43,15 @@ export async function action({ request }: ActionFunctionArgs) {
 			},
 		},
 	});
+
+	if (newEvent.likes < 0) {
+		await db.event.update({
+			where: { id: eventId },
+			data: {
+				likes: 0,
+			},
+		});
+	}
 
 	likeEvent(eventId);
 
@@ -299,8 +308,11 @@ export const LikeButton = ({
 	const [hasLiked, setHasLiked] = useState(initialHasLiked);
 	const submit = useSubmit();
 	const [scope, animate] = useAnimate();
+	const navigation = useNavigation();
+	const isSubmitting = navigation.state === "submitting";
 
 	const handleClick = () => {
+		if (isSubmitting) return;
 		submit(
 			{ eventId },
 			{
@@ -332,8 +344,12 @@ export const LikeButton = ({
 				animate(scope.current, { scale: 0.9 });
 			}}
 		>
-			<span className="-mt-0.5 mr-0.5 h-full" ref={scope}>
-				{hasLiked ? <FavouriteIconFilled /> : <FavouriteIcon />}
+			<span className=" mr-0.5 flex" ref={scope}>
+				{hasLiked ? (
+					<FavouriteIconFilled size={ICON_SIZE} />
+				) : (
+					<FavouriteIcon size={ICON_SIZE} />
+				)}
 			</span>
 			{likes}
 		</button>
