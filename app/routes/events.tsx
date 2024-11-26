@@ -44,6 +44,15 @@ export async function action({ request }: ActionFunctionArgs) {
 		},
 	});
 
+	if (newEvent.likes < 0) {
+		await db.event.update({
+			where: { id: eventId },
+			data: {
+				likes: 0,
+			},
+		});
+	}
+
 	likeEvent(eventId);
 
 	return json(
