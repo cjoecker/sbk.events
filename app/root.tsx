@@ -120,7 +120,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 	const locale = loaderData?.locale ?? fallbackLng;
 	setI18nLocale(locale);
 	return (
-		<html lang={locale}>
+		<html lang={locale} className="dark">
 			<head>
 				<Meta />
 				<Links />
