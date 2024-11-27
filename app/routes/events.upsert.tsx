@@ -15,8 +15,8 @@ const validator = withZod(
 		infoUrl: z.string().url(),
 		name: z.string().min(1).trim(),
 		organizerId: z.number(),
-		startDate: z.date(),
-		endDate: z.date(),
+		startDate: z.string(),
+		endDate: z.string(),
 		locationId: z.number(),
 		salsaPercentage: z.number().int().min(0).max(100),
 		bachataPercentage: z.number().int().min(0).max(100),
@@ -29,30 +29,31 @@ export default function EventsUpsert() {
 	const form = useForm({
 		validator,
 	});
+	const sc = form.scope("aa")
 	return (
 		<EnhancedDialog title={t("createEvent")}>
 			<form className="flex flex-col gap-y-3" {...form.getFormProps()}>
-				<InputWithLabel label={t("eventName")} id="name" />
-				<InputWithLabel label={t("eventInformationUrl")} id="infoUrl" />
+				<InputWithLabel label={t("eventName")} scope={form.scope("eventName")} />
+				<InputWithLabel label={t("eventInformationUrl")} scope={form.scope("eventInformationUrl")}  />
 				<InputWithLabel
 					label={t("startDate")}
-					id="startDate"
+					scope={form.scope("startDate")}
 					type="datetime-local"
 				/>
-				<InputWithLabel label={t("endDate")} id="endDate" type="date" />
+				<InputWithLabel label={t("endDate")} type="datetime-local" scope={form.scope("endDate")} />
 				<div>
 					<Label>{t("SalsaBachataKizombaPercentage")}</Label>
 					<div className="flex gap-x-2">
-						<Input id="salsaPercentage" type="number" />
+						<Input id="salsaPercentage" type="number" scope={form.scope("salsaPercentage")} />
 						<div className="my-auto">–</div>
-						<Input id="bachataPercentage" type="number" />
+						<Input id="bachataPercentage" type="number" scope={form.scope("bachataPercentage")} />
 						<div className="my-auto">–</div>
-						<Input id="kizombaPercentage" type="number" />
+						<Input id="kizombaPercentage" type="number"  scope={form.scope("kizombaPercentage")}/>
 					</div>
 				</div>
-				<InputWithLabel label={t("locationName")} id="locationId" />
-				<InputWithLabel label={t("locationGoogleMapsUrl")} id="locationId" />
-				<InputWithLabel label={t("organizer")} id="organizerId" />
+				<InputWithLabel label={t("locationName")} id="locationId" scope={form.scope("locationName")}/>
+				<InputWithLabel label={t("locationGoogleMapsUrl")} id="locationId" scope={form.scope("locationGoogleMapsUrl")}/>
+				<InputWithLabel label={t("organizer")} id="organizerId" scope={form.scope("organizer")}/>
 				<Button type="submit">{t("save")}</Button>
 			</form>
 		</EnhancedDialog>
