@@ -1,5 +1,9 @@
 import { SEOHandle } from "@nasa-gcn/remix-seo";
-import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import {
+	ActionFunctionArgs,
+	LinksFunction,
+	LoaderFunctionArgs,
+} from "@remix-run/node";
 import { useLoaderData, useNavigation, useSubmit } from "@remix-run/react";
 import { format } from "date-fns";
 import { motion, useAnimate } from "framer-motion";
@@ -20,6 +24,15 @@ import { getSession } from "~/modules/session.server";
 import { json } from "~/utils/remix";
 
 const ICON_SIZE = 18;
+
+export const links: LinksFunction = () => {
+	return [
+		{
+			rel: "canonical",
+			href: "https://sbk.events/events",
+		},
+	];
+};
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	const eventDays = await getEventsByDay("Valencia");

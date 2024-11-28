@@ -15,7 +15,7 @@ export const meta: MetaFunction = () => {
 };
 
 export function loader() {
-	return redirect("/events");
+	return redirect("/events", { status: 301 });
 }
 
 export const handle: SEOHandle = {
