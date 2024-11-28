@@ -29,3 +29,4 @@ export function addCookieToHeaders(
 	}
 	return headers;
 }
+

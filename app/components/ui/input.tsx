@@ -13,6 +13,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 		const field = useField(scope);
 		const hasError = field.error() !== null;
 		const errorId = `${field.name()}-error`;
+
+		const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+			props.onChange?.(e);
+			field.getInputProps().onChange?.(e);
+		};
 		return (
 			<div>
 				<input
@@ -27,6 +32,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 					aria-describedby={hasError ? errorId : undefined}
 					{...props}
 					{...field.getInputProps()}
+					onChange={handleChange}
 				/>
 				{hasError && (
 					<div id={errorId} className="text-xs text-destructive-foreground text-red-300 mt-0.5" aria-live="assertive">

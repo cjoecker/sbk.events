@@ -18,11 +18,12 @@ import { db } from "~/modules/db.server";
 import { getEventsByDay } from "~/modules/events.server";
 import { getSession } from "~/modules/session.server";
 import { json } from "~/utils/remix";
+import { CITY } from "~/constants/city";
 
 const ICON_SIZE = 18;
 
 export async function loader({ request }: LoaderFunctionArgs) {
-	const eventDays = await getEventsByDay("Valencia");
+	const eventDays = await getEventsByDay(CITY);
 	const { getLikedEvents } = await getSession(request);
 	return { eventDays, likedEvents: getLikedEvents() };
 }
@@ -95,7 +96,7 @@ export default function Events() {
 				<Title />
 				<h2 className="my-auto flex text-xl">
 					<Location01Icon size={25} className=" mt-0.5" />
-					Valencia
+					{CITY}
 				</h2>
 			</div>
 			{isHydrated && (

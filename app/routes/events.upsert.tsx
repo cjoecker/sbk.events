@@ -7,8 +7,16 @@ import { useTranslation } from "react-i18next";
 import { InputWithLabel } from "~/components/ui/input-with-label";
 import { DatePicker } from "~/components/ui/date-picker";
 import { EnhancedDialog } from "~/components/enhanced-dialog";
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "~/components/ui/button";
+import { LoaderFunctionArgs } from "@remix-run/node";
+import { getEventsByDay } from "~/modules/events.server";
+import { getSession } from "~/modules/session.server";
+import { db } from "~/modules/db.server";
+
+import { CITY } from "~/constants/city";
+import { AutoComplete } from "~/components/ui/autocomplete";
+import { useLoaderData } from "@remix-run/react";
 
 const validator = withZod(
 	z.object({
@@ -24,7 +32,45 @@ const validator = withZod(
 	})
 );
 
+export async function loader({ request }: LoaderFunctionArgs) {
+	const locations = await db.location.findMany({
+		select: { id: true, name: true },
+		where:{
+			city:{
+				name:CITY
+			}
+		}
+	});
+	const locationOptions = locations.map((location) => ({
+		value: location.id.toString(),
+		label: location.name,
+	}));
+	const organizers = await db.organizer.findMany({
+		select: { id: true, name: true },
+		where: {
+			events: {
+				some: {
+					location: {
+						city: {
+							name: CITY
+						}
+					}
+				}
+			}
+		}
+	});
+	const organizerOptions = organizers.map((organizer) => ({
+		value: organizer.id.toString(),
+		label: organizer.name,
+	}));
+
+	return { locationOptions, organizerOptions };
+}
+
 export default function EventsUpsert() {
+	const [searchValue, setSearchValue] = useState<string>("");
+	const [selectedValue, setSelectedValue] = useState<string>("");
+	const { locationOptions, organizerOptions } = useLoaderData<typeof loader>();
 	const { t } = useTranslation();
 	const form = useForm({
 		validator,
@@ -51,9 +97,9 @@ export default function EventsUpsert() {
 						<Input id="kizombaPercentage" type="number"  scope={form.scope("kizombaPercentage")}/>
 					</div>
 				</div>
-				<InputWithLabel label={t("locationName")} id="locationId" scope={form.scope("locationName")}/>
-				<InputWithLabel label={t("locationGoogleMapsUrl")} id="locationId" scope={form.scope("locationGoogleMapsUrl")}/>
-				<InputWithLabel label={t("organizer")} id="organizerId" scope={form.scope("organizer")}/>
+				<AutoComplete label={t("location")}  scope={form.scope("locationName")} options={locationOptions} />
+				<InputWithLabel label={t("locationGoogleMapsUrl")}  scope={form.scope("locationGoogleMapsUrl")}/>
+				<InputWithLabel label={t("organizer")} scope={form.scope("organizer")}/>
 				<Button type="submit">{t("save")}</Button>
 			</form>
 		</EnhancedDialog>
