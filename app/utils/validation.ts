@@ -9,7 +9,6 @@ export const intWithinRange = (min: number, max: number) => {
 			.int()
 			.refine(
 				(val) => {
-					console.log("val", val);
 					return val >= min && val <= max;
 				},
 				{
@@ -23,4 +22,15 @@ export const intWithinRange = (min: number, max: number) => {
 
 export function getWithinRangeErrorMessage(min: number, max: number) {
 	return `valueMustBeBetween${PARAMETERS_SEPARATOR}${JSON.stringify({ min, max })}`;
+}
+
+export function assert(
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	condition: any,
+	message: string,
+): asserts condition {
+	if (condition) {
+		return;
+	}
+	throw new Error(`Assert failed: ${message}`);
 }

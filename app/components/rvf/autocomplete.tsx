@@ -5,51 +5,47 @@ import {
 } from "@nextui-org/autocomplete";
 import React, { Ref, useEffect } from "react";
 import { AutocompleteProps } from "@nextui-org/react";
+import { useTranslation } from "react-i18next";
 
-export type _AutocompleteProps = {
+export type _AutocompleteProps = Omit<AutocompleteProps, "children" | "onSelectionChange"> & {
 	label: string;
 	options: { id: string; name: string }[];
 	idScope: FormScope<string>;
 	nameScope: FormScope<string>;
-} & Omit<AutocompleteProps, 'children'>;
+	onSelectionChange?: (id: string) => void;
+};
 
 export function AutoComplete({
 	label,
 	idScope,
 	nameScope,
 	options,
+	                             onSelectionChange,
 	...props
 }: _AutocompleteProps) {
 	const nameField = useField(nameScope);
 	const idField = useField(idScope);
-
-	const {
-		onChange: onChangeName,
-		onBlur,
-		defaultValue,
-		name,
-		type,
-		value,
-		form,
-	} = nameField.getInputProps();
-	const { onChange: onChangeId, value: idValue } = idField.getInputProps();
-
-	const hasError = nameField.error() !== null;
-
-	useEffect(() => {
-		console.log("value", value);
-	}, [value]);
+	const {t}=useTranslation();
+	const hasError = nameField.error() !== null || idField.error() !== null;
+	const errorTranslationKey = nameField.error() ?? idField.error() ?? "";
+	const errorMessage = t(errorTranslationKey);
 
 	return (
 		<>
 			<_Autocomplete
 				label={label}
-				errorMessage={nameField.error()}
+				errorMessage={errorMessage}
 				isInvalid={hasError}
 				allowsCustomValue={true}
 				allowsEmptyCollection={false}
 				onSelectionChange={(id) => {
 					idField.setValue(id as string);
+					idField.setTouched(true);
+					nameField.setTouched(true);
+					nameField.validate();
+					if(onSelectionChange) {
+						onSelectionChange(id as string);
+					}
 				}}
 				onInputChange={(value) => {
 					nameField.setValue(value);

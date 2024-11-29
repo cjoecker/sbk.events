@@ -9,7 +9,7 @@ export type _InputProps = {
 
 export const Input = ({ label, scope, ...props }: _InputProps) => {
 	const field = useField(scope);
-	const { onChange, onBlur, defaultValue, name, type, ref, value, form } =
+	const { onChange, onBlur, defaultValue, name, type, form } =
 		field.getInputProps();
 	const hasError = field.error() !== null;
 	return (
@@ -20,7 +20,7 @@ export const Input = ({ label, scope, ...props }: _InputProps) => {
 			defaultValue={defaultValue}
 			name={name}
 			type={type}
-			value={value as string}
+			value={field.value()}
 			form={form}
 			isInvalid={hasError}
 			errorMessage={field.error()}
