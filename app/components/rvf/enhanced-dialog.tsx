@@ -1,29 +1,20 @@
-import {Modal, ModalContent, ModalHeader, ModalBody} from "@nextui-org/react";
+import { Modal, ModalContent, ModalHeader, ModalBody } from "@nextui-org/react";
 
 import { ReactNode } from "react";
 
 export interface DialogDemoProps {
-	title: string
-	children: ReactNode
-	onClose: () => void
+	title: string;
+	children: ReactNode;
+	onClose: () => void;
 }
 
-export function EnhancedDialog({ title, onClose,children }: DialogDemoProps) {
-
+export function EnhancedDialog({ title, onClose, children }: DialogDemoProps) {
 	return (
 		<>
-			<Modal isOpen={true}>
+			<Modal isOpen={true} onClose={onClose}>
 				<ModalContent>
-					{(onClose) => (
-						<>
-							<ModalHeader className="flex flex-col gap-1">
-								Modal Title
-							</ModalHeader>
-							<ModalBody>
-								{children}
-							</ModalBody>
-						</>
-					)}
+					<ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
+					<ModalBody>{children}</ModalBody>
 				</ModalContent>
 			</Modal>
 		</>

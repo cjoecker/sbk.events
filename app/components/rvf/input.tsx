@@ -3,7 +3,7 @@ import { InputProps } from "@nextui-org/react";
 import { Input as _Input } from "@nextui-org/input";
 
 export type _InputProps = {
-	label: string;
+	label?: string;
 	scope: FormScope<string>;
 } & InputProps;
 
@@ -12,8 +12,6 @@ export const Input = ({ label, scope, ...props }: _InputProps) => {
 	const { onChange, onBlur, defaultValue, name, type, ref, value, form } =
 		field.getInputProps();
 	const hasError = field.error() !== null;
-	console.log("field.error()", field.error());
-	console.log("value", value);
 	return (
 		<_Input
 			label={label}

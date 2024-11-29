@@ -1,5 +1,5 @@
 import { withZod } from "@rvf/zod";
-import { useForm } from "@rvf/react";
+import { useForm } from "@rvf/remix";
 import { z } from "zod";
 import { useTranslation } from "react-i18next";
 import React, { useState } from "react";
@@ -8,7 +8,7 @@ import { ActionFunctionArgs, DataFunctionArgs, LoaderFunctionArgs } from "@remix
 import { db } from "~/modules/db.server";
 
 import { CITY } from "~/constants/city";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, useNavigate } from "@remix-run/react";
 import { AutoComplete } from "~/components/rvf/autocomplete";
 import { EnhancedDialog } from "~/components/rvf/enhanced-dialog";
 import { Input } from "~/components/rvf/input";
@@ -19,15 +19,17 @@ import { validationError } from "@rvf/remix";
 const validator = withZod(
 	z.object({
 		infoUrl: z.string().url(),
-		name: z.string().min(1).trim(),
-		// organizerId: z.string(),
-		startDate: z.string(),
-		endDate: z.string(),
-		// locationId: z.string(),
-		// locationGoogleMapsUrl: z.string(),
-		// salsaPercentage: intWithinRange(0, 100),
-		// bachataPercentage: intWithinRange(0, 100),
-		// kizombaPercentage: intWithinRange(0, 100),
+		name: z.string().trim().min(1),
+		organizerId: z.string().optional(),
+		organizerName: z.string().min(1),
+		startDate: z.string().min(1),
+		endDate: z.string().min(1),
+		locationId: z.string().optional(),
+		locationName: z.string().min(1),
+		locationGoogleMapsUrl: z.string().url(),
+		salsaPercentage: intWithinRange(0, 100),
+		bachataPercentage: intWithinRange(0, 100),
+		kizombaPercentage: intWithinRange(0, 100),
 	})
 );
 
@@ -41,8 +43,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
 		},
 	});
 	const locationOptions = locations.map((location) => ({
-		value: location.id.toString(),
-		label: location.name,
+		id: location.id.toString(),
+		name: location.name,
 	}));
 	const organizers = await db.organizer.findMany({
 		select: { id: true, name: true },
@@ -59,8 +61,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
 		},
 	});
 	const organizerOptions = organizers.map((organizer) => ({
-		value: organizer.id.toString(),
-		label: organizer.name,
+		id: organizer.id.toString(),
+		name: organizer.name,
 	}));
 
 	return { locationOptions, organizerOptions };
@@ -68,7 +70,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export const action = async ({ request }: ActionFunctionArgs) => {1
 
 
-	console.log("1", 1);
 	const result = await validator.validate(await request.formData());
 
 	if (result.error) {
@@ -86,10 +87,20 @@ export default function EventsUpsert() {
 	const { locationOptions, organizerOptions } = useLoaderData<typeof loader>();
 	const { t } = useTranslation();
 	const form = useForm({
+		method: "post",
 		validator,
+		onSubmitFailure: (data) => {
+		},
 	});
+
+	const navigate = useNavigate();
+
 	return (
-		<EnhancedDialog title={t("createEvent")}>
+		<EnhancedDialog title={t("createEvent")} onClose={
+			() => {
+				navigate("/events");
+			}
+		}>
 			<form className="flex flex-col gap-y-3" {...form.getFormProps()}>
 				<Input label={t("eventName")} scope={form.scope("name")} />
 				<Input
@@ -108,10 +119,9 @@ export default function EventsUpsert() {
 				/>
 				<AutoComplete
 					label={t("location")}
-					scope={form.scope("locationId")}
+					idScope={form.scope("locationId")}
+					nameScope={form.scope("locationName")}
 					options={locationOptions}
-					allowsCustomValue={true}
-					allowsEmptyCollection={false}
 					selectorIcon={null}
 					isClearable={false}
 				/>
@@ -119,15 +129,15 @@ export default function EventsUpsert() {
 					label={t("locationGoogleMapsUrl")}
 					scope={form.scope("locationGoogleMapsUrl")}
 				/>
-				<AutoComplete
-					label={t("organizer")}
-					scope={form.scope("organizerId")}
-					options={organizerOptions}
-					allowsCustomValue={true}
-					allowsEmptyCollection={false}
-					selectorIcon={null}
-					isClearable={false}
-				/>
+				{/*<AutoComplete*/}
+				{/*	label={t("organizer")}*/}
+				{/*	scope={form.scope("organizerId")}*/}
+				{/*	options={organizerOptions}*/}
+				{/*	allowsCustomValue={true}*/}
+				{/*	allowsEmptyCollection={false}*/}
+				{/*	selectorIcon={null}*/}
+				{/*	isClearable={false}*/}
+				{/*/>*/}
 				<div className="flex gap-x-2">
 					<Input
 						id="salsaPercentage"
