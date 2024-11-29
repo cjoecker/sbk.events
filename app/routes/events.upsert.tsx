@@ -95,7 +95,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		kizombaPercentage,
 	} = result.data;
 	const locationIdNumber = locationId ? Number.parseInt(locationId) : undefined;
+
 	const organizerIdNumber = organizerId ? Number.parseInt(organizerId) : undefined;
+
 	const city= await db.city.findFirst({
 		where: { name: CITY },
 		select: { id: true },
@@ -124,6 +126,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			return new Response("Organizer not found", { status: 404 });
 		}
 	}
+
+
+
 	await db.event.create({
 		data: {
 			infoUrl,
@@ -132,7 +137,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			endDate: new Date(endDate),
 			location: {
 				connectOrCreate: {
-					where: { id: locationIdNumber },
+					where: { id: locationIdNumber ?? 0 },
 					create: {
 						name: locationName,
 						googleMapsUrl: locationGoogleMapsUrl,
@@ -147,7 +152,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			},
 			organizer: {
 				connectOrCreate: {
-					where: { id: organizerIdNumber },
+					where: { id: organizerIdNumber ?? 0},
 					create: { name: organizerName, website: ""},
 				},
 			},
