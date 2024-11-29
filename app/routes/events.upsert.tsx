@@ -89,8 +89,6 @@ export default function EventsUpsert() {
 	const form = useForm({
 		method: "post",
 		validator,
-		onSubmitFailure: (data) => {
-		},
 	});
 
 	const navigate = useNavigate();
@@ -129,15 +127,14 @@ export default function EventsUpsert() {
 					label={t("locationGoogleMapsUrl")}
 					scope={form.scope("locationGoogleMapsUrl")}
 				/>
-				{/*<AutoComplete*/}
-				{/*	label={t("organizer")}*/}
-				{/*	scope={form.scope("organizerId")}*/}
-				{/*	options={organizerOptions}*/}
-				{/*	allowsCustomValue={true}*/}
-				{/*	allowsEmptyCollection={false}*/}
-				{/*	selectorIcon={null}*/}
-				{/*	isClearable={false}*/}
-				{/*/>*/}
+				<AutoComplete
+					label={t("organizer")}
+					idScope={form.scope("organizerId")}
+					nameScope={form.scope("organizerName")}
+					options={organizerOptions}
+					selectorIcon={null}
+					isClearable={false}
+				/>
 				<div className="flex gap-x-2">
 					<Input
 						id="salsaPercentage"
