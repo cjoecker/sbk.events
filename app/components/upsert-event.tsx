@@ -85,7 +85,7 @@ export function UpsertEvent({
 				<Input label={t("eventInformationUrl")} scope={form.scope("infoUrl")} />
 				<div className="flex gap-2">
 					<DatePicker
-						className="flex-1 min-w-[200px] w-full"
+						className="flex-1 min-w-[130px] w-full"
 						label={t("date")}
 						scope={form.scope("date")}
 						minValue={today(getLocalTimeZone())}
