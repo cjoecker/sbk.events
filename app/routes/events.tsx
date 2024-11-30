@@ -1,6 +1,10 @@
 import { SEOHandle } from "@nasa-gcn/remix-seo";
-import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { Outlet, useLoaderData, useSubmit,useNavigation } from "@remix-run/react";
+import {
+	ActionFunctionArgs,
+	LinksFunction,
+	LoaderFunctionArgs,
+} from "@remix-run/node";
+import { useLoaderData, useNavigation, useSubmit, Outlet } from "@remix-run/react";
 import { format } from "date-fns";
 import { motion, useAnimate } from "framer-motion";
 import {
@@ -21,6 +25,15 @@ import { json } from "~/utils/remix";
 import { CITY } from "~/constants/city";
 
 const ICON_SIZE = 18;
+
+export const links: LinksFunction = () => {
+	return [
+		{
+			rel: "canonical",
+			href: "https://sbk.events/events",
+		},
+	];
+};
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	const eventDays = await getEventsByDay(CITY);
@@ -96,7 +109,7 @@ export default function Events() {
 				<Title />
 				<h2 className="my-auto flex text-xl">
 					<Location01Icon size={25} className=" mt-0.5" />
-					{CITY}
+					Valencia
 				</h2>
 			</div>
 			{isHydrated && (
