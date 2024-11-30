@@ -4,6 +4,7 @@ import { addCookieToHeaders } from "~/utils/remix";
 
 interface SessionData {
 	likedEvents: number[];
+	isAdmin: boolean;
 }
 
 export const { getSession: getCookieSession, commitSession } =
@@ -28,6 +29,7 @@ export async function getSession(request: Request) {
 		const currentValue = await commitSession(session);
 		return currentValue === initialValue ? null : currentValue;
 	};
+
 	return {
 		session,
 		commit,
@@ -52,6 +54,12 @@ export async function getSession(request: Request) {
 		getLikedEvents: () => {
 			return session.get("likedEvents") ?? [];
 		},
+		setIsAdmin: () => {
+			session.set("isAdmin", true);
+		},
+		getIsAdmin: () => {
+			return session.get("isAdmin") ?? false
+			},
 		/**
 		 * This will initialize a Headers object if one is not provided.
 		 * It will set the 'Set-Cookie' header value on that headers object.

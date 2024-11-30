@@ -19,6 +19,16 @@ import { Button } from "@nextui-org/react";
 import { assert, intWithinRange } from "~/utils/validation";
 import { validationError } from "@rvf/remix";
 import { useField } from "@rvf/react";
+import { SEOHandle } from "@nasa-gcn/remix-seo";
+import { getSession } from "~/modules/session.server";
+import { json } from "~/utils/remix";
+
+export const handle: SEOHandle = {
+	getSitemapEntries: () => {
+		return null;
+	},
+};
+
 
 const validator = withZod(
 	z.object({
@@ -76,6 +86,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export const action = async ({ request }: ActionFunctionArgs) => {
+	const { getIsAdmin } = await getSession(request);
+
+	if(!getIsAdmin()){
+		// eslint-disable-next-line @typescript-eslint/only-throw-error
+		throw json(null, 403);
+	}
+
 	const result = await validator.validate(await request.formData());
 	if (result.error) {
 		return validationError(result.error, result.submittedData);
@@ -254,50 +271,3 @@ export default function EventsUpsert() {
 	);
 }
 
-
-// export default function EventsUpsert() {
-// 	const { locationOptions, organizerOptions } = useLoaderData<typeof loader>();
-// 	const { t } = useTranslation();
-// 	const form = useForm({
-// 		validator,
-// 	});
-// 	const sc = form.scope("aa");
-// 	return (
-// 		<EnhancedDialog title={t("createEvent")}>
-// 			<form className="flex flex-col gap-y-3" {...form.getFormProps()}>
-
-// 				<div>
-// 					<Label>{t("SalsaBachataKizombaPercentage")}</Label>
-
-// 				<AutoComplete
-// 					label={t("location")}
-// 					scope={form.scope("location")}
-// 					options={locationOptions}
-// 					allowsCustomValue={true}
-// 					allowsEmptyCollection={false}
-// 					selectorIcon={null}
-// 					isClearable={false}
-// 				/>
-// 				<Autocomplete
-// 					label="Select an animal"
-// 					className="max-w-xs"
-// 				>
-// 					{animals.map((animal) => (
-// 						<AutocompleteItem key={animal.value} value={animal.value}>
-// 							{animal.label}
-// 						</AutocompleteItem>
-// 					))}
-// 				</Autocomplete>
-// 				<Input
-// 					label={t("locationGoogleMapsUrl")}
-// 					scope={form.scope("locationGoogleMapsUrl")}
-// 				/>
-// 				<Input
-// 					label={t("organizer")}
-// 					scope={form.scope("organizer")}
-// 				/>
-// 				<Button type="submit">{t("save")}</Button>
-// 			</form>
-// 		</EnhancedDialog>
-// 	);
-// }
