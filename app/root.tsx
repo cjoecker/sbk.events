@@ -1,3 +1,4 @@
+import { NextUIProvider } from "@nextui-org/react";
 import {
 	LoaderFunctionArgs,
 	LinksFunction,
@@ -120,7 +121,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 	const locale = loaderData?.locale ?? fallbackLng;
 	setI18nLocale(locale);
 	return (
-		<html lang={locale}>
+		<html lang={locale} className="dark">
 			<head>
 				<Meta />
 				<Links />
@@ -193,7 +194,11 @@ export const Footer = () => {
 export default function App() {
 	const { locale } = useLoaderData<typeof loader>();
 	useChangeLanguage(locale);
-	return <Outlet />;
+	return (
+		<NextUIProvider>
+			<Outlet />
+		</NextUIProvider>
+	);
 }
 
 export function ErrorBoundary() {

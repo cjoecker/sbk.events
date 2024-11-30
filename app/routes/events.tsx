@@ -4,7 +4,12 @@ import {
 	LinksFunction,
 	LoaderFunctionArgs,
 } from "@remix-run/node";
-import { useLoaderData, useNavigation, useSubmit } from "@remix-run/react";
+import {
+	useLoaderData,
+	useNavigation,
+	useSubmit,
+	Outlet,
+} from "@remix-run/react";
 import { format } from "date-fns";
 import { motion, useAnimate } from "framer-motion";
 import {
@@ -18,6 +23,7 @@ import { useTranslation } from "react-i18next";
 import { useHydrated } from "remix-utils/use-hydrated";
 
 import { FavouriteIconFilled } from "~/components/icons/favourite-icon-filled";
+import { CITY } from "~/constants/city";
 import { db } from "~/modules/db.server";
 import { getEventsByDay } from "~/modules/events.server";
 import { getSession } from "~/modules/session.server";
@@ -35,7 +41,7 @@ export const links: LinksFunction = () => {
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
-	const eventDays = await getEventsByDay("Valencia");
+	const eventDays = await getEventsByDay(CITY);
 	const { getLikedEvents } = await getSession(request);
 	return { eventDays, likedEvents: getLikedEvents() };
 }
@@ -103,6 +109,7 @@ export default function Events() {
 
 	return (
 		<>
+			<Outlet />
 			<div className="flex w-full justify-between">
 				<Title />
 				<h2 className="my-auto flex text-xl">
@@ -234,7 +241,6 @@ interface EventItemProps {
 	name: string;
 	organizer: {
 		name: string;
-		website: string;
 	};
 	startDate: string;
 	endDate: string;
