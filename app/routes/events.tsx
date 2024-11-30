@@ -223,7 +223,6 @@ interface EventItemProps {
 	name: string;
 	organizer: {
 		name: string;
-		website: string;
 	};
 	startDate: string;
 	endDate: string;

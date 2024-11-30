@@ -70,7 +70,6 @@ export async function getUnfinishedEventsAndAfterNow(city: string) {
 			organizer: {
 				select: {
 					name: true,
-					website: true,
 				},
 			},
 			startDate: true,

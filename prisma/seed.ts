@@ -31,7 +31,7 @@ async function main() {
 		update: {},
 		create: {
 			name: "Bachata Club",
-			googleMapsUrl: "https://goo.gl/maps/1",
+			googleMapsUrl: "https://goo.gl/maps/2",
 			city: {
 				connect: { id: city.id },
 			},
@@ -43,7 +43,6 @@ async function main() {
 		update: {},
 		create: {
 			name: "Organizer 1",
-			website: "https://salsa.com",
 		},
 	});
 
@@ -52,7 +51,6 @@ async function main() {
 		update: {},
 		create: {
 			name: "Organizer 2",
-			website: "https://salsa.com",
 		},
 	});
 
