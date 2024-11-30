@@ -4,7 +4,12 @@ import {
 	LinksFunction,
 	LoaderFunctionArgs,
 } from "@remix-run/node";
-import { useLoaderData, useNavigation, useSubmit, Outlet } from "@remix-run/react";
+import {
+	useLoaderData,
+	useNavigation,
+	useSubmit,
+	Outlet,
+} from "@remix-run/react";
 import { format } from "date-fns";
 import { motion, useAnimate } from "framer-motion";
 import {
@@ -18,11 +23,11 @@ import { useTranslation } from "react-i18next";
 import { useHydrated } from "remix-utils/use-hydrated";
 
 import { FavouriteIconFilled } from "~/components/icons/favourite-icon-filled";
+import { CITY } from "~/constants/city";
 import { db } from "~/modules/db.server";
 import { getEventsByDay } from "~/modules/events.server";
 import { getSession } from "~/modules/session.server";
 import { json } from "~/utils/remix";
-import { CITY } from "~/constants/city";
 
 const ICON_SIZE = 18;
 

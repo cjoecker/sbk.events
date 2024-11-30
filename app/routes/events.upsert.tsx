@@ -1,28 +1,23 @@
-import { withZod } from "@rvf/zod";
-import { useForm } from "@rvf/remix";
-import { z } from "zod";
-import { useTranslation } from "react-i18next";
-import React, { useState } from "react";
-import {
-	ActionFunctionArgs,
-	LoaderFunctionArgs,
-	redirect,
-} from "@remix-run/node";
-
-import { db } from "~/modules/db.server";
-
-import { CITY } from "~/constants/city";
+import { SEOHandle } from "@nasa-gcn/remix-seo";
+import { Button } from "@nextui-org/react";
+import { ActionFunctionArgs, redirect } from "@remix-run/node";
 import { useLoaderData, useNavigate } from "@remix-run/react";
+import { useField } from "@rvf/react";
+import { useForm } from "@rvf/remix";
+import { validationError } from "@rvf/remix";
+import { withZod } from "@rvf/zod";
+import React from "react";
+import { useTranslation } from "react-i18next";
+import { z } from "zod";
+
 import { AutoComplete } from "~/components/rvf/autocomplete";
 import { EnhancedDialog } from "~/components/rvf/enhanced-dialog";
 import { Input } from "~/components/rvf/input";
-import { Button } from "@nextui-org/react";
-import { assert, intWithinRange } from "~/utils/validation";
-import { validationError } from "@rvf/remix";
-import { useField } from "@rvf/react";
-import { SEOHandle } from "@nasa-gcn/remix-seo";
+import { CITY } from "~/constants/city";
+import { db } from "~/modules/db.server";
 import { getSession } from "~/modules/session.server";
 import { json } from "~/utils/remix";
+import { assert, intWithinRange } from "~/utils/validation";
 
 export const handle: SEOHandle = {
 	getSitemapEntries: () => {
@@ -47,7 +42,7 @@ const validator = withZod(
 	})
 );
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader() {
 	const locations = await db.location.findMany({
 		select: { id: true, name: true, googleMapsUrl: true },
 		where: {
@@ -56,14 +51,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
 			},
 		},
 	});
-	const locationOptions = locations.map((location) => ({
-		id: location.id.toString(),
-		name: location.name,
-	}));
-	const googleMapsUrls = locations.map((location) => ({
-		id: location.id.toString(),
-		googleMapsUrl: location.googleMapsUrl,
-	}));
+	const locationOptions = locations.map((location) => {
+		return {
+			id: location.id.toString(),
+			name: location.name,
+		};
+	});
+	const googleMapsUrls = locations.map((location) => {
+		return {
+			id: location.id.toString(),
+			googleMapsUrl: location.googleMapsUrl,
+		};
+	});
 	const organizers = await db.organizer.findMany({
 		select: { id: true, name: true },
 		where: {
@@ -78,10 +77,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
 			},
 		},
 	});
-	const organizerOptions = organizers.map((organizer) => ({
-		id: organizer.id.toString(),
-		name: organizer.name,
-	}));
+	const organizerOptions = organizers.map((organizer) => {
+		return {
+			id: organizer.id.toString(),
+			name: organizer.name,
+		};
+	});
 	return { locationOptions, organizerOptions, googleMapsUrls };
 }
 

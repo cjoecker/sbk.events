@@ -3,7 +3,9 @@ import { z } from "zod";
 const PARAMETERS_SEPARATOR = ";;";
 export const intWithinRange = (min: number, max: number) => {
 	return z.preprocess(
-		(val) => (val === "" ? NaN : val),
+		(val) => {
+			return val === "" ? Number.NaN : val;
+		},
 		z.coerce
 			.number({ invalid_type_error: "wrongValueType" })
 			.int()
@@ -13,21 +15,22 @@ export const intWithinRange = (min: number, max: number) => {
 				},
 				{
 					message: getWithinRangeErrorMessage(min, max),
-				},
-			),
+				}
+			)
 	);
 };
 
-
-
 export function getWithinRangeErrorMessage(min: number, max: number) {
-	return `valueMustBeBetween${PARAMETERS_SEPARATOR}${JSON.stringify({ min, max })}`;
+	return `valueMustBeBetween${PARAMETERS_SEPARATOR}${JSON.stringify({
+		min,
+		max,
+	})}`;
 }
 
 export function assert(
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	condition: any,
-	message: string,
+	message: string
 ): asserts condition {
 	if (condition) {
 		return;

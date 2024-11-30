@@ -1,6 +1,6 @@
-import { FormScope, useField } from "@rvf/react";
-import { InputProps } from "@nextui-org/react";
 import { Input as _Input } from "@nextui-org/input";
+import { InputProps } from "@nextui-org/react";
+import { FormScope, useField } from "@rvf/react";
 
 export type _InputProps = {
 	label?: string;
@@ -9,8 +9,8 @@ export type _InputProps = {
 
 export const Input = ({ label, scope, ...props }: _InputProps) => {
 	const field = useField(scope);
-	const { onChange, onBlur, defaultValue, name, type, form } =
-		field.getInputProps();
+	const { onChange, onBlur, name, type, form } = field.getInputProps();
+	const defaultValue = field.getInputProps().defaultValue as string;
 	const hasError = field.error() !== null;
 	return (
 		<_Input

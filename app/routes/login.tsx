@@ -1,26 +1,14 @@
-import { withZod } from "@rvf/zod";
-import { useForm } from "@rvf/remix";
-import { z } from "zod";
-import { useTranslation } from "react-i18next";
-import React, { useState } from "react";
-import {
-	ActionFunctionArgs,
-	LoaderFunctionArgs,
-	redirect,
-} from "@remix-run/node";
-
-import { db } from "~/modules/db.server";
-
-import { CITY } from "~/constants/city";
-import { useLoaderData, useNavigate } from "@remix-run/react";
-import { AutoComplete } from "~/components/rvf/autocomplete";
-import { EnhancedDialog } from "~/components/rvf/enhanced-dialog";
-import { Input } from "~/components/rvf/input";
-import { Button } from "@nextui-org/react";
-import { assert, intWithinRange } from "~/utils/validation";
-import { validationError } from "@rvf/remix";
-import { useField } from "@rvf/react";
 import { SEOHandle } from "@nasa-gcn/remix-seo";
+import { Button } from "@nextui-org/react";
+import { ActionFunctionArgs, redirect } from "@remix-run/node";
+import { useForm } from "@rvf/remix";
+import { validationError } from "@rvf/remix";
+import { withZod } from "@rvf/zod";
+import React from "react";
+import { useTranslation } from "react-i18next";
+import { z } from "zod";
+
+import { Input } from "~/components/rvf/input";
 import { getSession } from "~/modules/session.server";
 import { json } from "~/utils/remix";
 
@@ -63,9 +51,9 @@ export default function Login() {
 	});
 
 	return (
-		<form className="flex gap-2 flex-col" {...form.getFormProps()}>
-				<Input label={t("key")} scope={form.scope("key")} type={"password"} />
-				<Button type="submit">{t("send")}</Button>
+		<form className="flex flex-col gap-2" {...form.getFormProps()}>
+			<Input label={t("key")} scope={form.scope("key")} type={"password"} />
+			<Button type="submit">{t("send")}</Button>
 		</form>
 	);
 }

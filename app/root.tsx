@@ -1,3 +1,4 @@
+import { NextUIProvider } from "@nextui-org/react";
 import {
 	LoaderFunctionArgs,
 	LinksFunction,
@@ -17,7 +18,6 @@ import { useTranslation } from "react-i18next";
 import { useChangeLanguage } from "remix-i18next/react";
 
 import i18nServer, { localeCookie } from "./modules/i18n.server";
-import { NextUIProvider } from "@nextui-org/react";
 
 import { fallbackLng, setI18nLocale } from "~/config/i18n";
 import LibreFranklinNormalFont from "~/fonts/libre-franklin-v18-latin-200.woff2";

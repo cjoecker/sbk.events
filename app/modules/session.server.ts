@@ -58,8 +58,8 @@ export async function getSession(request: Request) {
 			session.set("isAdmin", true);
 		},
 		getIsAdmin: () => {
-			return session.get("isAdmin") ?? false
-			},
+			return session.get("isAdmin") ?? false;
+		},
 		/**
 		 * This will initialize a Headers object if one is not provided.
 		 * It will set the 'Set-Cookie' header value on that headers object.

@@ -1,5 +1,4 @@
 import { Modal, ModalContent, ModalHeader, ModalBody } from "@nextui-org/react";
-
 import { ReactNode } from "react";
 
 export interface DialogDemoProps {
