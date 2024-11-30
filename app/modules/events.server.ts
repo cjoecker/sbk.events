@@ -133,7 +133,10 @@ export async function getAutocompleteOptions() {
 	return { locationOptions, organizerOptions, googleMapsUrls };
 }
 
-export async function updateLoacationOnEventUpsert(locationIdNumber: number | undefined, locationGoogleMapsUrl: string) {
+export async function updateLoacationOnEventUpsert(
+	locationIdNumber: number | undefined,
+	locationGoogleMapsUrl: string
+) {
 	if (locationIdNumber) {
 		const location = await db.location.findFirst({
 			where: {
@@ -159,7 +162,7 @@ export async function updateLoacationOnEventUpsert(locationIdNumber: number | un
 	}
 }
 
-export function getDates(date:string, startTime:string, endTime:string) {
+export function getDates(date: string, startTime: string, endTime: string) {
 	const startDate = new Date(`${date}T${startTime}Z`);
 	let endDate = new Date(`${date}T${endTime}Z`);
 	if (endDate < startDate) {

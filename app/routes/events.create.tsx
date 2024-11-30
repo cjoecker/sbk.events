@@ -2,13 +2,16 @@ import { SEOHandle } from "@nasa-gcn/remix-seo";
 import { ActionFunctionArgs, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { validationError } from "@rvf/remix";
-import { addDays } from "date-fns";
 import React from "react";
 
 import { UpsertEvent, upsertEventValidator } from "~/components/upsert-event";
 import { CITY } from "~/constants/city";
 import { db } from "~/modules/db.server";
-import { getAutocompleteOptions, getDates, updateLoacationOnEventUpsert } from "~/modules/events.server";
+import {
+	getAutocompleteOptions,
+	getDates,
+	updateLoacationOnEventUpsert,
+} from "~/modules/events.server";
 import { getSession } from "~/modules/session.server";
 import { json } from "~/utils/remix";
 import { assert } from "~/utils/validation";
