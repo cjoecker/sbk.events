@@ -297,7 +297,7 @@ export const EventItem = ({
 			<h4 className="flex-1 text-xl font-bold">
 				<a
 					href={infoUrl}
-					className="flex h-6 underline decoration-1 hover:text-gray-300"
+					className="flex h-auto whitespace-normal break-words underline decoration-1 hover:text-gray-300"
 				>
 					{name}
 				</a>
@@ -310,7 +310,7 @@ export const EventItem = ({
 				</div>
 				<a
 					href={location.googleMapsUrl}
-					className="flex flex h-6 underline decoration-1 hover:text-gray-300"
+					className="flex flex h-6 underline decoration-1 hover:text-gray-300 h-auto whitespace-normal break-words"
 					aria-label={t("location")}
 				>
 					<Location03Icon size={ICON_SIZE} className="my-auto" />
