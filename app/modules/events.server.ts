@@ -1,6 +1,7 @@
 import { startOfDay } from "date-fns";
 
 import { db } from "~/modules/db.server";
+import { CITY } from "~/constants/city";
 
 export async function getEventsByDay(city: string): Promise<EventDayDb[]> {
 	const events = await getUnfinishedEventsAndAfterNow(city);
@@ -86,4 +87,48 @@ export async function getUnfinishedEventsAndAfterNow(city: string) {
 			likes: true,
 		},
 	});
+}
+
+export async function getAutocompleteOptions() {
+	const locations = await db.location.findMany({
+		select: { id: true, name: true, googleMapsUrl: true },
+		where: {
+			city: {
+				name: CITY,
+			},
+		},
+	});
+	const locationOptions = locations.map((location) => {
+		return {
+			id: location.id.toString(),
+			name: location.name,
+		};
+	});
+	const googleMapsUrls = locations.map((location) => {
+		return {
+			id: location.id.toString(),
+			googleMapsUrl: location.googleMapsUrl,
+		};
+	});
+	const organizers = await db.organizer.findMany({
+		select: { id: true, name: true },
+		where: {
+			events: {
+				some: {
+					location: {
+						city: {
+							name: CITY,
+						},
+					},
+				},
+			},
+		},
+	});
+	const organizerOptions = organizers.map((organizer) => {
+		return {
+			id: organizer.id.toString(),
+			name: organizer.name,
+		};
+	});
+	return { locationOptions, organizerOptions, googleMapsUrls };
 }

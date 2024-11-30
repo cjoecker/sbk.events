@@ -10,14 +10,16 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
-import { AutoComplete } from "~/components/rvf/autocomplete";
-import { EnhancedDialog } from "~/components/rvf/enhanced-dialog";
-import { Input } from "~/components/rvf/input";
+import { AutoComplete } from "~/components/autocomplete";
+import { EnhancedDialog } from "~/components/enhanced-dialog";
+import { Input } from "~/components/input";
 import { CITY } from "~/constants/city";
 import { db } from "~/modules/db.server";
 import { getSession } from "~/modules/session.server";
 import { json } from "~/utils/remix";
 import { assert, intWithinRange } from "~/utils/validation";
+import { UpsertEvent } from "~/components/upsert-event";
+import { getAutocompleteOptions } from "~/modules/events.server";
 
 export const handle: SEOHandle = {
 	getSitemapEntries: () => {
@@ -43,47 +45,7 @@ const validator = withZod(
 );
 
 export async function loader() {
-	const locations = await db.location.findMany({
-		select: { id: true, name: true, googleMapsUrl: true },
-		where: {
-			city: {
-				name: CITY,
-			},
-		},
-	});
-	const locationOptions = locations.map((location) => {
-		return {
-			id: location.id.toString(),
-			name: location.name,
-		};
-	});
-	const googleMapsUrls = locations.map((location) => {
-		return {
-			id: location.id.toString(),
-			googleMapsUrl: location.googleMapsUrl,
-		};
-	});
-	const organizers = await db.organizer.findMany({
-		select: { id: true, name: true },
-		where: {
-			events: {
-				some: {
-					location: {
-						city: {
-							name: CITY,
-						},
-					},
-				},
-			},
-		},
-	});
-	const organizerOptions = organizers.map((organizer) => {
-		return {
-			id: organizer.id.toString(),
-			name: organizer.name,
-		};
-	});
-	return { locationOptions, organizerOptions, googleMapsUrls };
+	return getAutocompleteOptions();
 }
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -182,94 +144,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	return redirect("/events");
 };
 
-export default function EventsUpsert() {
+export default function EventsCreate() {
 	const { locationOptions, organizerOptions, googleMapsUrls } =
 		useLoaderData<typeof loader>();
-	const { t } = useTranslation();
-	const form = useForm({
-		method: "post",
-		validator,
-	});
-	const navigate = useNavigate();
-	const locationGoogleMapsUrlField = useField(
-		form.scope("locationGoogleMapsUrl")
-	);
-	const navigation = useNavigation();
-	const isSubmitting = navigation.state === "submitting";
-	const handleLocationSelected = (id: string) => {
-		const selectedLocation = googleMapsUrls.find((location) => {
-			return location.id === id;
-		});
-		if (selectedLocation) {
-			locationGoogleMapsUrlField.setValue(selectedLocation.googleMapsUrl);
-			locationGoogleMapsUrlField.validate();
-		}
-	};
-
 	return (
-		<EnhancedDialog
-			title={t("createEvent")}
-			onClose={() => {
-				navigate("/events");
-			}}
-		>
-			<form className="flex flex-col gap-y-3" {...form.getFormProps()}>
-				<Input label={t("eventName")} scope={form.scope("name")} />
-				<Input label={t("eventInformationUrl")} scope={form.scope("infoUrl")} />
-				<Input
-					label={t("startDate")}
-					scope={form.scope("startDate")}
-					type="datetime-local"
-				/>
-				<Input
-					label={t("endDate")}
-					type="datetime-local"
-					scope={form.scope("endDate")}
-				/>
-				<AutoComplete
-					label={t("location")}
-					idScope={form.scope("locationId")}
-					nameScope={form.scope("locationName")}
-					options={locationOptions}
-					selectorIcon={null}
-					isClearable={false}
-					onSelectionChange={handleLocationSelected}
-				/>
-				<Input
-					label={t("locationGoogleMapsUrl")}
-					scope={form.scope("locationGoogleMapsUrl")}
-				/>
-				<AutoComplete
-					label={t("organizer")}
-					idScope={form.scope("organizerId")}
-					nameScope={form.scope("organizerName")}
-					options={organizerOptions}
-					selectorIcon={null}
-					isClearable={false}
-				/>
-				<div className="flex gap-x-2">
-					<Input
-						id="salsaPercentage"
-						type="number"
-						scope={form.scope("salsaPercentage")}
-					/>
-					<div className="my-auto">–</div>
-					<Input
-						id="bachataPercentage"
-						type="number"
-						scope={form.scope("bachataPercentage")}
-					/>
-					<div className="my-auto">–</div>
-					<Input
-						id="kizombaPercentage"
-						type="number"
-						scope={form.scope("kizombaPercentage")}
-					/>
-				</div>
-				<Button type="submit" disabled={isSubmitting}>
-					{t("save")}
-				</Button>
-			</form>
-		</EnhancedDialog>
+		<UpsertEvent
+			locationOptions={locationOptions}
+			organizerOptions={organizerOptions}
+			googleMapsUrls={googleMapsUrls}
+		/>
 	);
 }
+

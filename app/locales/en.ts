@@ -11,6 +11,7 @@ export default {
 	pageTitle:
 		"Bachata and Salsa Socials and Classes Near You | Find SBK Events Today",
 	salsaBachataKizombaSocials: "Salsa Bachata Kizomba Socials",
+	salsaBachataKizombaPercentage: "Salsa Bachata Kizomba Socials",
 	pageDescription:
 		"All the socials and the best bachata classes and salsa classes near you. Stop searching through multiple groups and find today’s SBK social here with just one click!",
 	pageKeywords:
