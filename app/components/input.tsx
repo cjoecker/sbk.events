@@ -4,7 +4,7 @@ import { FormScope, useField } from "@rvf/react";
 
 export type _InputProps = {
 	label?: string;
-	scope: FormScope<string>;
+	scope: FormScope<string | number>;
 } & InputProps;
 
 export const Input = ({ label, scope, ...props }: _InputProps) => {
@@ -20,7 +20,7 @@ export const Input = ({ label, scope, ...props }: _InputProps) => {
 			defaultValue={defaultValue}
 			name={name}
 			type={type}
-			value={field.value()}
+			value={field.value()?.toString()}
 			form={form}
 			isInvalid={hasError}
 			errorMessage={field.error()}

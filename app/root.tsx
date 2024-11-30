@@ -25,6 +25,7 @@ import LibreFranklinBoldFont from "~/fonts/libre-franklin-v18-latin-regular.woff
 import Background from "~/images/background.webp";
 import stylesheet from "~/styles/tailwind.css?url";
 import { json } from "~/utils/remix";
+import { I18nProvider } from "@react-aria/i18n";
 
 export const handle = { i18n: ["translation"] };
 
@@ -194,9 +195,12 @@ export const Footer = () => {
 export default function App() {
 	const { locale } = useLoaderData<typeof loader>();
 	useChangeLanguage(locale);
+	const calendarLocale = locale === "en" ? "en-UK" : locale;
 	return (
 		<NextUIProvider>
+			<I18nProvider locale={calendarLocale}>
 			<Outlet />
+			</I18nProvider>
 		</NextUIProvider>
 	);
 }

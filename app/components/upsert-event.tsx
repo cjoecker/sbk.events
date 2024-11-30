@@ -11,14 +11,18 @@ import { loader } from "~/routes/events.create";
 import { withZod } from "@rvf/zod";
 import { z } from "zod";
 import { intWithinRange } from "~/utils/validation";
+import { DatePicker } from "~/components/date-picker";
+import { TimeInput } from "~/components/time-input";
+import { getLocalTimeZone, today } from "@internationalized/date";
 
 const schema = z.object({
 	infoUrl: z.string().trim().url(),
 	name: z.string().trim().min(1),
 	organizerId: z.string().optional(),
 	organizerName: z.string().min(1),
-	startDate: z.string().min(1),
-	endDate: z.string().min(1),
+	date: z.string(),
+	startTime: z.string(),
+	endTime: z.string(),
 	locationId: z.string().optional(),
 	locationName: z.string().min(1),
 	locationGoogleMapsUrl: z.string().trim().url(),
@@ -26,10 +30,7 @@ const schema = z.object({
 	bachataPercentage: intWithinRange(0, 100),
 	kizombaPercentage: intWithinRange(0, 100),
 });
-export const upsertEventValidator = withZod(
-	schema
-);
-
+export const upsertEventValidator = withZod(schema);
 
 interface AutocompleteOption {
 	id: string;
@@ -41,20 +42,20 @@ interface UpsertEvent {
 	organizerOptions: AutocompleteOption[];
 	googleMapsUrls: { id: string; googleMapsUrl: string }[];
 	// infer from schema
-	defaultValues?: z.infer<typeof schema>
+	defaultValues?: z.infer<typeof schema>;
 }
 
 export function UpsertEvent({
 	locationOptions,
 	organizerOptions,
 	googleMapsUrls,
-	                            defaultValues
+	defaultValues,
 }: UpsertEvent) {
 	const { t } = useTranslation();
 	const form = useForm({
 		method: "post",
 		validator: upsertEventValidator,
-		defaultValues
+		defaultValues,
 	});
 	const navigate = useNavigate();
 	const locationGoogleMapsUrlField = useField(
@@ -82,16 +83,16 @@ export function UpsertEvent({
 			<form className="flex flex-col gap-y-3" {...form.getFormProps()}>
 				<Input label={t("eventName")} scope={form.scope("name")} />
 				<Input label={t("eventInformationUrl")} scope={form.scope("infoUrl")} />
-				<Input
-					label={t("startDate")}
-					scope={form.scope("startDate")}
-					type="datetime-local"
-				/>
-				<Input
-					label={t("endDate")}
-					type="datetime-local"
-					scope={form.scope("endDate")}
-				/>
+				<div className="flex gap-2">
+					<DatePicker
+						className="flex-1 min-w-[200px] w-full"
+						label={t("date")}
+						scope={form.scope("date")}
+						minValue={today(getLocalTimeZone())}
+					/>
+					<TimeInput label={t("startTime")} scope={form.scope("startTime")} />
+					<TimeInput label={t("endTime")} scope={form.scope("endTime")} />
+				</div>
 				<AutoComplete
 					label={t("location")}
 					idScope={form.scope("locationId")}

@@ -13,7 +13,7 @@ export type _AutocompleteProps = Omit<
 > & {
 	label: string;
 	options: { id: string; name: string }[];
-	idScope: FormScope<string>;
+	idScope: FormScope<string | undefined>;
 	nameScope: FormScope<string>;
 	onSelectionChange?: (id: string) => void;
 };
