@@ -1,6 +1,6 @@
 import { SEOHandle } from "@nasa-gcn/remix-seo";
 import { Button } from "@nextui-org/react";
-import { ActionFunctionArgs, redirect } from "@remix-run/node";
+import { ActionFunctionArgs, LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { useLoaderData, useNavigate, useNavigation } from "@remix-run/react";
 import { useField } from "@rvf/react";
 import { useForm } from "@rvf/remix";
@@ -44,8 +44,48 @@ const validator = withZod(
 	})
 );
 
-export async function loader() {
-	return getAutocompleteOptions();
+export async function loader({ params }: LoaderFunctionArgs) {
+	const id = params.id;
+	assert(id, "Id is required");
+	const event = await db.event.findUnique({
+		where: { id: Number(id) },
+		select: {
+			id: true,
+			infoUrl: true,
+			name: true,
+			organizer: {
+				select: { id: true, name: true },
+			},
+			startDate: true,
+			endDate: true,
+			location: {
+				select: { id: true, name: true, googleMapsUrl: true },
+			},
+			salsaPercentage: true,
+			bachataPercentage: true,
+			kizombaPercentage: true,
+		},
+	});
+	assert(event, "Event not found");
+	const defaultValues = {
+		infoUrl: event.infoUrl,
+		name: event.name,
+		organizerId: event.organizer.id.toString(),
+		organizerName: event.organizer.name,
+		startDate: event.startDate.toISOString(),
+		endDate: event.endDate.toISOString(),
+		locationId: event.location.id.toString(),
+		locationName: event.location.name,
+		locationGoogleMapsUrl: event.location.googleMapsUrl,
+		salsaPercentage: event.salsaPercentage,
+		bachataPercentage: event.bachataPercentage,
+		kizombaPercentage: event.kizombaPercentage,
+	}
+	const autocompleteOptions = await getAutocompleteOptions();
+	return {
+		defaultValues,
+		autocompleteOptions,
+	};
 }
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -145,13 +185,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 export default function EventsCreate() {
-	const { locationOptions, organizerOptions, googleMapsUrls } =
+	const {autocompleteOptions,defaultValues } =
 		useLoaderData<typeof loader>();
+	const { locationOptions, organizerOptions, googleMapsUrls } = autocompleteOptions;
 	return (
 		<UpsertEvent
 			locationOptions={locationOptions}
 			organizerOptions={organizerOptions}
 			googleMapsUrls={googleMapsUrls}
+			defaultValues={defaultValues}
 		/>
 	);
 }

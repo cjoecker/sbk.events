@@ -12,22 +12,24 @@ import { withZod } from "@rvf/zod";
 import { z } from "zod";
 import { intWithinRange } from "~/utils/validation";
 
+const schema = z.object({
+	infoUrl: z.string().trim().url(),
+	name: z.string().trim().min(1),
+	organizerId: z.string().optional(),
+	organizerName: z.string().min(1),
+	startDate: z.string().min(1),
+	endDate: z.string().min(1),
+	locationId: z.string().optional(),
+	locationName: z.string().min(1),
+	locationGoogleMapsUrl: z.string().trim().url(),
+	salsaPercentage: intWithinRange(0, 100),
+	bachataPercentage: intWithinRange(0, 100),
+	kizombaPercentage: intWithinRange(0, 100),
+});
 export const upsertEventValidator = withZod(
-	z.object({
-		infoUrl: z.string().trim().url(),
-		name: z.string().trim().min(1),
-		organizerId: z.string().optional(),
-		organizerName: z.string().min(1),
-		startDate: z.string().min(1),
-		endDate: z.string().min(1),
-		locationId: z.string().optional(),
-		locationName: z.string().min(1),
-		locationGoogleMapsUrl: z.string().trim().url(),
-		salsaPercentage: intWithinRange(0, 100),
-		bachataPercentage: intWithinRange(0, 100),
-		kizombaPercentage: intWithinRange(0, 100),
-	})
+	schema
 );
+
 
 interface AutocompleteOption {
 	id: string;
@@ -38,17 +40,21 @@ interface UpsertEvent {
 	locationOptions: AutocompleteOption[];
 	organizerOptions: AutocompleteOption[];
 	googleMapsUrls: { id: string; googleMapsUrl: string }[];
+	// infer from schema
+	defaultValues?: z.infer<typeof schema>
 }
 
 export function UpsertEvent({
 	locationOptions,
 	organizerOptions,
 	googleMapsUrls,
+	                            defaultValues
 }: UpsertEvent) {
 	const { t } = useTranslation();
 	const form = useForm({
 		method: "post",
 		validator: upsertEventValidator,
+		defaultValues
 	});
 	const navigate = useNavigate();
 	const locationGoogleMapsUrlField = useField(
