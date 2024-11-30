@@ -126,7 +126,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	return redirect("/events");
 };
 
-export default function EventsAdd() {
+export default function EventsCreate() {
 	const { locationOptions, organizerOptions, googleMapsUrls } =
 		useLoaderData<typeof loader>();
 	return (

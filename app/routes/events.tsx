@@ -134,7 +134,7 @@ export default function Events() {
 					color="primary"
 					aria-label={t("addEvent")}
 					onClick={() => {
-						navigate("/events/add");
+						navigate("/events/create");
 					}}
 				>
 					<Add01Icon />
@@ -299,7 +299,7 @@ export const EventItem = ({
 	const { t } = useTranslation();
 	const navigate = useNavigate();
 	const handleEditClick = () => {
-		const url = `/events/edit/${id}`;
+		const url = `/events/update/${id}`;
 		navigate(url);
 	};
 	return (
