@@ -153,7 +153,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				}}
 				className="h-[100svh] w-[100svw] overflow-hidden bg-black bg-cover bg-right font-body text-base font-normal text-white sm:bg-center "
 			>
-				{" "}
 				{isLoading && (
 					<Progress
 						size="sm"
