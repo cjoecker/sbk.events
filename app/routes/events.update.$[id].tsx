@@ -12,7 +12,7 @@ import React from "react";
 import { UpsertEvent, upsertEventValidator } from "~/components/upsert-event";
 import { CITY } from "~/constants/city";
 import { db } from "~/modules/db.server";
-import { getAutocompleteOptions } from "~/modules/events.server";
+import { getAutocompleteOptions, getDates, updateLoacationOnEventUpsert } from "~/modules/events.server";
 import { getSession } from "~/modules/session.server";
 import { json } from "~/utils/remix";
 import { assert } from "~/utils/validation";
@@ -113,33 +113,10 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 	});
 	assert(city, "City not found");
 	const cityId = city.id;
-	if (locationIdNumber) {
-		const location = await db.location.findFirst({
-			where: {
-				id: locationIdNumber,
-			},
-			select: { id: true, name: true, googleMapsUrl: true },
-		});
-		if (location) {
-			if (location.googleMapsUrl !== locationGoogleMapsUrl) {
-				await db.location.update({
-					where: {
-						id: locationIdNumber,
-					},
-					data: {
-						googleMapsUrl: locationGoogleMapsUrl,
-					},
-				});
-			}
-		} else {
-			return new Response("Organizer not found", { status: 404 });
-		}
-	}
-	const startDate = new Date(`${date}T${startTime}Z`);
-	let endDate = new Date(`${date}T${endTime}Z`);
-	if (endDate < startDate) {
-		endDate = addDays(endDate, 1);
-	}
+
+	await updateLoacationOnEventUpsert(locationIdNumber, locationGoogleMapsUrl);
+
+	const { startDate, endDate } = getDates(date, startTime, endTime);
 
 	await db.event.update({
 		where: { id },
