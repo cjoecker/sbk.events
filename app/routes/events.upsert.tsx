@@ -1,7 +1,7 @@
 import { SEOHandle } from "@nasa-gcn/remix-seo";
 import { Button } from "@nextui-org/react";
 import { ActionFunctionArgs, redirect } from "@remix-run/node";
-import { useLoaderData, useNavigate } from "@remix-run/react";
+import { useLoaderData, useNavigate, useNavigation } from "@remix-run/react";
 import { useField } from "@rvf/react";
 import { useForm } from "@rvf/remix";
 import { validationError } from "@rvf/remix";
@@ -194,7 +194,8 @@ export default function EventsUpsert() {
 	const locationGoogleMapsUrlField = useField(
 		form.scope("locationGoogleMapsUrl")
 	);
-
+	const navigation = useNavigation();
+	const isSubmitting = navigation.state === "submitting";
 	const handleLocationSelected = (id: string) => {
 		const selectedLocation = googleMapsUrls.find((location) => {
 			return location.id === id;
@@ -265,7 +266,9 @@ export default function EventsUpsert() {
 						scope={form.scope("kizombaPercentage")}
 					/>
 				</div>
-				<Button type="submit">{t("save")}</Button>
+				<Button type="submit" disabled={isSubmitting}>
+					{t("save")}
+				</Button>
 			</form>
 		</EnhancedDialog>
 	);
