@@ -52,11 +52,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
 	});
 	assert(event, "Event not found");
 
-	// get only date string, not time
-
-	const date = event.startDate.toISOString().split("T")[0];
-
-
 	const defaultValues = {
 		infoUrl: event.infoUrl,
 		name: event.name,
@@ -81,13 +76,16 @@ export async function loader({ params }: LoaderFunctionArgs) {
 	};
 }
 
-export const action = async ({ request }: ActionFunctionArgs) => {
+export const action = async ({ request, params }: ActionFunctionArgs) => {
 	const { getIsAdmin } = await getSession(request);
 
 	if (!getIsAdmin()) {
 		// eslint-disable-next-line @typescript-eslint/only-throw-error
 		throw json(null, 403);
 	}
+
+	assert(params.id, "Id is required");
+	const id = Number(params.id);
 
 	const result = await upsertEventValidator.validate(await request.formData());
 	if (result.error) {
@@ -148,7 +146,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		endDate = addDays(endDate, 1);
 	}
 
-	await db.event.create({
+	await db.event.update({
+		where: { id },
 		data: {
 			infoUrl,
 			name,

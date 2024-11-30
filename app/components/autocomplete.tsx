@@ -32,6 +32,7 @@ export function AutoComplete({
 	const hasError = nameField.error() !== null || idField.error() !== null;
 	const errorTranslationKey = nameField.error() ?? idField.error() ?? "";
 	const errorMessage = t(errorTranslationKey);
+	const defaultValue = nameField.defaultValue()
 
 	return (
 		<>
@@ -41,6 +42,7 @@ export function AutoComplete({
 				isInvalid={hasError}
 				allowsCustomValue={true}
 				allowsEmptyCollection={false}
+				defaultInputValue={defaultValue}
 				onSelectionChange={(id) => {
 					idField.setValue(id as string);
 					idField.setTouched(true);
