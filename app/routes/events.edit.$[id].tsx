@@ -18,31 +18,15 @@ import { db } from "~/modules/db.server";
 import { getSession } from "~/modules/session.server";
 import { json } from "~/utils/remix";
 import { assert, intWithinRange } from "~/utils/validation";
-import { UpsertEvent } from "~/components/upsert-event";
+import { UpsertEvent, upsertEventValidator } from "~/components/upsert-event";
 import { getAutocompleteOptions } from "~/modules/events.server";
+import { addDays, format } from "date-fns";
 
 export const handle: SEOHandle = {
 	getSitemapEntries: () => {
 		return null;
 	},
 };
-
-const validator = withZod(
-	z.object({
-		infoUrl: z.string().trim().url(),
-		name: z.string().trim().min(1),
-		organizerId: z.string().optional(),
-		organizerName: z.string().min(1),
-		startDate: z.string().min(1),
-		endDate: z.string().min(1),
-		locationId: z.string().optional(),
-		locationName: z.string().min(1),
-		locationGoogleMapsUrl: z.string().trim().url(),
-		salsaPercentage: intWithinRange(0, 100),
-		bachataPercentage: intWithinRange(0, 100),
-		kizombaPercentage: intWithinRange(0, 100),
-	})
-);
 
 export async function loader({ params }: LoaderFunctionArgs) {
 	const id = params.id;
@@ -67,11 +51,20 @@ export async function loader({ params }: LoaderFunctionArgs) {
 		},
 	});
 	assert(event, "Event not found");
+
+	// get only date string, not time
+
+	const date = event.startDate.toISOString().split("T")[0];
+
+
 	const defaultValues = {
 		infoUrl: event.infoUrl,
 		name: event.name,
 		organizerId: event.organizer.id.toString(),
 		organizerName: event.organizer.name,
+		date: format(event.startDate, "yyyy-MM-dd"),
+		startTime: format(event.startDate, "HH:mm"),
+		endTime: format(event.endDate, "HH:mm"),
 		startDate: event.startDate.toISOString(),
 		endDate: event.endDate.toISOString(),
 		locationId: event.location.id.toString(),
@@ -96,7 +89,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		throw json(null, 403);
 	}
 
-	const result = await validator.validate(await request.formData());
+	const result = await upsertEventValidator.validate(await request.formData());
 	if (result.error) {
 		return validationError(result.error, result.submittedData);
 	}
@@ -105,8 +98,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		name,
 		organizerId,
 		organizerName,
-		startDate,
-		endDate,
+		date,
+		startTime,
+		endTime,
 		locationId,
 		locationName,
 		locationGoogleMapsUrl,
@@ -147,6 +141,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		} else {
 			return new Response("Organizer not found", { status: 404 });
 		}
+	}
+	const startDate = new Date(`${date}T${startTime}`);
+	let endDate = new Date (`${date}T${endTime}`);
+	if (endDate < startDate) {
+		endDate = addDays(endDate, 1);
 	}
 
 	await db.event.create({

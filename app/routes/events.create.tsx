@@ -20,6 +20,7 @@ import { json } from "~/utils/remix";
 import { assert, intWithinRange } from "~/utils/validation";
 import { UpsertEvent, upsertEventValidator } from "~/components/upsert-event";
 import { getAutocompleteOptions } from "~/modules/events.server";
+import { addDays } from "date-fns";
 
 export const handle: SEOHandle = {
 	getSitemapEntries: () => {
@@ -48,8 +49,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		name,
 		organizerId,
 		organizerName,
-		startDate,
-		endDate,
+		date,
+		startTime,
+		endTime,
 		locationId,
 		locationName,
 		locationGoogleMapsUrl,
@@ -90,6 +92,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		} else {
 			return new Response("Organizer not found", { status: 404 });
 		}
+	}
+
+	const startDate = new Date(`${date}T${startTime}`);
+	let endDate = new Date (`${date}T${endTime}`);
+	if (endDate < startDate) {
+		endDate = addDays(endDate, 1);
 	}
 
 	await db.event.create({
