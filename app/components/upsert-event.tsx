@@ -7,7 +7,6 @@ import { Input } from "~/components/input";
 import { AutoComplete } from "~/components/autocomplete";
 import { Button } from "@nextui-org/react";
 import React from "react";
-import { loader } from "~/routes/events.create";
 import { withZod } from "@rvf/zod";
 import { z } from "zod";
 import { intWithinRange } from "~/utils/validation";
@@ -85,7 +84,7 @@ export function UpsertEvent({
 				<Input label={t("eventInformationUrl")} scope={form.scope("infoUrl")} />
 				<div className="flex gap-2">
 					<DatePicker
-						className="flex-1 min-w-[130px] w-full"
+						className="flex-1 min-w-[150px] w-full"
 						label={t("date")}
 						scope={form.scope("date")}
 						minValue={today(getLocalTimeZone())}

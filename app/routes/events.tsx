@@ -19,6 +19,7 @@ import {
 	Location01Icon,
 	FavouriteIcon,
 	Edit02Icon,
+	Add01Icon,
 } from "hugeicons-react";
 import { Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -30,6 +31,7 @@ import { db } from "~/modules/db.server";
 import { getEventsByDay } from "~/modules/events.server";
 import { getSession } from "~/modules/session.server";
 import { json } from "~/utils/remix";
+import { Button } from "@nextui-org/react";
 
 const ICON_SIZE = 18;
 
@@ -108,8 +110,10 @@ const childAnimationVariants = {
 
 export default function Events() {
 	const { eventDays } = useLoaderData<typeof loader>();
-
 	const isHydrated = useHydrated();
+	const { t } = useTranslation();
+	const { isAdmin } = useLoaderData<typeof loader>();
+	const navigate = useNavigate();
 
 	return (
 		<>
@@ -121,6 +125,21 @@ export default function Events() {
 					Valencia
 				</h2>
 			</div>
+			{isAdmin && (
+				<Button
+					className="absolute bottom-2 right-2 z-40"
+					size={"lg"}
+					radius={"full"}
+					isIconOnly
+					color="primary"
+					aria-label={t("addEvent")}
+					onClick={() => {
+						navigate("/events/add");
+					}}
+				>
+					<Add01Icon />
+				</Button>
+			)}
 			{isHydrated && (
 				<motion.ul
 					className="mt-2 flex flex-col gap-y-2"
@@ -310,7 +329,7 @@ export const EventItem = ({
 				</div>
 				<a
 					href={location.googleMapsUrl}
-					className="flex flex h-6 underline decoration-1 hover:text-gray-300 h-auto whitespace-normal break-words"
+					className="flex flex h-6 h-auto whitespace-normal break-words underline decoration-1 hover:text-gray-300"
 					aria-label={t("location")}
 				>
 					<Location03Icon size={ICON_SIZE} className="my-auto" />
