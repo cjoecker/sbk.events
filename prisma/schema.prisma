@@ -22,7 +22,7 @@ model Event {
   salsaPercentage   Int
   bachataPercentage Int
   kizombaPercentage Int
-  likes             Int
+  likes             Int       @default(0)
 }
 
 model Organizer {
@@ -30,7 +30,6 @@ model Organizer {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   name      String
-  website   String
   events    Event[]
 }
 

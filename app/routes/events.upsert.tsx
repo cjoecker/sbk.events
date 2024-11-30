@@ -5,7 +5,8 @@ import { useTranslation } from "react-i18next";
 import React, { useState } from "react";
 import {
 	ActionFunctionArgs,
-	LoaderFunctionArgs, redirect
+	LoaderFunctionArgs,
+	redirect,
 } from "@remix-run/node";
 
 import { db } from "~/modules/db.server";
@@ -28,7 +29,6 @@ export const handle: SEOHandle = {
 		return null;
 	},
 };
-
 
 const validator = withZod(
 	z.object({
@@ -88,7 +88,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export const action = async ({ request }: ActionFunctionArgs) => {
 	const { getIsAdmin } = await getSession(request);
 
-	if(!getIsAdmin()){
+	if (!getIsAdmin()) {
 		// eslint-disable-next-line @typescript-eslint/only-throw-error
 		throw json(null, 403);
 	}
@@ -113,9 +113,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	} = result.data;
 	const locationIdNumber = locationId ? Number.parseInt(locationId) : undefined;
 
-	const organizerIdNumber = organizerId ? Number.parseInt(organizerId) : undefined;
+	const organizerIdNumber = organizerId
+		? Number.parseInt(organizerId)
+		: undefined;
 
-	const city= await db.city.findFirst({
+	const city = await db.city.findFirst({
 		where: { name: CITY },
 		select: { id: true },
 	});
@@ -124,7 +126,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	if (locationIdNumber) {
 		const location = await db.location.findFirst({
 			where: {
-				id:locationIdNumber,
+				id: locationIdNumber,
 			},
 			select: { id: true, name: true, googleMapsUrl: true },
 		});
@@ -132,7 +134,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			if (location.googleMapsUrl !== locationGoogleMapsUrl) {
 				await db.location.update({
 					where: {
-						id:locationIdNumber,
+						id: locationIdNumber,
 					},
 					data: {
 						googleMapsUrl: locationGoogleMapsUrl,
@@ -143,8 +145,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			return new Response("Organizer not found", { status: 404 });
 		}
 	}
-
-
 
 	await db.event.create({
 		data: {
@@ -169,14 +169,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			},
 			organizer: {
 				connectOrCreate: {
-					where: { id: organizerIdNumber ?? 0},
-					create: { name: organizerName, website: ""},
+					where: { id: organizerIdNumber ?? 0 },
+					create: { name: organizerName },
 				},
 			},
 			salsaPercentage,
 			bachataPercentage,
 			kizombaPercentage,
-			likes:0,
 		},
 	});
 	return redirect("/events");
@@ -270,4 +269,3 @@ export default function EventsUpsert() {
 		</EnhancedDialog>
 	);
 }
-
