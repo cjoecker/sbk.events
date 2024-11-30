@@ -47,7 +47,6 @@ export function AutoComplete({
 					idField.setValue(id as string);
 					idField.setTouched(true);
 					nameField.setTouched(true);
-					nameField.validate();
 					if (onSelectionChange) {
 						onSelectionChange(id as string);
 					}

@@ -24,6 +24,7 @@ export const DatePicker = ({ label, scope, ...props }: _DatePickerProps) => {
 				if (onChange) {
 					onChange(dateText);
 				}
+				field.setTouched(true);
 			}}
 			name={name}
 			defaultValue={dateDefaultValue}

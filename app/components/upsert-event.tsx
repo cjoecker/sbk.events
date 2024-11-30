@@ -69,7 +69,7 @@ export function UpsertEvent({
 		});
 		if (selectedLocation) {
 			locationGoogleMapsUrlField.setValue(selectedLocation.googleMapsUrl);
-			locationGoogleMapsUrlField.validate();
+			locationGoogleMapsUrlField.setTouched(true);
 		}
 	};
 
