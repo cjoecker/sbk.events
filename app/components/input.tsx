@@ -20,7 +20,8 @@ export const Input = ({ label, scope, ...props }: _InputProps) => {
 			defaultValue={defaultValue}
 			name={name}
 			type={type}
-			value={field.value().toString()}
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+			value={field.value()?.toString()}
 			form={form}
 			isInvalid={hasError}
 			errorMessage={field.error()}

@@ -85,12 +85,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		}
 	}
 
-	const startDate = new Date(`${date}T${startTime}`);
-	let endDate = new Date(`${date}T${endTime}`);
+	const startDate = new Date(`${date}T${startTime}Z`);
+	let endDate = new Date(`${date}T${endTime}Z`);
 	if (endDate < startDate) {
 		endDate = addDays(endDate, 1);
 	}
-
 	await db.event.create({
 		data: {
 			infoUrl,

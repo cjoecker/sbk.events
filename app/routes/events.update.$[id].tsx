@@ -135,8 +135,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 			return new Response("Organizer not found", { status: 404 });
 		}
 	}
-	const startDate = new Date(`${date}T${startTime}`);
-	let endDate = new Date(`${date}T${endTime}`);
+	const startDate = new Date(`${date}T${startTime}Z`);
+	let endDate = new Date(`${date}T${endTime}Z`);
 	if (endDate < startDate) {
 		endDate = addDays(endDate, 1);
 	}
