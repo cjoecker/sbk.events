@@ -290,8 +290,8 @@ export const EventItem = ({
 	kizombaPercentage,
 	likes,
 }: EventItemProps) => {
-	const startTime = format(startDate, "HH:mm");
-	const endTime = format(endDate, "HH:mm");
+	const startTime = startDate.slice(11, 16);
+	const endTime = endDate.slice(11, 16);
 	const sbk = `${salsaPercentage}-${bachataPercentage}-${kizombaPercentage}`;
 	const { likedEvents } = useLoaderData<typeof loader>();
 	const initialHasLiked = likedEvents.includes(id);
