@@ -1,8 +1,8 @@
+import { parseTime } from "@internationalized/date";
 import { TimeInput as _TimeInput } from "@nextui-org/date-input";
-import { InputProps, TimeInputProps } from "@nextui-org/react";
-import { FormScope, useField } from "@rvf/react";
+import { TimeInputProps } from "@nextui-org/react";
 import { TimeValue } from "@react-types/datepicker";
-import { parseTime, Time } from "@internationalized/date";
+import { FormScope, useField } from "@rvf/react";
 
 export type _TimeInputProps = {
 	label?: string;
@@ -24,7 +24,7 @@ export const TimeInput = ({ label, scope, ...props }: _TimeInputProps) => {
 			onChange={(value: TimeValue) => {
 				const timeText = value.toString();
 				field.setValue(timeText);
-				if(onChange){
+				if (onChange) {
 					onChange(timeText);
 				}
 			}}

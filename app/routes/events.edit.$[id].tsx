@@ -1,26 +1,21 @@
 import { SEOHandle } from "@nasa-gcn/remix-seo";
-import { Button } from "@nextui-org/react";
-import { ActionFunctionArgs, LoaderFunctionArgs, redirect } from "@remix-run/node";
-import { useLoaderData, useNavigate, useNavigation } from "@remix-run/react";
-import { useField } from "@rvf/react";
-import { useForm } from "@rvf/remix";
+import {
+	ActionFunctionArgs,
+	LoaderFunctionArgs,
+	redirect,
+} from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 import { validationError } from "@rvf/remix";
-import { withZod } from "@rvf/zod";
+import { addDays, format } from "date-fns";
 import React from "react";
-import { useTranslation } from "react-i18next";
-import { z } from "zod";
 
-import { AutoComplete } from "~/components/autocomplete";
-import { EnhancedDialog } from "~/components/enhanced-dialog";
-import { Input } from "~/components/input";
+import { UpsertEvent, upsertEventValidator } from "~/components/upsert-event";
 import { CITY } from "~/constants/city";
 import { db } from "~/modules/db.server";
+import { getAutocompleteOptions } from "~/modules/events.server";
 import { getSession } from "~/modules/session.server";
 import { json } from "~/utils/remix";
-import { assert, intWithinRange } from "~/utils/validation";
-import { UpsertEvent, upsertEventValidator } from "~/components/upsert-event";
-import { getAutocompleteOptions } from "~/modules/events.server";
-import { addDays, format } from "date-fns";
+import { assert } from "~/utils/validation";
 
 export const handle: SEOHandle = {
 	getSitemapEntries: () => {
@@ -68,7 +63,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 		salsaPercentage: event.salsaPercentage,
 		bachataPercentage: event.bachataPercentage,
 		kizombaPercentage: event.kizombaPercentage,
-	}
+	};
 	const autocompleteOptions = await getAutocompleteOptions();
 	return {
 		defaultValues,
@@ -141,7 +136,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 		}
 	}
 	const startDate = new Date(`${date}T${startTime}`);
-	let endDate = new Date (`${date}T${endTime}`);
+	let endDate = new Date(`${date}T${endTime}`);
 	if (endDate < startDate) {
 		endDate = addDays(endDate, 1);
 	}
@@ -183,9 +178,9 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 };
 
 export default function EventsCreate() {
-	const {autocompleteOptions,defaultValues } =
-		useLoaderData<typeof loader>();
-	const { locationOptions, organizerOptions, googleMapsUrls } = autocompleteOptions;
+	const { autocompleteOptions, defaultValues } = useLoaderData<typeof loader>();
+	const { locationOptions, organizerOptions, googleMapsUrls } =
+		autocompleteOptions;
 	return (
 		<UpsertEvent
 			locationOptions={locationOptions}
@@ -195,4 +190,3 @@ export default function EventsCreate() {
 		/>
 	);
 }
-

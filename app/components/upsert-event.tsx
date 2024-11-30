@@ -1,18 +1,19 @@
-import { useLoaderData, useNavigate, useNavigation } from "@remix-run/react";
-import { useTranslation } from "react-i18next";
-import { useForm } from "@rvf/remix";
+import { getLocalTimeZone, today } from "@internationalized/date";
+import { Button } from "@nextui-org/react";
+import { useNavigate, useNavigation } from "@remix-run/react";
 import { useField } from "@rvf/react";
+import { useForm } from "@rvf/remix";
+import { withZod } from "@rvf/zod";
+import React from "react";
+import { useTranslation } from "react-i18next";
+import { z } from "zod";
+
+import { AutoComplete } from "~/components/autocomplete";
+import { DatePicker } from "~/components/date-picker";
 import { EnhancedDialog } from "~/components/enhanced-dialog";
 import { Input } from "~/components/input";
-import { AutoComplete } from "~/components/autocomplete";
-import { Button } from "@nextui-org/react";
-import React from "react";
-import { withZod } from "@rvf/zod";
-import { z } from "zod";
-import { intWithinRange } from "~/utils/validation";
-import { DatePicker } from "~/components/date-picker";
 import { TimeInput } from "~/components/time-input";
-import { getLocalTimeZone, today } from "@internationalized/date";
+import { intWithinRange } from "~/utils/validation";
 
 const schema = z.object({
 	infoUrl: z.string().trim().url(),
@@ -84,7 +85,7 @@ export function UpsertEvent({
 				<Input label={t("eventInformationUrl")} scope={form.scope("infoUrl")} />
 				<div className="flex gap-2">
 					<DatePicker
-						className="flex-1 min-w-[150px] w-full"
+						className="w-full min-w-[150px] flex-1"
 						label={t("date")}
 						scope={form.scope("date")}
 						minValue={today(getLocalTimeZone())}

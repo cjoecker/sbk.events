@@ -20,7 +20,7 @@ export const Input = ({ label, scope, ...props }: _InputProps) => {
 			defaultValue={defaultValue}
 			name={name}
 			type={type}
-			value={field.value()?.toString()}
+			value={field.value().toString()}
 			form={form}
 			isInvalid={hasError}
 			errorMessage={field.error()}

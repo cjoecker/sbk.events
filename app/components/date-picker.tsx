@@ -1,8 +1,7 @@
-import { DatePicker as _DatePicker } from "@nextui-org/date-picker";
-import { DatePickerProps, InputProps } from "@nextui-org/react";
-import { FormScope, useField } from "@rvf/react";
-import { I18nProvider } from "@react-aria/i18n";
 import { parseDate } from "@internationalized/date";
+import { DatePicker as _DatePicker } from "@nextui-org/date-picker";
+import { DatePickerProps } from "@nextui-org/react";
+import { FormScope, useField } from "@rvf/react";
 
 export type _DatePickerProps = {
 	label?: string;
@@ -17,7 +16,7 @@ export const DatePicker = ({ label, scope, ...props }: _DatePickerProps) => {
 	const hasError = field.error() !== null;
 	return (
 		<_DatePicker
-			label="Birth date"
+			label={label}
 			onBlur={onBlur}
 			onChange={(value) => {
 				const dateText = value.toString();

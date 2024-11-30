@@ -1,7 +1,7 @@
 import { startOfDay } from "date-fns";
 
-import { db } from "~/modules/db.server";
 import { CITY } from "~/constants/city";
+import { db } from "~/modules/db.server";
 
 export async function getEventsByDay(city: string): Promise<EventDayDb[]> {
 	const events = await getUnfinishedEventsAndAfterNow(city);

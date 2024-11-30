@@ -1,4 +1,5 @@
 import { SEOHandle } from "@nasa-gcn/remix-seo";
+import { Button } from "@nextui-org/react";
 import {
 	ActionFunctionArgs,
 	LinksFunction,
@@ -31,7 +32,6 @@ import { db } from "~/modules/db.server";
 import { getEventsByDay } from "~/modules/events.server";
 import { getSession } from "~/modules/session.server";
 import { json } from "~/utils/remix";
-import { Button } from "@nextui-org/react";
 
 const ICON_SIZE = 18;
 

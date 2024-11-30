@@ -32,7 +32,7 @@ export function AutoComplete({
 	const hasError = nameField.error() !== null || idField.error() !== null;
 	const errorTranslationKey = nameField.error() ?? idField.error() ?? "";
 	const errorMessage = t(errorTranslationKey);
-	const defaultValue = nameField.defaultValue()
+	const defaultValue = nameField.defaultValue();
 
 	return (
 		<>

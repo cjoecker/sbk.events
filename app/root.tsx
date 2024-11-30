@@ -1,4 +1,5 @@
 import { NextUIProvider, Progress } from "@nextui-org/react";
+import { I18nProvider } from "@react-aria/i18n";
 import {
 	LoaderFunctionArgs,
 	LinksFunction,
@@ -26,7 +27,6 @@ import LibreFranklinBoldFont from "~/fonts/libre-franklin-v18-latin-regular.woff
 import Background from "~/images/background.webp";
 import stylesheet from "~/styles/tailwind.css?url";
 import { json } from "~/utils/remix";
-import { I18nProvider } from "@react-aria/i18n";
 
 export const handle = { i18n: ["translation"] };
 
@@ -159,9 +159,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
 						size="sm"
 						isIndeterminate
 						aria-label="Loading..."
-						className="w-full absolute"
+						className="absolute w-full"
 						color={"secondary"}
-						style={{zIndex: 60}}
+						style={{ zIndex: 60 }}
 					/>
 				)}
 				<div className="h-full overflow-y-auto overflow-x-hidden">
