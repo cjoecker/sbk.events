@@ -306,7 +306,7 @@ export const EventItem = ({
 		<div className="relative flex flex-col gap-y-1">
 			{isAdmin && (
 				<button
-					className="absolute right-0 top-0"
+					className="absolute right-0 top-0 h-6 w-6"
 					aria-label={t("editEvent")}
 					onClick={handleEditClick}
 				>
