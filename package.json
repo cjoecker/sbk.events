@@ -6,7 +6,7 @@
   "scripts": {
     "build": "prisma generate && remix vite:build",
     "dev": "remix vite:dev",
-    "start": "netlify serve",
+    "start": "vercel dev",
     "typecheck": "tsc",
     "check:all": "pnpm lint . && pnpm format --check . && pnpm check-types",
     "fix:all": "pnpm lint-fix:all && pnpm format:all && pnpm check-types",
