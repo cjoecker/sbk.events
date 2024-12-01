@@ -9,7 +9,7 @@
     "start": "netlify serve",
     "typecheck": "tsc",
     "check:all": "pnpm lint . && pnpm format --check . && pnpm check-types",
-    "fix:all": "pnpm lint-fix:all && pnpm format:all && pnpm check-types",
+    "fix:all": "pnpm lint-fix:all s&& pnpm format:all && pnpm check-types",
     "check-types": "tsc --noemit -p tsconfig.json",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint --max-warnings=0",
     "lint-fix:all": "pnpm lint --fix .",
