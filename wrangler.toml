@@ -2,3 +2,12 @@
 name = "sbk-events"
 compatibility_date = "2024-11-27"
 pages_build_output_dir = "./build/client"
+
+[build]
+command = "npm run build"
+
+[build.upload]
+format = "service-worker"
+
+[build.env]
+prebuild = "npm run setup:db"
