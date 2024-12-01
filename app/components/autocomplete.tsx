@@ -13,7 +13,7 @@ export type _AutocompleteProps = Omit<
 > & {
 	label: string;
 	options: { id: string; name: string }[];
-	idScope: FormScope<string>;
+	idScope: FormScope<string | undefined>;
 	nameScope: FormScope<string>;
 	onSelectionChange?: (id: string) => void;
 };
@@ -32,6 +32,7 @@ export function AutoComplete({
 	const hasError = nameField.error() !== null || idField.error() !== null;
 	const errorTranslationKey = nameField.error() ?? idField.error() ?? "";
 	const errorMessage = t(errorTranslationKey);
+	const defaultValue = nameField.defaultValue();
 
 	return (
 		<>
@@ -41,11 +42,11 @@ export function AutoComplete({
 				isInvalid={hasError}
 				allowsCustomValue={true}
 				allowsEmptyCollection={false}
+				defaultInputValue={defaultValue}
 				onSelectionChange={(id) => {
 					idField.setValue(id as string);
 					idField.setTouched(true);
 					nameField.setTouched(true);
-					nameField.validate();
 					if (onSelectionChange) {
 						onSelectionChange(id as string);
 					}

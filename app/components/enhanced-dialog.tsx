@@ -9,13 +9,16 @@ export interface DialogDemoProps {
 
 export function EnhancedDialog({ title, onClose, children }: DialogDemoProps) {
 	return (
-		<>
-			<Modal isOpen={true} onClose={onClose}>
-				<ModalContent>
-					<ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
-					<ModalBody>{children}</ModalBody>
-				</ModalContent>
-			</Modal>
-		</>
+		<Modal
+			defaultOpen
+			onClose={onClose}
+			placement={"top"}
+			isDismissable={false}
+		>
+			<ModalContent>
+				<ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
+				<ModalBody>{children}</ModalBody>
+			</ModalContent>
+		</Modal>
 	);
 }

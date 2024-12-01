@@ -1,4 +1,5 @@
-import { NextUIProvider } from "@nextui-org/react";
+import { NextUIProvider, Progress } from "@nextui-org/react";
+import { I18nProvider } from "@react-aria/i18n";
 import {
 	LoaderFunctionArgs,
 	LinksFunction,
@@ -11,6 +12,7 @@ import {
 	Scripts,
 	ScrollRestoration,
 	useLoaderData,
+	useNavigation,
 	useRouteError,
 } from "@remix-run/react";
 import { useEffect } from "react";
@@ -44,7 +46,8 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 		},
 		{
 			name: "viewport",
-			content: "width=device-width,initial-scale=1,viewport-fit=cover",
+			content:
+				"width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1",
 		},
 		{
 			name: "theme-color",
@@ -119,6 +122,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
 	const loaderData = useLoaderData<typeof loader>();
 	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 	const locale = loaderData?.locale ?? fallbackLng;
+	const navigation = useNavigation();
+	const isLoading = navigation.state !== "idle";
 	setI18nLocale(locale);
 	return (
 		<html lang={locale} className="dark">
@@ -148,6 +153,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				}}
 				className="h-[100svh] w-[100svw] overflow-hidden bg-black bg-cover bg-right font-body text-base font-normal text-white sm:bg-center "
 			>
+				{isLoading && (
+					<Progress
+						size="sm"
+						isIndeterminate
+						aria-label="Loading..."
+						className="absolute w-full"
+						color={"secondary"}
+						style={{ zIndex: 60 }}
+					/>
+				)}
 				<div className="h-full overflow-y-auto overflow-x-hidden">
 					<div className="mx-auto flex h-full max-w-2xl flex-col p-2">
 						<main className="mx-2 mb-8 flex-1">{children}</main>
@@ -194,9 +209,12 @@ export const Footer = () => {
 export default function App() {
 	const { locale } = useLoaderData<typeof loader>();
 	useChangeLanguage(locale);
+	const calendarLocale = locale === "en" ? "en-UK" : locale;
 	return (
 		<NextUIProvider>
-			<Outlet />
+			<I18nProvider locale={calendarLocale}>
+				<Outlet />
+			</I18nProvider>
 		</NextUIProvider>
 	);
 }

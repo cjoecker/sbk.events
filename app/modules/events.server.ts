@@ -1,5 +1,6 @@
-import { startOfDay } from "date-fns";
+import { addDays, startOfDay } from "date-fns";
 
+import { CITY } from "~/constants/city";
 import { db } from "~/modules/db.server";
 
 export async function getEventsByDay(city: string): Promise<EventDayDb[]> {
@@ -86,4 +87,86 @@ export async function getUnfinishedEventsAndAfterNow(city: string) {
 			likes: true,
 		},
 	});
+}
+
+export async function getAutocompleteOptions() {
+	const locations = await db.location.findMany({
+		select: { id: true, name: true, googleMapsUrl: true },
+		where: {
+			city: {
+				name: CITY,
+			},
+		},
+	});
+	const locationOptions = locations.map((location) => {
+		return {
+			id: location.id.toString(),
+			name: location.name,
+		};
+	});
+	const googleMapsUrls = locations.map((location) => {
+		return {
+			id: location.id.toString(),
+			googleMapsUrl: location.googleMapsUrl,
+		};
+	});
+	const organizers = await db.organizer.findMany({
+		select: { id: true, name: true },
+		where: {
+			events: {
+				some: {
+					location: {
+						city: {
+							name: CITY,
+						},
+					},
+				},
+			},
+		},
+	});
+	const organizerOptions = organizers.map((organizer) => {
+		return {
+			id: organizer.id.toString(),
+			name: organizer.name,
+		};
+	});
+	return { locationOptions, organizerOptions, googleMapsUrls };
+}
+
+export async function updateLoacationOnEventUpsert(
+	locationIdNumber: number | undefined,
+	locationGoogleMapsUrl: string
+) {
+	if (locationIdNumber) {
+		const location = await db.location.findFirst({
+			where: {
+				id: locationIdNumber,
+			},
+			select: { id: true, name: true, googleMapsUrl: true },
+		});
+		if (location) {
+			if (location.googleMapsUrl !== locationGoogleMapsUrl) {
+				await db.location.update({
+					where: {
+						id: locationIdNumber,
+					},
+					data: {
+						googleMapsUrl: locationGoogleMapsUrl,
+					},
+				});
+			}
+		} else {
+			// eslint-disable-next-line @typescript-eslint/only-throw-error
+			throw new Response("Organizer not found", { status: 404 });
+		}
+	}
+}
+
+export function getDates(date: string, startTime: string, endTime: string) {
+	const startDate = new Date(`${date}T${startTime}Z`);
+	let endDate = new Date(`${date}T${endTime}Z`);
+	if (endDate < startDate) {
+		endDate = addDays(endDate, 1);
+	}
+	return { startDate, endDate };
 }

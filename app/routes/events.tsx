@@ -1,4 +1,5 @@
 import { SEOHandle } from "@nasa-gcn/remix-seo";
+import { Button } from "@nextui-org/react";
 import {
 	ActionFunctionArgs,
 	LinksFunction,
@@ -9,6 +10,7 @@ import {
 	useNavigation,
 	useSubmit,
 	Outlet,
+	useNavigate,
 } from "@remix-run/react";
 import { format } from "date-fns";
 import { motion, useAnimate } from "framer-motion";
@@ -17,12 +19,14 @@ import {
 	Clock01Icon,
 	Location01Icon,
 	FavouriteIcon,
+	Edit02Icon,
+	Add01Icon,
 } from "hugeicons-react";
 import { Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHydrated } from "remix-utils/use-hydrated";
 
-import { FavouriteIconFilled } from "~/components/icons/favourite-icon-filled";
+import { FavouriteIconFilled } from "~/components/favourite-icon-filled";
 import { CITY } from "~/constants/city";
 import { db } from "~/modules/db.server";
 import { getEventsByDay } from "~/modules/events.server";
@@ -41,9 +45,11 @@ export const links: LinksFunction = () => {
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
+	const { getIsAdmin } = await getSession(request);
+	const isAdmin = getIsAdmin();
 	const eventDays = await getEventsByDay(CITY);
 	const { getLikedEvents } = await getSession(request);
-	return { eventDays, likedEvents: getLikedEvents() };
+	return { eventDays, likedEvents: getLikedEvents(), isAdmin };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -104,8 +110,10 @@ const childAnimationVariants = {
 
 export default function Events() {
 	const { eventDays } = useLoaderData<typeof loader>();
-
 	const isHydrated = useHydrated();
+	const { t } = useTranslation();
+	const { isAdmin } = useLoaderData<typeof loader>();
+	const navigate = useNavigate();
 
 	return (
 		<>
@@ -117,6 +125,21 @@ export default function Events() {
 					Valencia
 				</h2>
 			</div>
+			{isAdmin && (
+				<Button
+					className="absolute bottom-2 right-2 z-40"
+					size={"lg"}
+					radius={"full"}
+					isIconOnly
+					color="primary"
+					aria-label={t("addEvent")}
+					onClick={() => {
+						navigate("/events/create");
+					}}
+				>
+					<Add01Icon />
+				</Button>
+			)}
 			{isHydrated && (
 				<motion.ul
 					className="mt-2 flex flex-col gap-y-2"
@@ -267,31 +290,47 @@ export const EventItem = ({
 	kizombaPercentage,
 	likes,
 }: EventItemProps) => {
-	const startTime = format(startDate, "HH:mm");
-	const endTime = format(endDate, "HH:mm");
+	const startTime = startDate.slice(11, 16);
+	const endTime = endDate.slice(11, 16);
 	const sbk = `${salsaPercentage}-${bachataPercentage}-${kizombaPercentage}`;
 	const { likedEvents } = useLoaderData<typeof loader>();
 	const initialHasLiked = likedEvents.includes(id);
-
+	const { isAdmin } = useLoaderData<typeof loader>();
+	const { t } = useTranslation();
+	const navigate = useNavigate();
+	const handleEditClick = () => {
+		const url = `/events/update/${id}`;
+		navigate(url);
+	};
 	return (
-		<div className="flex flex-col gap-y-1">
+		<div className="relative flex flex-col gap-y-1">
+			{isAdmin && (
+				<button
+					className="absolute right-0 top-0"
+					aria-label={t("editEvent")}
+					onClick={handleEditClick}
+				>
+					<Edit02Icon size={ICON_SIZE} />
+				</button>
+			)}
 			<h4 className="flex-1 text-xl font-bold">
 				<a
 					href={infoUrl}
-					className="flex h-6 underline decoration-1 hover:text-gray-300"
+					className="flex h-auto whitespace-normal break-words underline decoration-1 hover:text-gray-300"
 				>
 					{name}
 				</a>
 			</h4>
 			<div className="-mt-0.5 flex flex-1 flex-wrap gap-x-4 gap-y-1 leading-snug text-gray-200">
-				<div>{organizer.name}</div>
-				<div className="flex">
+				<div aria-label={t("organizer")}>{organizer.name}</div>
+				<div className="flex" aria-label={t("time")}>
 					<Clock01Icon size={ICON_SIZE} className="my-auto mr-1" />
 					{startTime} – {endTime}
 				</div>
 				<a
 					href={location.googleMapsUrl}
-					className="flex flex h-6 underline decoration-1 hover:text-gray-300"
+					className="flex flex h-6 h-auto whitespace-normal break-words underline decoration-1 hover:text-gray-300"
+					aria-label={t("location")}
 				>
 					<Location03Icon size={ICON_SIZE} className="my-auto" />
 					{location.name}
