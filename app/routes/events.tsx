@@ -4,7 +4,7 @@ import {
 	ActionFunctionArgs,
 	LinksFunction,
 	LoaderFunctionArgs,
-} from "@remix-run/node";
+} from "@remix-run/cloudflare";
 import {
 	useLoaderData,
 	useNavigation,
