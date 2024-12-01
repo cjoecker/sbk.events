@@ -1,15 +1,47 @@
-# sbk.events 💃🕺
+# Welcome to Remix + Cloudflare!
 
-An open source project to see the salsa bachata and kizomba socials in your city
+- 📖 [Remix docs](https://remix.run/docs)
+- 📖 [Remix Cloudflare docs](https://remix.run/guides/vite#cloudflare)
 
-## How to start
+## Development
 
-1. Asl the repository maintainer for the `.env` file
-2. Run `npm install` to install all dependencies
-3. Run `npx prisma migrate dev --name init`
-4. Run `npm run dev` to start the app in development mode
+Run the dev server:
 
-## Edit database
+```sh
+npm run dev
+```
 
-1. Run `npx prisma studio` to open the database editor
-2. Go to `http://localhost:5555/` in your browser
+To run Wrangler:
+
+```sh
+npm run build
+npm run start
+```
+
+## Typegen
+
+Generate types for your Cloudflare bindings in `wrangler.toml`:
+
+```sh
+npm run typegen
+```
+
+You will need to rerun typegen whenever you make changes to `wrangler.toml`.
+
+## Deployment
+
+First, build your app for production:
+
+```sh
+npm run build
+```
+
+Then, deploy your app to Cloudflare Pages:
+
+```sh
+npm run deploy
+```
+
+## Styling
+
+This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever css framework you prefer. See the [Vite docs on css](https://vitejs.dev/guide/features.html#css) for more information.
