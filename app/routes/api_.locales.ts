@@ -5,7 +5,6 @@ import { z } from "zod";
 import { resources } from "~/config/i18n";
 import { json } from "~/utils/remix";
 
-export const config = { runtime: "edge" };
 
 export function loader({ request }: LoaderFunctionArgs) {
 	const url = new URL(request.url);

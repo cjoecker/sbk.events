@@ -16,7 +16,6 @@ import { getSession } from "~/modules/session.server";
 import { json } from "~/utils/remix";
 import { assert } from "~/utils/validation";
 
-export const config = { runtime: "edge" };
 
 export const handle: SEOHandle = {
 	getSitemapEntries: () => {
