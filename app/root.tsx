@@ -28,8 +28,6 @@ import Background from "~/images/background.webp";
 import stylesheet from "~/styles/tailwind.css?url";
 import { json } from "~/utils/remix";
 
-// run vercel on edge functions
-export const config = { runtime: "edge" };
 
 export const handle = { i18n: ["translation"] };
 

@@ -11,7 +11,7 @@ export const handle: SEOHandle = {
 		return null;
 	},
 };
-
+export const config = { runtime: "edge" };
 export const action = async ({ request }: ActionFunctionArgs) => {
 	const formData = await request.formData();
 	const key = formData.get("key") as string | undefined;
