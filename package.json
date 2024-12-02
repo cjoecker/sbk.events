@@ -59,7 +59,6 @@
 		"remix-i18next": "^6.4.1",
 		"remix-utils": "^7.7.0",
 		"superjson": "^2.2.1",
-		"tailwind-merge": "^2.5.4",
 		"vite-env-only": "^3.0.3",
 		"zod": "^3.23.8"
 	},
