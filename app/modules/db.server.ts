@@ -1,5 +1,5 @@
 import { remember } from "@epic-web/remember";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 
 export const db = remember("prisma", () => {
