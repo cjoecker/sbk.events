@@ -28,6 +28,7 @@ import Background from "~/images/background.webp";
 import stylesheet from "~/styles/tailwind.css?url";
 import { json } from "~/utils/remix";
 
+
 export const handle = { i18n: ["translation"] };
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {

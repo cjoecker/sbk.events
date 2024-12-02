@@ -21,6 +21,7 @@ import { getSession } from "~/modules/session.server";
 import { json } from "~/utils/remix";
 import { assert } from "~/utils/validation";
 
+
 export const handle: SEOHandle = {
 	getSitemapEntries: () => {
 		return null;

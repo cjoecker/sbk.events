@@ -5,6 +5,7 @@ import { z } from "zod";
 import { resources } from "~/config/i18n";
 import { json } from "~/utils/remix";
 
+
 export function loader({ request }: LoaderFunctionArgs) {
 	const url = new URL(request.url);
 
