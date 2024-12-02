@@ -35,6 +35,8 @@ import { json } from "~/utils/remix";
 
 const ICON_SIZE = 18;
 
+export const config = { runtime: "edge" };
+
 export const links: LinksFunction = () => {
 	return [
 		{
