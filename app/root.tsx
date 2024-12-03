@@ -25,7 +25,7 @@ import stylesheet from "~/styles/tailwind.css?url";
 import { json } from "~/utils/remix";
 
 // Vercel edge functions
-export const config = { runtime: 'edge' };
+export const config = { runtime: "edge" };
 
 export const handle = { i18n: ["translation"] };
 
