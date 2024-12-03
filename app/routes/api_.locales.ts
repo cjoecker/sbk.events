@@ -1,4 +1,4 @@
-import { type LoaderFunctionArgs } from "@remix-run/deno";
+import { type LoaderFunctionArgs } from "@remix-run/node";
 import { cacheHeader } from "pretty-cache-header";
 import { z } from "zod";
 

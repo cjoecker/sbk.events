@@ -1,5 +1,5 @@
 import { generateRobotsTxt } from "@nasa-gcn/remix-seo";
-import { type LoaderFunctionArgs } from "@remix-run/deno";
+import { type LoaderFunctionArgs } from "@remix-run/node";
 
 import { getDomainUrl } from "~/utils/remix";
 

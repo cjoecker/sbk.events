@@ -1,7 +1,7 @@
 import { PassThrough } from "node:stream";
 
-import type { AppLoadContext, EntryContext } from "@remix-run/deno";
-import { createReadableStreamFromReadable } from "@remix-run/deno";
+import type { AppLoadContext, EntryContext } from "@remix-run/node";
+import { createReadableStreamFromReadable } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
 import { createInstance, i18n as i18next } from "i18next";
 import { isbot } from "isbot";

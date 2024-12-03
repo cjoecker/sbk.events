@@ -1,5 +1,5 @@
 import { generateSitemap } from "@nasa-gcn/remix-seo";
-import { type LoaderFunctionArgs } from "@remix-run/deno";
+import { type LoaderFunctionArgs } from "@remix-run/node";
 import { ServerRouteManifest } from "@remix-run/server-runtime/dist/routes";
 // @ts-expect-error Virtual modules are not recognized by TypeScript
 // See issue here: https://github.com/nasa-gcn/remix-seo/issues/7

@@ -1,4 +1,4 @@
-import { createCookie } from "@remix-run/deno";
+import { createCookie } from "@remix-run/node";
 import { RemixI18Next } from "remix-i18next/server";
 
 import * as i18n from "~/config/i18n";

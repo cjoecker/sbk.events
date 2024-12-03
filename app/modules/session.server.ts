@@ -1,4 +1,4 @@
-import { createCookieSessionStorage } from "@remix-run/deno";
+import { createCookieSessionStorage } from "@remix-run/node";
 
 import { addCookieToHeaders } from "~/utils/remix";
 

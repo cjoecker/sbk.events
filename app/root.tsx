@@ -4,7 +4,7 @@ import {
 	LoaderFunctionArgs,
 	LinksFunction,
 	MetaFunction,
-} from "@remix-run/deno";
+} from "@remix-run/node";
 import {
 	Links,
 	Meta,
