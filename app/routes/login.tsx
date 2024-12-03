@@ -1,6 +1,6 @@
 import { SEOHandle } from "@nasa-gcn/remix-seo";
 import { Button } from "@nextui-org/react";
-import { ActionFunctionArgs, redirect } from "@remix-run/node";
+import { ActionFunctionArgs, redirect } from "@remix-run/deno";
 import React from "react";
 
 import { getSession } from "~/modules/session.server";

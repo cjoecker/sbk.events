@@ -1,5 +1,5 @@
 import { SEOHandle } from "@nasa-gcn/remix-seo";
-import { ActionFunctionArgs, redirect } from "@remix-run/node";
+import { ActionFunctionArgs, redirect } from "@remix-run/deno";
 import { useLoaderData } from "@remix-run/react";
 import { validationError } from "@rvf/remix";
 import React from "react";

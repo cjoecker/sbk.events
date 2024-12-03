@@ -4,7 +4,7 @@ import {
 	ActionFunctionArgs,
 	LinksFunction,
 	LoaderFunctionArgs,
-} from "@remix-run/node";
+} from "@remix-run/deno";
 import {
 	useLoaderData,
 	useNavigation,
