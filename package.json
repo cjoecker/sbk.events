@@ -4,7 +4,7 @@
 	"sideEffects": false,
 	"type": "module",
 	"scripts": {
-		"build": "remix vite:build",
+		"build": "prisma generate --no-engine && remix vite:build",
 		"dev": "remix vite:dev",
 		"start": "netlify serve",
 		"typecheck": "tsc",
@@ -18,7 +18,6 @@
 		"test": "vitest run --silent --bail 1",
 		"setup": "prisma generate && prisma migrate deploy",
 		"migrate:db": "prisma generate && prisma migrate dev --create-only",
-		"postinstall": "prisma generate --no-engine"
 	},
 	"dependencies": {
 		"@epic-web/remember": "^1.1.0",
