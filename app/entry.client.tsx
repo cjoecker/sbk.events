@@ -18,6 +18,9 @@ await i18next
 		react: { useSuspense: false },
 		ns: getInitialNamespaces(),
 		detection: { order: ["htmlTag"], caches: [] },
+		backend: {
+			cache: "no-store"
+		},
 		...i18n,
 	})
 	.then(hydrate);
