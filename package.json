@@ -36,6 +36,7 @@
 		"@rvf/remix": "^6.3.0",
 		"@rvf/zod": "^6.0.3",
 		"@uidotdev/usehooks": "^2.4.1",
+		"@vercel/analytics": "^1.4.1",
 		"@vercel/remix": "^2.15.0",
 		"class-variance-authority": "^0.7.0",
 		"clsx": "^2.1.1",

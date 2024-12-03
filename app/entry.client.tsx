@@ -6,8 +6,11 @@ import { startTransition, StrictMode } from "react";
 import { hydrateRoot } from "react-dom/client";
 import { I18nextProvider, initReactI18next } from "react-i18next";
 import { getInitialNamespaces } from "remix-i18next/client";
+import { inject } from '@vercel/analytics';
 
 import { defaultNS, fallbackLng, supportedLngs } from "~/config/i18n";
+
+inject();
 
 async function main() {
 	await i18next
