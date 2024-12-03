@@ -6,6 +6,9 @@ import React from "react";
 import { getSession } from "~/modules/session.server";
 import { json } from "~/utils/remix";
 
+// Vercel edge functions
+export const config = { runtime: "edge" };
+
 export const handle: SEOHandle = {
 	getSitemapEntries: () => {
 		return null;
