@@ -11,7 +11,8 @@ import * as i18n from "~/config/i18n";
 
 inject();
 
-await i18next
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+i18next
 	.use(initReactI18next)
 	.use(LanguageDetector)
 	.init({
@@ -23,6 +24,7 @@ await i18next
 		},
 		...i18n,
 	})
+	// eslint-disable-next-line unicorn/prefer-top-level-await
 	.then(hydrate);
 
 function hydrate() {
