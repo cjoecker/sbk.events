@@ -1,17 +1,17 @@
 import { SEOHandle } from "@nasa-gcn/remix-seo";
 import { Button } from "@nextui-org/react";
 import {
-	ActionFunctionArgs,
-	LinksFunction,
-	LoaderFunctionArgs,
-} from "@remix-run/node";
-import {
 	useLoaderData,
 	useNavigation,
 	useSubmit,
 	Outlet,
 	useNavigate,
 } from "@remix-run/react";
+import {
+	ActionFunctionArgs,
+	LinksFunction,
+	LoaderFunctionArgs,
+} from "@vercel/remix";
 import { format } from "date-fns";
 import { motion, useAnimate } from "framer-motion";
 import {

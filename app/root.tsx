@@ -1,11 +1,6 @@
 import { NextUIProvider, Progress } from "@nextui-org/react";
 import { I18nProvider } from "@react-aria/i18n";
 import {
-	LoaderFunctionArgs,
-	LinksFunction,
-	MetaFunction,
-} from "@remix-run/node";
-import {
 	Links,
 	Meta,
 	Outlet,
@@ -15,6 +10,7 @@ import {
 	useNavigation,
 	useRouteError,
 } from "@remix-run/react";
+import { LoaderFunctionArgs, LinksFunction, MetaFunction } from "@vercel/remix";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useChangeLanguage } from "remix-i18next/react";

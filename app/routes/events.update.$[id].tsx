@@ -1,11 +1,11 @@
 import { SEOHandle } from "@nasa-gcn/remix-seo";
+import { useLoaderData } from "@remix-run/react";
+import { validationError } from "@rvf/remix";
 import {
 	ActionFunctionArgs,
 	LoaderFunctionArgs,
 	redirect,
-} from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
-import { validationError } from "@rvf/remix";
+} from "@vercel/remix";
 import { format } from "date-fns";
 import React from "react";
 

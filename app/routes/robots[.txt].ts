@@ -1,5 +1,5 @@
 import { generateRobotsTxt } from "@nasa-gcn/remix-seo";
-import { type LoaderFunctionArgs } from "@remix-run/node";
+import { type LoaderFunctionArgs } from "@vercel/remix";
 
 import { getDomainUrl } from "~/utils/remix";
 
