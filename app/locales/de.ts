@@ -27,5 +27,5 @@ export default {
 	bachataPercentage: "Bachata-Prozentsatz",
 	kizombaPercentage: "Kizomba-Prozentsatz",
 	sbkPercentage: "Salsa-Bachata-Kizomba-Prozentsatz",
-
+	createEvent: "Create event",
 };

@@ -124,18 +124,24 @@ export function UpsertEvent({
 						id="salsaPercentage"
 						type="number"
 						scope={form.scope("salsaPercentage")}
+						endContentText="%"
+						step={10}
 					/>
 					<div className="my-auto">–</div>
 					<Input
 						id="bachataPercentage"
 						type="number"
 						scope={form.scope("bachataPercentage")}
+						endContentText="%"
+						step={10}
 					/>
 					<div className="my-auto">–</div>
 					<Input
 						id="kizombaPercentage"
 						type="number"
 						scope={form.scope("kizombaPercentage")}
+						endContentText="%"
+						step={10}
 					/>
 				</div>
 				</div>
