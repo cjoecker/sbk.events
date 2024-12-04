@@ -43,7 +43,7 @@ export const Input = ({
 const EndContentText = ({ children }: { children: string }) => {
 	return (
 		<div className="pointer-events-none flex items-center">
-			<span className="text-small text-default-400">{children}</span>
+			<span className="text-small text-default-500">{children}</span>
 		</div>
 	);
 };

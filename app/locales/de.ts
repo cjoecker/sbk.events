@@ -28,4 +28,5 @@ export default {
 	kizombaPercentage: "Kizomba-Prozentsatz",
 	createEvent: "Create event",
 	socialMediaPosterEtc: "Social-Media-Poster, WhatsApp-Gruppe, etc.",
+	totalMustBe100: "Gesamt muss 100 sein",
 };

@@ -35,4 +35,5 @@ kizombaPercentage: "Porcentaje de kizomba",
 	wrongUrl: "Enlace incorrecto",
 	mandatoryField: "Campo obligatorio",
 	socialMediaPosterEtc: "Póster de redes sociales, grupo de WhatsApp, etc.",
+	totalMustBe100: "El total debe ser 100",
 };

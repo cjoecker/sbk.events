@@ -4,7 +4,7 @@ import { useNavigate, useNavigation } from "@remix-run/react";
 import { useField } from "@rvf/react";
 import { useForm } from "@rvf/remix";
 import { withZod } from "@rvf/zod";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
@@ -29,7 +29,15 @@ export const eventSchema = z.object({
 	salsaPercentage: intWithinRange(0, 100),
 	bachataPercentage: intWithinRange(0, 100),
 	kizombaPercentage: intWithinRange(0, 100),
-});
+}).refine((data) => {
+	if (
+		data.salsaPercentage + data.bachataPercentage + data.kizombaPercentage !== 100
+	) {
+		return {
+			message: "totalMustBe100",
+			path: ["salsaPercentage", "bachataPercentage", "kizombaPercentage"],
+		}
+}});
 
 export const upsertEventValidator = withZod(eventSchema);
 
@@ -81,7 +89,7 @@ export function UpsertEvent({
 				navigate("/events");
 			}}
 		>
-			<form className="flex flex-col gap-y-3" {...form.getFormProps()}>
+			<form className="flex flex-col gap-y-3 pb-2" {...form.getFormProps()}>
 				<Input label={t("eventName")} scope={form.scope("name")} />
 				<Input
 					label={t("eventInformationUrl")}
@@ -120,7 +128,7 @@ export function UpsertEvent({
 					isClearable={false}
 				/>
 				<div className="flex flex-col gap-1">
-					<label className="text-sm text-gray-400">{t("salsaBachataKizomba")}</label>
+					<label className="text-sm text-default-500">{t("salsaBachataKizomba")}</label>
 					<div className="flex gap-x-2">
 						<Input
 							id="salsaPercentage"
@@ -153,7 +161,7 @@ export function UpsertEvent({
 						/>
 					</div>
 				</div>
-				<Button type="submit" disabled={isSubmitting}>
+				<Button className="mt-3" type="submit" disabled={isSubmitting} color={"primary"}>
 					{t("createEvent")}
 				</Button>
 			</form>

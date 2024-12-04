@@ -16,6 +16,7 @@ import { getSession } from "~/modules/session.server";
 import { json } from "~/utils/remix";
 import { assert } from "~/utils/validation";
 import { z } from "zod";
+import { addDays } from "date-fns";
 
 export const handle: SEOHandle = {
 	getSitemapEntries: () => {
@@ -107,6 +108,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 export default function EventsCreate() {
 	const { locationOptions, organizerOptions, googleMapsUrls } =
 		useLoaderData<typeof loader>();
+	const tomorrow = addDays(new Date(), 1);
+	const tomorrowString = tomorrow.toISOString().split("T")[0];
+
 	return (
 		<UpsertEvent
 			locationOptions={locationOptions}
@@ -116,6 +120,9 @@ export default function EventsCreate() {
 				salsaPercentage: 40,
 				bachataPercentage: 60,
 				kizombaPercentage: 0,
+				date: tomorrowString,
+				startTime: "21:00",
+				endTime: "01:00",
 			} as z.infer<typeof eventSchema>}
 		/>
 	);

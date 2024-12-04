@@ -33,4 +33,5 @@ export default {
 	wrongUrl: "Wrong link",
 	mandatoryField: "Mandatory field",
 	socialMediaPosterEtc: "Social media poster, WhatsApp group, etc.",
+	totalMustBe100: "Total must be 100",
 };

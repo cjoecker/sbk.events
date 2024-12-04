@@ -17,7 +17,7 @@ export function EnhancedDialog({ title, onClose, children }: DialogDemoProps) {
 		>
 			<ModalContent>
 				<ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
-				<ModalBody>{children}</ModalBody>
+				<ModalBody className="px-4">{children}</ModalBody>
 			</ModalContent>
 		</Modal>
 	);
