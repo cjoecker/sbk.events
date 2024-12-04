@@ -110,7 +110,6 @@ const childAnimationVariants = {
 
 export default function Events() {
 	const { eventDays } = useLoaderData<typeof loader>();
-	const isHydrated = useHydrated();
 	const { t } = useTranslation();
 	const { isAdmin } = useLoaderData<typeof loader>();
 	const navigate = useNavigate();
@@ -140,35 +139,27 @@ export default function Events() {
 					<Add01Icon />
 				</Button>
 			)}
-			{isHydrated && (
-				<motion.ul
-					className="mt-2 flex flex-col gap-y-2"
-					initial="hidden"
-					animate="visible"
-					variants={containerAnimationVariants}
-					viewport={{ once: true, amount: 0.3 }}
-				>
-					{eventDays.map((eventDay, index) => {
-						const dayBefore =
-							index > 0 ? new Date(eventDays[index - 1].date) : null;
-						const isNextMonth =
-							(dayBefore &&
-								dayBefore.getMonth() !== new Date(eventDay.date).getMonth()) ||
-							index === 0;
+			<ul className="mt-2 flex flex-col gap-y-2">
+				{eventDays.map((eventDay, index) => {
+					const dayBefore =
+						index > 0 ? new Date(eventDays[index - 1].date) : null;
+					const isNextMonth =
+						(dayBefore &&
+							dayBefore.getMonth() !== new Date(eventDay.date).getMonth()) ||
+						index === 0;
 
-						return (
-							<motion.li key={eventDay.date} variants={childAnimationVariants}>
-								{isNextMonth && <MonthName date={eventDay.date} />}
-								<EventDayItem
-									key={eventDay.date}
-									date={eventDay.date}
-									events={eventDay.events}
-								/>
-							</motion.li>
-						);
-					})}
-				</motion.ul>
-			)}
+					return (
+						<motion.li key={eventDay.date} variants={childAnimationVariants}>
+							{isNextMonth && <MonthName date={eventDay.date} />}
+							<EventDayItem
+								key={eventDay.date}
+								date={eventDay.date}
+								events={eventDay.events}
+							/>
+						</motion.li>
+					);
+				})}
+			</ul>
 		</>
 	);
 }
