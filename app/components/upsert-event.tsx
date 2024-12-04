@@ -20,9 +20,9 @@ const schema = z.object({
 	name: z.string().trim().min(1),
 	organizerId: z.string().optional(),
 	organizerName: z.string().min(1),
-	date: z.string(),
-	startTime: z.string(),
-	endTime: z.string(),
+	date: z.string().date(),
+	startTime: z.string().time(),
+	endTime: z.string().time(),
 	locationId: z.string().optional(),
 	locationName: z.string().min(1),
 	locationGoogleMapsUrl: z.string().trim().url(),
@@ -30,6 +30,7 @@ const schema = z.object({
 	bachataPercentage: intWithinRange(0, 100),
 	kizombaPercentage: intWithinRange(0, 100),
 });
+
 export const upsertEventValidator = withZod(schema);
 
 interface AutocompleteOption {

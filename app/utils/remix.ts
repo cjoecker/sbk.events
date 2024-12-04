@@ -1,4 +1,4 @@
-import { json as DeprecatedJSON } from "@remix-run/node";
+import { json as DeprecatedJSON } from "@vercel/remix";
 
 // there seems not to be a good alternative for deprecated json
 // https://github.com/remix-run/react-router/discussions/12257

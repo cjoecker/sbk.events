@@ -1,7 +1,7 @@
 import { SEOHandle } from "@nasa-gcn/remix-seo";
-import { ActionFunctionArgs, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { validationError } from "@rvf/remix";
+import { ActionFunctionArgs, redirect } from "@vercel/remix";
 import React from "react";
 
 import { UpsertEvent, upsertEventValidator } from "~/components/upsert-event";
