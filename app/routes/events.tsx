@@ -124,21 +124,19 @@ export default function Events() {
 					Valencia
 				</h2>
 			</div>
-			{isAdmin && (
-				<Button
-					className="absolute bottom-2 right-2 z-40"
-					size={"lg"}
-					radius={"full"}
-					isIconOnly
-					color="primary"
-					aria-label={t("addEvent")}
-					onClick={() => {
-						navigate("/events/create");
-					}}
-				>
-					<Add01Icon />
-				</Button>
-			)}
+			<Button
+				className="fixed bottom-2 right-3 z-40 h-14 w-14"
+				size={"lg"}
+				radius={"full"}
+				isIconOnly
+				color="primary"
+				aria-label={t("addEvent")}
+				onClick={() => {
+					navigate("/events/create");
+				}}
+			>
+				<Add01Icon />
+			</Button>
 			<ul className="mt-2 flex flex-col gap-y-2">
 				{eventDays.map((eventDay, index) => {
 					const dayBefore =

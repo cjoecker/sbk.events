@@ -115,6 +115,10 @@ export function UpsertEvent({
 					selectorIcon={null}
 					isClearable={false}
 				/>
+				<div className="flex flex-col gap-1">
+				<label className="text-sm text-gray-400">
+					{t("sbkPercentage")}
+				</label>
 				<div className="flex gap-x-2">
 					<Input
 						id="salsaPercentage"
@@ -133,6 +137,7 @@ export function UpsertEvent({
 						type="number"
 						scope={form.scope("kizombaPercentage")}
 					/>
+				</div>
 				</div>
 				<Button type="submit" disabled={isSubmitting}>
 					{t("save")}
