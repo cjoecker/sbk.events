@@ -4,7 +4,7 @@ import { useNavigate, useNavigation } from "@remix-run/react";
 import { useField } from "@rvf/react";
 import { useForm } from "@rvf/remix";
 import { withZod } from "@rvf/zod";
-import React from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
@@ -15,23 +15,23 @@ import { Input } from "~/components/input";
 import { TimeInput } from "~/components/time-input";
 import { intWithinRange } from "~/utils/validation";
 
-const schema = z.object({
-	infoUrl: z.string().trim().url(),
-	name: z.string().trim().min(1),
+export const eventSchema = z.object({
+	infoUrl: z.string().trim().url("wrongUrl"),
+	name: z.string().trim().min(1, "mandatoryField"),
 	organizerId: z.string().optional(),
-	organizerName: z.string().min(1),
-	date: z.string().date(),
-	startTime: z.string().time(),
-	endTime: z.string().time(),
+	organizerName: z.string().min(1, "mandatoryField"),
+	date: z.string().date("mandatoryField"),
+	startTime: z.string().time("mandatoryField"),
+	endTime: z.string().time("mandatoryField"),
 	locationId: z.string().optional(),
-	locationName: z.string().min(1),
+	locationName: z.string().min(1, "mandatoryField"),
 	locationGoogleMapsUrl: z.string().trim().url(),
 	salsaPercentage: intWithinRange(0, 100),
 	bachataPercentage: intWithinRange(0, 100),
 	kizombaPercentage: intWithinRange(0, 100),
 });
 
-export const upsertEventValidator = withZod(schema);
+export const upsertEventValidator = withZod(eventSchema);
 
 interface AutocompleteOption {
 	id: string;
@@ -42,8 +42,8 @@ interface UpsertEvent {
 	locationOptions: AutocompleteOption[];
 	organizerOptions: AutocompleteOption[];
 	googleMapsUrls: { id: string; googleMapsUrl: string }[];
-	// infer from schema
-	defaultValues?: z.infer<typeof schema>;
+	// infer from eventSchema
+	defaultValues?: z.infer<typeof eventSchema>;
 }
 
 export function UpsertEvent({
@@ -83,7 +83,11 @@ export function UpsertEvent({
 		>
 			<form className="flex flex-col gap-y-3" {...form.getFormProps()}>
 				<Input label={t("eventName")} scope={form.scope("name")} />
-				<Input label={t("eventInformationUrl")} scope={form.scope("infoUrl")} />
+				<Input
+					label={t("eventInformationUrl")}
+					scope={form.scope("infoUrl")}
+					description={t("socialMediaPosterEtc")}
+				/>
 				<div className="flex gap-2">
 					<DatePicker
 						className="w-full min-w-[150px] flex-1"
@@ -116,37 +120,41 @@ export function UpsertEvent({
 					isClearable={false}
 				/>
 				<div className="flex flex-col gap-1">
-				<label className="text-sm text-gray-400">
-					{t("sbkPercentage")}
-				</label>
-				<div className="flex gap-x-2">
-					<Input
-						id="salsaPercentage"
-						type="number"
-						scope={form.scope("salsaPercentage")}
-						endContentText="%"
-						step={10}
-					/>
-					<div className="my-auto">–</div>
-					<Input
-						id="bachataPercentage"
-						type="number"
-						scope={form.scope("bachataPercentage")}
-						endContentText="%"
-						step={10}
-					/>
-					<div className="my-auto">–</div>
-					<Input
-						id="kizombaPercentage"
-						type="number"
-						scope={form.scope("kizombaPercentage")}
-						endContentText="%"
-						step={10}
-					/>
-				</div>
+					<label className="text-sm text-gray-400">{t("salsaBachataKizomba")}</label>
+					<div className="flex gap-x-2">
+						<Input
+							id="salsaPercentage"
+							type="number"
+							scope={form.scope("salsaPercentage")}
+							endContentText="%"
+							step={10}
+							min={0}
+							max={100}
+						/>
+						<div className="mt-2">–</div>
+						<Input
+							id="bachataPercentage"
+							type="number"
+							scope={form.scope("bachataPercentage")}
+							endContentText="%"
+							step={10}
+							min={0}
+							max={100}
+						/>
+						<div className="mt-2">–</div>
+						<Input
+							id="kizombaPercentage"
+							type="number"
+							scope={form.scope("kizombaPercentage")}
+							endContentText="%"
+							step={10}
+							min={0}
+							max={100}
+						/>
+					</div>
 				</div>
 				<Button type="submit" disabled={isSubmitting}>
-					{t("save")}
+					{t("createEvent")}
 				</Button>
 			</form>
 		</EnhancedDialog>

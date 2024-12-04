@@ -4,7 +4,7 @@ import { validationError } from "@rvf/remix";
 import { ActionFunctionArgs, redirect } from "@vercel/remix";
 import React from "react";
 
-import { UpsertEvent, upsertEventValidator } from "~/components/upsert-event";
+import { eventSchema, UpsertEvent, upsertEventValidator } from "~/components/upsert-event";
 import { CITY } from "~/constants/city";
 import { db } from "~/modules/db.server";
 import {
@@ -15,6 +15,7 @@ import {
 import { getSession } from "~/modules/session.server";
 import { json } from "~/utils/remix";
 import { assert } from "~/utils/validation";
+import { z } from "zod";
 
 export const handle: SEOHandle = {
 	getSitemapEntries: () => {
@@ -111,6 +112,11 @@ export default function EventsCreate() {
 			locationOptions={locationOptions}
 			organizerOptions={organizerOptions}
 			googleMapsUrls={googleMapsUrls}
+			defaultValues={{
+				salsaPercentage: 40,
+				bachataPercentage: 60,
+				kizombaPercentage: 0,
+			} as z.infer<typeof eventSchema>}
 		/>
 	);
 }

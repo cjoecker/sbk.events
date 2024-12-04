@@ -26,6 +26,6 @@ export default {
 	salsaPercentage: "Salsa-Prozentsatz",
 	bachataPercentage: "Bachata-Prozentsatz",
 	kizombaPercentage: "Kizomba-Prozentsatz",
-	sbkPercentage: "Salsa-Bachata-Kizomba-Prozentsatz",
 	createEvent: "Create event",
+	socialMediaPosterEtc: "Social-Media-Poster, WhatsApp-Gruppe, etc.",
 };

@@ -26,6 +26,11 @@ export default {
 	salsaPercentage: "Salsa percentage",
 	bachataPercentage: "Bachata percentage",
 	kizombaPercentage: "Kizomba percentage",
-	sbkPercentage: "Salsa-Bachata-Kizomba percentage",
 	createEvent: "Create event",
+
+	wrongValueType:"Wrong value type",
+	valueMustBeBetween: "Value must be between {{min}} and {{max}}",
+	wrongUrl: "Wrong link",
+	mandatoryField: "Mandatory field",
+	socialMediaPosterEtc: "Social media poster, WhatsApp group, etc.",
 };

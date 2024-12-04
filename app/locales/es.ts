@@ -28,7 +28,11 @@ organizer: "Organizador",
 salsaPercentage: "Porcentaje de salsa",
 bachataPercentage: "Porcentaje de bachata",
 kizombaPercentage: "Porcentaje de kizomba",
-sbkPercentage: "Porcentaje de Salsa-Bachata-Kizomba",
 	createEvent: "Crear evento",
 
+	wrongValueType:"Valor incorrecto",
+	valueMustBeBetween: "El valor debe estar entre {{min}} y {{max}}",
+	wrongUrl: "Enlace incorrecto",
+	mandatoryField: "Campo obligatorio",
+	socialMediaPosterEtc: "Póster de redes sociales, grupo de WhatsApp, etc.",
 };
