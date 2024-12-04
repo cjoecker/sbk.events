@@ -20,7 +20,7 @@ i18next
 		ns: getInitialNamespaces(),
 		detection: { order: ["htmlTag"], caches: [] },
 		backend: {
-			cache: "no-store"
+			cache: "no-store",
 		},
 		...i18n,
 	})

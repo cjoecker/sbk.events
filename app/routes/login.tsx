@@ -6,7 +6,6 @@ import React from "react";
 import { getSession } from "~/modules/session.server";
 import { json } from "~/utils/remix";
 
-
 export const handle: SEOHandle = {
 	getSitemapEntries: () => {
 		return null;
