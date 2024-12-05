@@ -9,8 +9,8 @@ import { CITY } from "~/constants/city";
 import { db } from "~/modules/db.server";
 import {
 	getAutocompleteOptions,
-	getDates,
-	updateLoacationOnEventUpsert,
+	getDates, sendEmail,
+	updateLoacationOnEventUpsert
 } from "~/modules/events.server";
 import { getSession } from "~/modules/session.server";
 import { json } from "~/utils/remix";
@@ -30,7 +30,7 @@ export async function loader() {
 
 export const action = async ({ request }: ActionFunctionArgs) => {
 	const { getIsAdmin } = await getSession(request);
-
+await sendEmail();
 	if (!getIsAdmin()) {
 		// eslint-disable-next-line @typescript-eslint/only-throw-error
 		throw json(null, 403);

@@ -110,14 +110,17 @@ export function UpsertEvent({
 			onClose={() => {
 				navigate("/events");
 			}}
-			footer={<Button
-				className="mt-3"
-				type="submit"
-				disabled={isSubmitting}
-				color={"primary"}
-			>
-				{t("createEvent")}
-			</Button>}
+			footer={
+				<Button
+					className="mt-3"
+					type="submit"
+					disabled={isSubmitting}
+					color={"primary"}
+					form={form.getFormProps().id}
+				>
+					{t("createEvent")}
+				</Button>
+			}
 		>
 			<form className="flex flex-col gap-y-3 pb-2" {...form.getFormProps()}>
 				<Input label={t("eventName")} scope={form.scope("name")} />
@@ -193,7 +196,6 @@ export function UpsertEvent({
 						<div className="ml-2 text-sm text-danger">{t(sumError)}</div>
 					)}
 				</div>
-
 			</form>
 		</EnhancedDialog>
 	);

@@ -2,7 +2,7 @@ import { addDays, startOfDay } from "date-fns";
 
 import { CITY } from "~/constants/city";
 import { db } from "~/modules/db.server";
-
+import nodemailer from "nodemailer";
 export async function getEventsByDay(city: string): Promise<EventDayDb[]> {
 	const events = await getUnfinishedEventsAndAfterNow(city);
 	const eventDays: EventDayDb[] = [];
@@ -169,4 +169,27 @@ export function getDates(date: string, startTime: string, endTime: string) {
 		endDate = addDays(endDate, 1);
 	}
 	return { startDate, endDate };
+}
+
+export async function sendEmail(){
+	const transporter = nodemailer.createTransport({
+		host: "smtp-relay.brevo.com",
+		port: 587,
+		secure: false,
+		auth: {
+			user: process.env.STMTP_USER,
+			pass: process.env.SMTP_PASSWORD,
+		},
+	});
+
+	const info = await transporter.sendMail({
+		// from-to emails should be different to allow
+		// to add the sender to the contacts
+		from: `"sbk.vents" <${process.env.NOTIFICATIONS_SENDER_EMAIL}>`,
+		to: process.env.NOTIFICATIONS_RECIPIENT_EMAIL,
+		subject: "New event created",
+		html: "threre is a new event created",
+	});
+
+	console.log("Message sent: %s", JSON.stringify(info));
 }
