@@ -15,29 +15,50 @@ import { Input } from "~/components/input";
 import { TimeInput } from "~/components/time-input";
 import { intWithinRange } from "~/utils/validation";
 
-export const eventSchema = z.object({
-	infoUrl: z.string().trim().url("wrongUrl"),
-	name: z.string().trim().min(1, "mandatoryField"),
-	organizerId: z.string().optional(),
-	organizerName: z.string().min(1, "mandatoryField"),
-	date: z.string().date("mandatoryField"),
-	startTime: z.string().time("mandatoryField"),
-	endTime: z.string().time("mandatoryField"),
-	locationId: z.string().optional(),
-	locationName: z.string().min(1, "mandatoryField"),
-	locationGoogleMapsUrl: z.string().trim().url(),
-	salsaPercentage: intWithinRange(0, 100),
-	bachataPercentage: intWithinRange(0, 100),
-	kizombaPercentage: intWithinRange(0, 100),
-}).refine((data) => {
-	if (
-		data.salsaPercentage + data.bachataPercentage + data.kizombaPercentage !== 100
-	) {
-		return {
-			message: "totalMustBe100",
-			path: ["salsaPercentage", "bachataPercentage", "kizombaPercentage"],
+export const eventSchema = z
+	.object({
+		infoUrl: z.string().trim().url("wrongUrl"),
+		name: z.string().trim().min(1, "mandatoryField"),
+		organizerId: z.string().optional(),
+		organizerName: z.string().min(1, "mandatoryField"),
+		date: z.string().date("mandatoryField"),
+		startTime: z.string().time("mandatoryField"),
+		endTime: z.string().time("mandatoryField"),
+		locationId: z.string().optional(),
+		locationName: z.string().min(1, "mandatoryField"),
+		locationGoogleMapsUrl: z.string().trim().url(),
+		salsaPercentage: intWithinRange(0, 100),
+		bachataPercentage: intWithinRange(0, 100),
+		kizombaPercentage: intWithinRange(0, 100),
+	})
+	.superRefine((val, ctx) => {
+		if (
+			val.bachataPercentage + val.kizombaPercentage + val.salsaPercentage !==
+			100
+		) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: "",
+				// all fields in path array is not working
+				path: ["salsaPercentage"],
+			});
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: "",
+				path: ["bachataPercentage"],
+			});
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: "",
+				path: ["kizombaPercentage"],
+			});
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: "totalMustBe100",
+				path: ["sumError"],
+			});
 		}
-}});
+	});
 
 export const upsertEventValidator = withZod(eventSchema);
 
@@ -81,7 +102,8 @@ export function UpsertEvent({
 			locationGoogleMapsUrlField.setTouched(true);
 		}
 	};
-
+	const sumError = form.formState.fieldErrors?.sumError;
+	console.log("sumError", sumError);
 	return (
 		<EnhancedDialog
 			title={t("createEvent")}
@@ -128,14 +150,15 @@ export function UpsertEvent({
 					isClearable={false}
 				/>
 				<div className="flex flex-col gap-1">
-					<label className="text-sm text-default-500">{t("salsaBachataKizomba")}</label>
+					<label className="text-sm text-default-500">
+						{t("salsaBachataKizomba")}
+					</label>
 					<div className="flex gap-x-2">
 						<Input
 							id="salsaPercentage"
 							type="number"
 							scope={form.scope("salsaPercentage")}
 							endContentText="%"
-							step={10}
 							min={0}
 							max={100}
 						/>
@@ -145,7 +168,6 @@ export function UpsertEvent({
 							type="number"
 							scope={form.scope("bachataPercentage")}
 							endContentText="%"
-							step={10}
 							min={0}
 							max={100}
 						/>
@@ -155,13 +177,20 @@ export function UpsertEvent({
 							type="number"
 							scope={form.scope("kizombaPercentage")}
 							endContentText="%"
-							step={10}
 							min={0}
 							max={100}
 						/>
 					</div>
+					{sumError && (
+						<div className="ml-2 text-sm text-danger">{t(sumError)}</div>
+					)}
 				</div>
-				<Button className="mt-3" type="submit" disabled={isSubmitting} color={"primary"}>
+				<Button
+					className="mt-3"
+					type="submit"
+					disabled={isSubmitting}
+					color={"primary"}
+				>
 					{t("createEvent")}
 				</Button>
 			</form>

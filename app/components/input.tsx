@@ -28,7 +28,7 @@ export const Input = ({
 			name={name}
 			type={type}
 			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-			value={field.value()?.toString()}
+			value={field.value()?.toString() ?? null}
 			form={form}
 			isInvalid={hasError}
 			errorMessage={field.error()}

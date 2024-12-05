@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const PARAMETERS_SEPARATOR = ";;";
-export const intWithinRange = (min: number, max: number) => {
+export const  intWithinRange = (min: number, max: number) => {
 	return z.preprocess(
 		(val) => {
 			return val === "" ? Number.NaN : val;
