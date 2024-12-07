@@ -8,21 +8,28 @@ datasource db {
 }
 
 model Event {
-  id                Int       @id @default(autoincrement())
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
+  id                Int         @id @default(autoincrement())
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
   infoUrl           String
   name              String
-  organizer         Organizer @relation(fields: [organizerId], references: [id])
+  organizer         Organizer   @relation(fields: [organizerId], references: [id])
   organizerId       Int
   startDate         DateTime
   endDate           DateTime
-  location          Location  @relation(fields: [locationId], references: [id])
+  location          Location    @relation(fields: [locationId], references: [id])
   locationId        Int
   salsaPercentage   Int
   bachataPercentage Int
   kizombaPercentage Int
-  likes             Int       @default(0)
+  likes             Int         @default(0)
+  status            EventStatus @default(PENDING_CREATION_APPROVAL)
+}
+
+enum EventStatus {
+  DELETED
+  PENDING_CREATION_APPROVAL
+  ACTIVE
 }
 
 model Organizer {
