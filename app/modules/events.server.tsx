@@ -1,8 +1,19 @@
-import { addDays, startOfDay } from "date-fns";
+import { addDays, format, startOfDay } from "date-fns";
 
 import { CITY } from "~/constants/city";
 import { db } from "~/modules/db.server";
-import nodemailer from "nodemailer";
+import {
+	Body,
+	Column,
+	Head,
+	Html,
+	render,
+	Row,
+	Section,
+} from "@react-email/components";
+import { sendEmail } from "~/modules/email.server";
+import { Event } from "@prisma/client";
+
 export async function getEventsByDay(city: string): Promise<EventDayDb[]> {
 	const events = await getUnfinishedEventsAndAfterNow(city);
 	const eventDays: EventDayDb[] = [];
@@ -27,6 +38,7 @@ interface EventDayDb {
 	date: Date;
 	events: EventsDb;
 }
+
 type EventsDb = Awaited<ReturnType<typeof getUnfinishedEventsAndAfterNow>>;
 
 export async function getUnfinishedEventsAndAfterNow(city: string) {
@@ -171,25 +183,63 @@ export function getDates(date: string, startTime: string, endTime: string) {
 	return { startDate, endDate };
 }
 
-export async function sendEmail(){
-	const transporter = nodemailer.createTransport({
-		host: "smtp-relay.brevo.com",
-		port: 587,
-		secure: false,
-		auth: {
-			user: process.env.STMTP_USER,
-			pass: process.env.SMTP_PASSWORD,
-		},
-	});
+export async function sendNewEventEmail(
+	event: Event,
+	organizerName: string,
+	locationName: string,
+	locationGoogleMapsUrl: string,
+	isNewLocation: boolean,
+	isNewOrganizer: boolean
+) {
+	const sbk = `${event.salsaPercentage}-${event.bachataPercentage}-${event.kizombaPercentage}`;
+	const startDate = format(event.startDate, "dd.MM.yyyy HH:mm");
+	const endDate = format(event.endDate, "dd.MM.yyyy HH:mm");
 
-	const info = await transporter.sendMail({
-		// from-to emails should be different to allow
-		// to add the sender to the contacts
-		from: `"sbk.vents" <${process.env.NOTIFICATIONS_SENDER_EMAIL}>`,
-		to: process.env.NOTIFICATIONS_RECIPIENT_EMAIL,
-		subject: "New event created",
-		html: "threre is a new event created",
-	});
+	const emailEvent = {
+		name: event.name,
+		infoUrl: event.infoUrl,
+		startDate,
+		endDate,
+		isNewLocation,
+		locationId: event.locationId,
+		locationName: locationName,
+		goggleMapsUrl: locationGoogleMapsUrl,
+		isNewOrganizer,
+		organizerName: organizerName,
+		organizerId: event.organizerId,
+		sbk: sbk,
+	};
 
-	console.log("Message sent: %s", JSON.stringify(info));
+	const htmlEmail = await render(<NewEventEmail event={emailEvent} />);
+	await sendEmail(htmlEmail);
 }
+
+interface NewEventEmailProps {
+	event: Record<string, unknown>;
+}
+
+export const NewEventEmail = ({ event }: NewEventEmailProps) => {
+	const data = Object.entries(event);
+
+	return (
+		<Html>
+			<Head />
+			<Body style={{textAlign:"left"}}>
+				<Section style={{ maxWidth: "600px", textAlign:"left" }}>
+					{data.map(([key, value]) => {
+						return (
+							<Row key={key}>
+								<Column style={{ textAlign: "right", paddingRight: "10px", width:"200px" }}>
+									<strong>{key}:</strong>
+								</Column>
+								<Column style={{ textAlign: "left" }}>
+									{value?.toString()}
+								</Column>
+							</Row>
+						);
+					})}
+				</Section>
+			</Body>
+		</Html>
+	);
+};

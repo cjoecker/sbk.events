@@ -4,16 +4,19 @@ import { validationError } from "@rvf/remix";
 import { ActionFunctionArgs, redirect } from "@vercel/remix";
 import React from "react";
 
-import { eventSchema, UpsertEvent, upsertEventValidator } from "~/components/upsert-event";
+import {
+	eventSchema,
+	UpsertEvent,
+	upsertEventValidator,
+} from "~/components/upsert-event";
 import { CITY } from "~/constants/city";
 import { db } from "~/modules/db.server";
 import {
 	getAutocompleteOptions,
-	getDates, sendEmail,
-	updateLoacationOnEventUpsert
+	getDates,
+	sendNewEventEmail,
+	updateLoacationOnEventUpsert,
 } from "~/modules/events.server";
-import { getSession } from "~/modules/session.server";
-import { json } from "~/utils/remix";
 import { assert } from "~/utils/validation";
 import { z } from "zod";
 import { addDays } from "date-fns";
@@ -29,13 +32,6 @@ export async function loader() {
 }
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-	const { getIsAdmin } = await getSession(request);
-await sendEmail();
-	if (!getIsAdmin()) {
-		// eslint-disable-next-line @typescript-eslint/only-throw-error
-		throw json(null, 403);
-	}
-
 	const result = await upsertEventValidator.validate(await request.formData());
 	if (result.error) {
 		return validationError(result.error, result.submittedData);
@@ -56,6 +52,8 @@ await sendEmail();
 		kizombaPercentage,
 	} = result.data;
 	const locationIdNumber = locationId ? Number.parseInt(locationId) : undefined;
+	const isNewLocation = !locationIdNumber;
+	const isNewOrganizer = !organizerId;
 
 	const organizerIdNumber = organizerId
 		? Number.parseInt(organizerId)
@@ -70,7 +68,7 @@ await sendEmail();
 	await updateLoacationOnEventUpsert(locationIdNumber, locationGoogleMapsUrl);
 	const { startDate, endDate } = getDates(date, startTime, endTime);
 
-	await db.event.create({
+	const newEvent = await db.event.create({
 		data: {
 			infoUrl,
 			name,
@@ -102,6 +100,15 @@ await sendEmail();
 			kizombaPercentage,
 		},
 	});
+	await sendNewEventEmail(
+		newEvent,
+		organizerName,
+		locationName,
+		locationGoogleMapsUrl,
+		isNewLocation,
+		isNewOrganizer
+	);
+
 	return redirect("/events");
 };
 
@@ -116,14 +123,16 @@ export default function EventsCreate() {
 			locationOptions={locationOptions}
 			organizerOptions={organizerOptions}
 			googleMapsUrls={googleMapsUrls}
-			defaultValues={{
-				salsaPercentage: 40,
-				bachataPercentage: 60,
-				kizombaPercentage: 0,
-				date: tomorrowString,
-				startTime: "21:00",
-				endTime: "01:00",
-			} as z.infer<typeof eventSchema>}
+			defaultValues={
+				{
+					salsaPercentage: 40,
+					bachataPercentage: 60,
+					kizombaPercentage: 0,
+					date: tomorrowString,
+					startTime: "21:00",
+					endTime: "01:00",
+				} as z.infer<typeof eventSchema>
+			}
 		/>
 	);
 }
