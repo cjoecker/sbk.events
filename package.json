@@ -23,6 +23,7 @@
 	"dependencies": {
 		"@epic-web/remember": "^1.1.0",
 		"@internationalized/date": "^3.6.0",
+		"@lottiefiles/dotlottie-react": "^0.11.0",
 		"@nasa-gcn/remix-seo": "^2.0.1",
 		"@nextui-org/react": "^2.4.8",
 		"@prisma/client": "^5.22.0",
@@ -53,6 +54,7 @@
 		"i18next-fs-backend": "^2.3.2",
 		"i18next-http-backend": "^2.6.2",
 		"isbot": "^4.1.0",
+		"lottie-react": "^2.4.0",
 		"lucide-react": "^0.460.0",
 		"nodemailer": "^6.9.16",
 		"prettier-plugin-tailwindcss": "^0.0.0-insiders.d539a72",

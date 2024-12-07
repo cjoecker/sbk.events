@@ -109,7 +109,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		isNewOrganizer
 	);
 
-	return redirect("/events");
+	return redirect("/events/create-success");
 };
 
 export default function EventsCreate() {

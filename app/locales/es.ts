@@ -36,4 +36,9 @@ kizombaPercentage: "Porcentaje de kizomba",
 	mandatoryField: "Campo obligatorio",
 	socialMediaPosterEtc: "Póster de redes sociales, grupo de WhatsApp, etc.",
 	totalMustBe100: "El total debe ser 100",
+
+	close: "Cerrar",
+	eventCreated: "¡Evento creado!",
+	eventSuccessfullyCreatedInfo: "¡Gracias por enviar el evento! Normalmente revisamos las solicitudes en un plazo de dos horas y garantizamos una respuesta dentro de las 24 horas. ¡Pronto verás tu evento online!",
+
 };

@@ -29,4 +29,8 @@ export default {
 	createEvent: "Create event",
 	socialMediaPosterEtc: "Social-Media-Poster, WhatsApp-Gruppe, etc.",
 	totalMustBe100: "Gesamt muss 100 sein",
+
+	close: "Schließen",
+	eventCreated: "Event erstellt!",
+	eventSuccessfullyCreatedInfo: "Vielen Dank für das Einreichen! Normalerweise überprüfen wir Einreichungen innerhalb von zwei Stunden und garantieren eine Rückmeldung innerhalb von 24 Stunden. Dein Event wird bald online sein!",
 };
