@@ -12,10 +12,10 @@ import {
 	Section,
 } from "@react-email/components";
 import { sendEmail } from "~/modules/email.server";
-import { Event } from "@prisma/client";
+import { Event, EventStatus } from "@prisma/client";
 
-export async function getEventsByDay(city: string): Promise<EventDayDb[]> {
-	const events = await getUnfinishedEventsAndAfterNow(city);
+export async function getEventsByDay(city: string, isAdmin: boolean): Promise<EventDayDb[]> {
+	const events = await getUnfinishedEventsAndAfterNow(city, isAdmin);
 	const eventDays: EventDayDb[] = [];
 	for (const event of events) {
 		const eventDate = startOfDay(event.startDate);
@@ -41,9 +41,11 @@ interface EventDayDb {
 
 type EventsDb = Awaited<ReturnType<typeof getUnfinishedEventsAndAfterNow>>;
 
-export async function getUnfinishedEventsAndAfterNow(city: string) {
+export async function getUnfinishedEventsAndAfterNow(city: string, isAdmin: boolean) {
 	const startOfToday = startOfDay(new Date());
 	const now = new Date();
+	const status = isAdmin ? {} : { status: EventStatus.PUBLISHED };
+
 	return db.event.findMany({
 		orderBy: {
 			startDate: "asc",
@@ -54,6 +56,7 @@ export async function getUnfinishedEventsAndAfterNow(city: string) {
 					name: city,
 				},
 			},
+			...status,
 			OR: [
 				{
 					startDate: {
@@ -97,6 +100,7 @@ export async function getUnfinishedEventsAndAfterNow(city: string) {
 			bachataPercentage: true,
 			kizombaPercentage: true,
 			likes: true,
+			status: true,
 		},
 	});
 }

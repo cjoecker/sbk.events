@@ -29,7 +29,7 @@ model Event {
 enum EventStatus {
   DELETED
   PENDING_CREATION_APPROVAL
-  ACTIVE
+  PUBLISHED
 }
 
 model Organizer {

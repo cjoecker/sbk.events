@@ -20,6 +20,8 @@ import {
 import { assert } from "~/utils/validation";
 import { z } from "zod";
 import { addDays } from "date-fns";
+import { getSession } from "~/modules/session.server";
+import { EventStatus } from "@prisma/client";
 
 export const handle: SEOHandle = {
 	getSitemapEntries: () => {
@@ -32,6 +34,7 @@ export async function loader() {
 }
 
 export const action = async ({ request }: ActionFunctionArgs) => {
+	const { getIsAdmin } = await getSession(request);
 	const result = await upsertEventValidator.validate(await request.formData());
 	if (result.error) {
 		return validationError(result.error, result.submittedData);
@@ -68,6 +71,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	await updateLoacationOnEventUpsert(locationIdNumber, locationGoogleMapsUrl);
 	const { startDate, endDate } = getDates(date, startTime, endTime);
 
+	const isAdmin = getIsAdmin();
+	const status = isAdmin ? EventStatus.PUBLISHED : EventStatus.PENDING_CREATION_APPROVAL;
+
 	const newEvent = await db.event.create({
 		data: {
 			infoUrl,
@@ -98,6 +104,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			salsaPercentage,
 			bachataPercentage,
 			kizombaPercentage,
+			status,
 		},
 	});
 	await sendNewEventEmail(

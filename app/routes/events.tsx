@@ -47,7 +47,7 @@ export const links: LinksFunction = () => {
 export async function loader({ request }: LoaderFunctionArgs) {
 	const { getIsAdmin } = await getSession(request);
 	const isAdmin = getIsAdmin();
-	const eventDays = await getEventsByDay(CITY);
+	const eventDays = await getEventsByDay(CITY, isAdmin);
 	const { getLikedEvents } = await getSession(request);
 	return { eventDays, likedEvents: getLikedEvents(), isAdmin };
 }
