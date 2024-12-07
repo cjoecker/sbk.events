@@ -13,9 +13,12 @@ export function EnhancedDialog({ title, onClose, children, footer }: DialogDemoP
 		<Modal
 			defaultOpen
 			onClose={onClose}
-			placement={"top"}
+			placement={"center"}
 			scrollBehavior={"inside"}
 			isDismissable={false}
+			classNames={{
+				base: "sm:m-2 m-2 max-h-[98%] h-auto",
+			}}
 		>
 			<ModalContent>
 				<ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
