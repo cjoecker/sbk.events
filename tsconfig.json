@@ -1,5 +1,6 @@
 {
-	"include": ["env.d.ts", "**/*.ts", "**/*.tsx"],
+	"include": ["env.d.ts", "**/*.ts", "**/*.tsx", "instrumentation.server.mjs"],
+	"exclude": ["node_modules"],
 	"compilerOptions": {
 		"lib": ["DOM", "DOM.Iterable", "ES2022"],
 		"isolatedModules": true,

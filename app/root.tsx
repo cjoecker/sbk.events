@@ -1,4 +1,3 @@
-import { captureRemixErrorBoundaryError, withSentry } from "@sentry/remix";
 import { NextUIProvider, Progress } from "@nextui-org/react";
 import { I18nProvider } from "@react-aria/i18n";
 import {
@@ -11,6 +10,7 @@ import {
 	useNavigation,
 	useRouteError,
 } from "@remix-run/react";
+import { captureRemixErrorBoundaryError, withSentry } from "@sentry/remix";
 import { LoaderFunctionArgs, LinksFunction, MetaFunction } from "@vercel/remix";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -219,14 +219,14 @@ function App() {
 export default withSentry(App);
 
 export function ErrorBoundary() {
-    const error = useRouteError();
-    useEffect(() => {
+	const error = useRouteError();
+	useEffect(() => {
 		console.error("error", error);
 	}, [error]);
 
-    captureRemixErrorBoundaryError(error);
+	captureRemixErrorBoundaryError(error);
 
-    return (
+	return (
 		<div>
 			<h1>Unexpected Error</h1>
 		</div>
