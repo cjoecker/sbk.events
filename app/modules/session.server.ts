@@ -4,7 +4,7 @@ import { addCookieToHeaders } from "~/utils/remix";
 
 interface SessionData {
 	likedEvents: number[];
-	isAdmin: boolean;
+	crudEventKey: string;
 }
 
 export const { getSession: getCookieSession, commitSession } =
@@ -53,11 +53,11 @@ export async function getSession(request: Request) {
 		getLikedEvents: () => {
 			return session.get("likedEvents") ?? [];
 		},
-		setIsAdmin: () => {
-			session.set("isAdmin", true);
+		setCrudEventKey: (crudEventKey:string) => {
+			session.set("crudEventKey", crudEventKey);
 		},
 		getIsAdmin: () => {
-			return session.get("isAdmin") ?? false;
+			return session.get("crudEventKey") === process.env.CRUD_EVENT_KEY;
 		},
 		/**
 		 * This will initialize a Headers object if one is not provided.
