@@ -260,3 +260,36 @@ export const NewEventEmail = ({ event }: NewEventEmailProps) => {
 		</Html>
 	);
 };
+
+export async function publishEvent(eventId: number, isPublished: boolean) {
+	const status = isPublished ? EventStatus.PUBLISHED : EventStatus.DELETED;
+	await db.event.update({
+		where: { id: eventId },
+		data: {
+			status,
+		},
+	});
+}
+
+export async function setEventLike(eventId: number, hasLikedEvent: boolean) {
+	const increment = hasLikedEvent ? -1 : 1;
+	const newEvent = await db.event.update({
+		where: { id: eventId },
+		data: {
+			likes: {
+				increment,
+			},
+		},
+	});
+
+	if (newEvent.likes < 0) {
+		await db.event.update({
+			where: { id: eventId },
+			data: {
+				likes: 0,
+			},
+		});
+	}
+	return newEvent.likes;
+
+}

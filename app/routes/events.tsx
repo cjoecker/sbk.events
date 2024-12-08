@@ -1,6 +1,7 @@
 import { SEOHandle } from "@nasa-gcn/remix-seo";
 import { Button } from "@nextui-org/react";
 import { Switch } from "@nextui-org/switch";
+import { assert } from "~/utils/validation";
 
 import {
 	useLoaderData,
@@ -29,12 +30,10 @@ import { useTranslation } from "react-i18next";
 
 import { FavouriteIconFilled } from "~/components/favourite-icon-filled";
 import { CITY } from "~/constants/city";
-import { db } from "~/modules/db.server";
-import { getEventsByDay } from "~/modules/events.server";
+import { getEventsByDay, publishEvent, setEventLike } from "~/modules/events.server";
 import { getSession } from "~/modules/session.server";
 import { json } from "~/utils/remix";
 import { useTranslationWithMarkdown } from "~/utils/use-translation-with-markdown";
-import { EventStatus } from "@prisma/client";
 
 const ICON_SIZE = 18;
 
@@ -66,41 +65,16 @@ export async function action({ request }: ActionFunctionArgs) {
 
 	if (intent === "publish" && isAdmin) {
 		const isPublished = body.get("isPublished") === "true";
-		const status = isPublished ? EventStatus.PUBLISHED : EventStatus.DELETED;
-		await db.event.update({
-			where: { id: eventId },
-			data: {
-				status,
-			},
-		});
+		await publishEvent(eventId, isPublished);
 		return json({ action: "publish", eventId, isPublished });
 	}
 
 	if (intent === "like") {
 		const hasLikedEvent = getHasLikedEvent(eventId);
-		const increment = hasLikedEvent ? -1 : 1;
-		const newEvent = await db.event.update({
-			where: { id: eventId },
-			data: {
-				likes: {
-					increment,
-				},
-			},
-		});
-
-		if (newEvent.likes < 0) {
-			await db.event.update({
-				where: { id: eventId },
-				data: {
-					likes: 0,
-				},
-			});
-		}
-
+		const likes = await setEventLike(eventId, hasLikedEvent);
 		likeEvent(eventId);
-
 		return json(
-			{ actionLikes: newEvent.likes, eventId },
+			{ actionLikes: likes, eventId },
 			{ headers: await getHeaders() }
 		);
 	}
@@ -368,7 +342,7 @@ export interface PublishSwitchProps {
 }
 export const PublishSwitch = ({ id, status }: PublishSwitchProps) => {
 	const submit = useSubmit();
-	const isPublished = status === EventStatus.PUBLISHED;
+	const isPublished = status === "PUBLISHED";
 	const navigation = useNavigation();
 	const isLoading = navigation.state !== "idle";
 	const { isAdmin } = useLoaderData<typeof loader>();
