@@ -127,7 +127,7 @@ export default function Events() {
 	const { t: tWithMarkdown } = useTranslationWithMarkdown();
 
 	return (
-		<>
+		<div>
 			<Outlet />
 			<div className="flex w-full justify-between">
 				<Title />
@@ -173,7 +173,7 @@ export default function Events() {
 			<div className="mx-auto mt-5 w-[90%] whitespace-pre-wrap text-center text-sm">
 				{tWithMarkdown("allTheEventsAndClasses")}
 			</div>
-		</>
+		</div>
 	);
 }
 
