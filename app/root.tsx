@@ -163,13 +163,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				<div className="h-full overflow-y-auto overflow-x-hidden">
 					<div className="mx-auto flex h-full max-w-2xl flex-col p-2">
 						<main className="mx-2 mb-8 flex-1">{children}</main>
-						<button
-							onClick={() => {
-								console.log("click me");
-							}}
-						>
-							Click me
-						</button>
 						<Footer />
 					</div>
 				</div>
