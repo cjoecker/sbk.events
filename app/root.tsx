@@ -1,3 +1,4 @@
+import { captureRemixErrorBoundaryError, withSentry } from "@sentry/remix";
 import { NextUIProvider, Progress } from "@nextui-org/react";
 import { I18nProvider } from "@react-aria/i18n";
 import {
@@ -202,7 +203,7 @@ export const Footer = () => {
 	);
 };
 
-export default function App() {
+function App() {
 	const { locale } = useLoaderData<typeof loader>();
 	useChangeLanguage(locale);
 	const calendarLocale = locale === "en" ? "en-UK" : locale;
@@ -215,13 +216,17 @@ export default function App() {
 	);
 }
 
+export default withSentry(App);
+
 export function ErrorBoundary() {
-	const error = useRouteError();
-	useEffect(() => {
+    const error = useRouteError();
+    useEffect(() => {
 		console.error("error", error);
 	}, [error]);
 
-	return (
+    captureRemixErrorBoundaryError(error);
+
+    return (
 		<div>
 			<h1>Unexpected Error</h1>
 		</div>

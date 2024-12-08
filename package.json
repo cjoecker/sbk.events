@@ -39,6 +39,8 @@
 		"@remix-run/serve": "^2.15.0",
 		"@rvf/remix": "^6.3.0",
 		"@rvf/zod": "^6.0.3",
+		"@sentry/remix": "^8.42.0",
+		"@sentry/vite-plugin": "^2.22.7",
 		"@uidotdev/usehooks": "^2.4.1",
 		"@vercel/analytics": "^1.4.1",
 		"@vercel/remix": "^2.15.0",
