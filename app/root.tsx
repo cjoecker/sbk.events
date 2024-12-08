@@ -70,7 +70,7 @@ export const links: LinksFunction = () => {
 		{ rel: "stylesheet", href: stylesheet },
 		{
 			rel: "preload",
-			as: "image/webp",
+			as: "image",
 			href: Background,
 		},
 		{
