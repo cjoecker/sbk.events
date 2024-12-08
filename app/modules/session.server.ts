@@ -15,9 +15,8 @@ export const { getSession: getCookieSession, commitSession } =
 			path: "/",
 			sameSite: "lax",
 			secrets: [process.env.COOKIE_SECRET ?? ""],
-			// secure: true,
-			// TODO make secure true after safari bug is fixed
-			// https://developer.apple.com/forums/thread/728137
+			secure: true,
+			maxAge: 60 * 60 * 24 * 365
 		},
 	});
 
