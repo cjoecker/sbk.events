@@ -19,5 +19,22 @@ export default {
 	},
 	darkMode: "class",
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-call
-	plugins: [nextui()],
+	plugins: [
+		nextui({
+			layout: {
+				radius: {
+					small: "1px", // rounded-small
+					medium: "3px", // rounded-medium
+					large: "4px", // rounded-large
+				},
+			},
+			themes: {
+				dark: {
+					colors: {
+						primary: "#005cd1",
+					},
+				},
+			},
+		}),
+	],
 } satisfies Config;

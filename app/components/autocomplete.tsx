@@ -42,6 +42,9 @@ export function AutoComplete({
 				allowsCustomValue={true}
 				allowsEmptyCollection={false}
 				defaultInputValue={defaultValue}
+				listboxProps={{
+					hideSelectedIcon: true,
+				}}
 				onSelectionChange={(id) => {
 					idField.setValue(id as string);
 					idField.setTouched(true);

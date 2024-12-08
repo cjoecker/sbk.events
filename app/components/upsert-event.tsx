@@ -4,7 +4,7 @@ import { useNavigate, useNavigation } from "@remix-run/react";
 import { useField } from "@rvf/react";
 import { useForm } from "@rvf/remix";
 import { withZod } from "@rvf/zod";
-import React from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
@@ -71,7 +71,6 @@ interface UpsertEvent {
 	locationOptions: AutocompleteOption[];
 	organizerOptions: AutocompleteOption[];
 	googleMapsUrls: { id: string; googleMapsUrl: string }[];
-	// infer from eventSchema
 	defaultValues?: z.infer<typeof eventSchema>;
 }
 
@@ -103,6 +102,12 @@ export function UpsertEvent({
 		}
 	};
 	const sumError = form.formState.fieldErrors.sumError;
+
+	useEffect(() => {
+		// show error when field is left
+		form.field("sumError" as never).setTouched(true);
+	}, [form]);
+
 	return (
 		<EnhancedDialog
 			title={t("createEvent")}

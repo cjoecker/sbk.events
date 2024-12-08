@@ -29,12 +29,13 @@ export function EnhancedDialog({
 			isDismissable={false}
 			classNames={{
 				base: "sm:m-2 m-2 max-h-[98%] h-auto",
+				backdrop: "bg-black bg-opacity-80",
 			}}
 		>
 			<ModalContent>
 				<ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
 				<ModalBody className="px-4">{children}</ModalBody>
-				{footer && <ModalFooter>{footer}</ModalFooter>}
+				{footer && <ModalFooter className="pt-0">{footer}</ModalFooter>}
 			</ModalContent>
 		</Modal>
 	);
