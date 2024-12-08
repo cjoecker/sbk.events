@@ -28,7 +28,7 @@ export function EnhancedDialog({
 			scrollBehavior={"inside"}
 			isDismissable={false}
 			classNames={{
-				base: "sm:m-2 m-2 max-h-[98%] h-auto",
+				base: "sm:m-2 m-2 max-h-[98%] h-auto glass-l-black",
 				backdrop: "bg-black bg-opacity-80",
 			}}
 		>
