@@ -7,6 +7,7 @@ import {
 	render,
 	Row,
 	Section,
+	Link,
 } from "@react-email/components";
 import { addDays, format, startOfDay } from "date-fns";
 
@@ -255,6 +256,9 @@ export const NewEventEmail = ({ event }: NewEventEmailProps) => {
 							</Row>
 						);
 					})}
+					<Row style={{ marginTop: "30px", textAlign: "center" }}>
+						<Link href="https://sbk.events/events">sbk.events</Link>
+					</Row>
 				</Section>
 			</Body>
 		</Html>

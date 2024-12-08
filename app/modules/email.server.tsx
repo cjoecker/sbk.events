@@ -14,8 +14,8 @@ export async function sendEmail(htmlEmail: string) {
 	const info = await transporter.sendMail({
 		// from-to emails should be different to allow
 		// to add the sender to the contacts
-		from: `"sbk.vents" <${process.env.NOTIFICATIONS_SENDER_EMAIL}>`,
-		to: process.env.NOTIFICATIONS_RECIPIENT_EMAIL,
+		from: "\"SBK Events\" <alerts@sbk.events>",
+		to: process.env.ALERTS_RECIPIENT_EMAIL,
 		subject: "New event created",
 		html: htmlEmail,
 	});

@@ -109,14 +109,16 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			status,
 		},
 	});
-	await sendNewEventEmail(
-		newEvent,
-		organizerName,
-		locationName,
-		locationGoogleMapsUrl,
-		isNewLocation,
-		isNewOrganizer
-	);
+	if (!isAdmin) {
+		await sendNewEventEmail(
+			newEvent,
+			organizerName,
+			locationName,
+			locationGoogleMapsUrl,
+			isNewLocation,
+			isNewOrganizer
+		);
+	}
 
 	return redirect("/events/create-success");
 };
