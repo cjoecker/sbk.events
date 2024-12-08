@@ -1,7 +1,7 @@
 import { SEOHandle } from "@nasa-gcn/remix-seo";
 import { Button } from "@nextui-org/react";
 import { Switch } from "@nextui-org/switch";
-import { EventStatus } from "@prisma/client";
+
 import {
 	useLoaderData,
 	useNavigation,
@@ -34,6 +34,7 @@ import { getEventsByDay } from "~/modules/events.server";
 import { getSession } from "~/modules/session.server";
 import { json } from "~/utils/remix";
 import { useTranslationWithMarkdown } from "~/utils/use-translation-with-markdown";
+import { EventStatus } from "@prisma/client";
 
 const ICON_SIZE = 18;
 
@@ -263,6 +264,8 @@ export const EventDayItem = ({ events, date }: EventDayItemProps) => {
 	);
 };
 
+type EventStatusClient = "PUBLISHED" | "PENDING_CREATION_APPROVAL" | "DELETED";
+
 interface EventItemProps {
 	id: number;
 	infoUrl: string;
@@ -280,7 +283,7 @@ interface EventItemProps {
 	bachataPercentage: number;
 	kizombaPercentage: number;
 	likes: number;
-	status: EventStatus;
+	status: EventStatusClient;
 }
 
 export const EventItem = ({
@@ -361,7 +364,7 @@ export const Separator = () => {
 
 export interface PublishSwitchProps {
 	id: number;
-	status: EventStatus;
+	status: EventStatusClient;
 }
 export const PublishSwitch = ({ id, status }: PublishSwitchProps) => {
 	const submit = useSubmit();
