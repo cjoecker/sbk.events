@@ -32,6 +32,8 @@ import { db } from "~/modules/db.server";
 import { getEventsByDay } from "~/modules/events.server";
 import { getSession } from "~/modules/session.server";
 import { json } from "~/utils/remix";
+import { Switch } from "@nextui-org/switch";
+import { EventStatus } from "@prisma/client";
 
 const ICON_SIZE = 18;
 
@@ -57,33 +59,51 @@ export async function action({ request }: ActionFunctionArgs) {
 
 	const body = new URLSearchParams(await request.text());
 	const eventId = Number(body.get("eventId"));
+	const intent = body.get("intent");
 
-	const hasLikedEvent = getHasLikedEvent(eventId);
-	const increment = hasLikedEvent ? -1 : 1;
-	const newEvent = await db.event.update({
-		where: { id: eventId },
-		data: {
-			likes: {
-				increment,
-			},
-		},
-	});
-
-	if (newEvent.likes < 0) {
+	if (intent === "publish") {
+		const isPublished = body.get("isPublished") === "true";
+		const status = isPublished ? EventStatus.PUBLISHED : EventStatus.DELETED;
 		await db.event.update({
 			where: { id: eventId },
 			data: {
-				likes: 0,
+				status,
 			},
 		});
+		return json(
+			{ action: "publish", eventId, isPublished },
+		);
 	}
 
-	likeEvent(eventId);
+	if (intent === "like") {
 
-	return json(
-		{ actionLikes: newEvent.likes, eventId },
-		{ headers: await getHeaders() }
-	);
+		const hasLikedEvent = getHasLikedEvent(eventId);
+		const increment = hasLikedEvent ? -1 : 1;
+		const newEvent = await db.event.update({
+			where: { id: eventId },
+			data: {
+				likes: {
+					increment,
+				},
+			},
+		});
+
+		if (newEvent.likes < 0) {
+			await db.event.update({
+				where: { id: eventId },
+				data: {
+					likes: 0,
+				},
+			});
+		}
+
+		likeEvent(eventId);
+
+		return json(
+			{ actionLikes: newEvent.likes, eventId },
+			{ headers: await getHeaders() }
+		);
+	}
 }
 
 export const handle: SEOHandle = {
@@ -92,13 +112,6 @@ export const handle: SEOHandle = {
 	},
 };
 
-const containerAnimationVariants = {
-	visible: {
-		transition: {
-			staggerChildren: 0.2,
-		},
-	},
-};
 const childAnimationVariants = {
 	hidden: { opacity: 0, x: -20 },
 	visible: {
@@ -111,7 +124,6 @@ const childAnimationVariants = {
 export default function Events() {
 	const { eventDays } = useLoaderData<typeof loader>();
 	const { t } = useTranslation();
-	const { isAdmin } = useLoaderData<typeof loader>();
 	const navigate = useNavigate();
 
 	return (
@@ -237,6 +249,7 @@ export const EventDayItem = ({ events, date }: EventDayItemProps) => {
 								bachataPercentage={event.bachataPercentage}
 								kizombaPercentage={event.kizombaPercentage}
 								likes={event.likes}
+								status={event.status}
 							/>
 							{!isLast && <Separator />}
 						</Fragment>
@@ -264,6 +277,7 @@ interface EventItemProps {
 	bachataPercentage: number;
 	kizombaPercentage: number;
 	likes: number;
+	status: EventStatus;
 }
 
 export const EventItem = ({
@@ -278,6 +292,7 @@ export const EventItem = ({
 	bachataPercentage,
 	kizombaPercentage,
 	likes,
+	status
 }: EventItemProps) => {
 	const startTime = startDate.slice(11, 16);
 	const endTime = endDate.slice(11, 16);
@@ -291,6 +306,8 @@ export const EventItem = ({
 		const url = `/events/update/${id}`;
 		navigate(url);
 	};
+
+
 	return (
 		<div className="relative flex flex-col gap-y-1">
 			{isAdmin && (
@@ -331,12 +348,43 @@ export const EventItem = ({
 					eventId={id}
 				/>
 			</div>
+			<PublishSwitch id={id} status={status} />
 		</div>
 	);
 };
 
 export const Separator = () => {
 	return <span className="h-[1px] w-full bg-gray-500" />;
+};
+
+export type PublishSwitchProps = {
+	id: number;
+	status: EventStatus;
+};
+export const PublishSwitch = ({id, status}: PublishSwitchProps) => {
+	const submit = useSubmit();
+	const isPublished = status === EventStatus.PUBLISHED;
+	const navigation = useNavigation();
+	const isLoading = navigation.state !== "idle";
+	const { isAdmin } = useLoaderData<typeof loader>();
+
+	const handlePublishSwitch = () => {
+		const newStatus = !isPublished;
+		submit(
+			{ eventId: id, isPublished:newStatus, intent: "publish" },
+			{
+				method: "POST",
+				fetcherKey: "publish",
+			}
+		)
+	}
+	if (!isAdmin) return null;
+
+	return (
+		<div>
+			<Switch disabled={isLoading} defaultSelected color="primary" isSelected={isPublished} onClick={handlePublishSwitch} />
+		</div>
+	);
 };
 
 export interface LikeButtonProps {
@@ -361,7 +409,7 @@ export const LikeButton = ({
 	const handleClick = () => {
 		if (isSubmitting) return;
 		submit(
-			{ eventId },
+			{ eventId, intent: "like" },
 			{
 				method: "POST",
 				fetcherKey: "like",
