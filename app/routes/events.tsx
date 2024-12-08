@@ -136,9 +136,6 @@ export default function Events() {
 					Valencia
 				</h2>
 			</div>
-			<button onClick={() => {
-				console.log("click me");
-			}}>Click me</button>
 			<Button
 				className="fixed bottom-2 right-3 z-40 h-14 w-14"
 				size={"lg"}
@@ -147,7 +144,6 @@ export default function Events() {
 				color="primary"
 				aria-label={t("addEvent")}
 				onClick={() => {
-					console.log("click me");
 					navigate("/events/create");
 				}}
 			>
