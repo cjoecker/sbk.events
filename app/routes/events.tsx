@@ -34,6 +34,7 @@ import { getSession } from "~/modules/session.server";
 import { json } from "~/utils/remix";
 import { Switch } from "@nextui-org/switch";
 import { EventStatus } from "@prisma/client";
+import { useTranslationWithMarkdown } from "~/utils/use-translation-with-markdown";
 
 const ICON_SIZE = 18;
 
@@ -125,6 +126,7 @@ export default function Events() {
 	const { eventDays } = useLoaderData<typeof loader>();
 	const { t } = useTranslation();
 	const navigate = useNavigate();
+	const { t: tWithMarkdown } = useTranslationWithMarkdown();
 
 	return (
 		<>
@@ -149,7 +151,7 @@ export default function Events() {
 			>
 				<Add01Icon />
 			</Button>
-			<ul className="mt-2 flex flex-col gap-y-2">
+			<ul className="mt-1 flex flex-col gap-y-2">
 				{eventDays.map((eventDay, index) => {
 					const dayBefore =
 						index > 0 ? new Date(eventDays[index - 1].date) : null;
@@ -170,6 +172,9 @@ export default function Events() {
 					);
 				})}
 			</ul>
+			<div className="mt-5 text-sm w-[90%] mx-auto text-center whitespace-pre-wrap">
+				{tWithMarkdown("allTheEventsAndClasses")}
+			</div>
 		</>
 	);
 }

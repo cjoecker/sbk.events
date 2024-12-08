@@ -39,3 +39,8 @@ ul {
 :root {
 	color-scheme: dark;
 }
+
+.markdown a {
+	color: #fdcf58;
+	text-decoration: underline;
+}

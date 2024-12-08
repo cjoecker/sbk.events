@@ -40,5 +40,5 @@ kizombaPercentage: "Porcentaje de kizomba",
 	close: "Cerrar",
 	eventCreated: "¡Evento creado!",
 	eventSuccessfullyCreatedInfo: "¡Gracias por enviar el evento! Normalmente revisamos las solicitudes en un plazo de dos horas y garantizamos una respuesta dentro de las 24 horas. ¡Pronto verás tu evento online!",
-
+	allTheEventsAndClasses:"¿Conoces algún evento que no está aquí? ¡[Agrégalo](/events/create) así no seas el organizador!\n¡Ayuda a que todos sepamos dónde bailar hoy!",
 };

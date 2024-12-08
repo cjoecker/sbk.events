@@ -38,4 +38,5 @@ export default {
 	close: "Close",
 	eventCreated: "Event created!",
 	eventSuccessfullyCreatedInfo: "Thanks for submitting the event! We typically review submissions within two hours and guarantee a response within 24 hours. You’ll see your event online soon!",
+	allTheEventsAndClasses:"Do you know of an event that isn't listed here? [Add it](/events/create) even if you're not the organizer!\nHelp us all know where we can dance today!",
 };
