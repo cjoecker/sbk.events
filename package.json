@@ -4,7 +4,7 @@
 	"sideEffects": false,
 	"type": "module",
 	"scripts": {
-		"build": "prisma generate --no-engine && remix vite:build",
+		"build": "prisma generate --no-engine && prisma migrate deploy && remix vite:build",
 		"dev": "remix vite:dev",
 		"start": "vercel dev",
 		"typecheck": "tsc",
@@ -19,7 +19,6 @@
 		"setup": "prisma generate && prisma migrate deploy",
 		"migrate:db-create-only": "prisma migrate dev --create-only",
 		"migrate:db": "prisma generate && prisma migrate dev --create-only",
-		"migrate:deploy": "prisma migrate deploy",
 		"postinstall": "prisma generate --no-engine"
 	},
 	"dependencies": {
