@@ -291,5 +291,4 @@ export async function setEventLike(eventId: number, hasLikedEvent: boolean) {
 		});
 	}
 	return newEvent.likes;
-
 }

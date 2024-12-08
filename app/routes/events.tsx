@@ -1,8 +1,6 @@
 import { SEOHandle } from "@nasa-gcn/remix-seo";
 import { Button } from "@nextui-org/react";
 import { Switch } from "@nextui-org/switch";
-import { assert } from "~/utils/validation";
-
 import {
 	useLoaderData,
 	useNavigation,
@@ -30,7 +28,11 @@ import { useTranslation } from "react-i18next";
 
 import { FavouriteIconFilled } from "~/components/favourite-icon-filled";
 import { CITY } from "~/constants/city";
-import { getEventsByDay, publishEvent, setEventLike } from "~/modules/events.server";
+import {
+	getEventsByDay,
+	publishEvent,
+	setEventLike,
+} from "~/modules/events.server";
 import { getSession } from "~/modules/session.server";
 import { json } from "~/utils/remix";
 import { useTranslationWithMarkdown } from "~/utils/use-translation-with-markdown";
