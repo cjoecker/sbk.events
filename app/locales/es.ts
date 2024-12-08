@@ -32,7 +32,7 @@ export default {
 	valueMustBeBetween: "El valor debe estar entre {{min}} y {{max}}",
 	wrongUrl: "Enlace incorrecto",
 	mandatoryField: "Campo obligatorio",
-	socialMediaPosterEtc: "Póster de redes sociales, grupo de WhatsApp, etc.",
+	socialMediaPosterEtc: "Cartel de redes sociales, grupo de WhatsApp, etc.",
 	totalMustBe100: "El total debe ser 100",
 
 	close: "Cerrar",

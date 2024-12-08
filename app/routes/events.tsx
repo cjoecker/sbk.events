@@ -55,13 +55,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-	const { getHasLikedEvent, likeEvent, getHeaders } = await getSession(request);
+	const { getHasLikedEvent, likeEvent, getHeaders, getIsAdmin } =
+		await getSession(request);
 
 	const body = new URLSearchParams(await request.text());
 	const eventId = Number(body.get("eventId"));
 	const intent = body.get("intent");
+	const isAdmin = getIsAdmin();
 
-	if (intent === "publish") {
+	if (intent === "publish" && isAdmin) {
 		const isPublished = body.get("isPublished") === "true";
 		const status = isPublished ? EventStatus.PUBLISHED : EventStatus.DELETED;
 		await db.event.update({

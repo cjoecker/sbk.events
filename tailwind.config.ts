@@ -18,8 +18,9 @@ export default {
 		},
 	},
 	darkMode: "class",
-	// eslint-disable-next-line @typescript-eslint/no-unsafe-call
+
 	plugins: [
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-call
 		nextui({
 			layout: {
 				radius: {
