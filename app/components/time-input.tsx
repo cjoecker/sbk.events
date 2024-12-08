@@ -3,6 +3,7 @@ import { TimeInput as _TimeInput } from "@nextui-org/date-input";
 import { TimeInputProps } from "@nextui-org/react";
 import { TimeValue } from "@react-types/datepicker";
 import { FormScope, useField } from "@rvf/react";
+import { useTranslation } from "react-i18next";
 
 export type _TimeInputProps = {
 	label?: string;
@@ -15,8 +16,9 @@ export const TimeInput = ({ label, scope, ...props }: _TimeInputProps) => {
 	const defaultValue = field.getInputProps().defaultValue as string;
 	const timeDefaultValue = defaultValue ? parseTime(defaultValue) : undefined;
 	const timeValue = field.value() ? parseTime(field.value()) : undefined;
-
 	const hasError = field.error() !== null;
+	const { t } = useTranslation();
+	const translatedError = hasError ? t(field.error() ?? "") : undefined;
 	return (
 		<_TimeInput
 			hourCycle={24}
@@ -33,7 +35,7 @@ export const TimeInput = ({ label, scope, ...props }: _TimeInputProps) => {
 			name={name}
 			value={timeValue}
 			isInvalid={hasError}
-			errorMessage={field.error()}
+			errorMessage={translatedError}
 			{...props}
 		/>
 	);

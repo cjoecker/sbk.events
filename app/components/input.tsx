@@ -2,6 +2,7 @@ import { Input as _Input } from "@nextui-org/input";
 import { InputProps } from "@nextui-org/react";
 import { FormScope, useField } from "@rvf/react";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 export type _InputProps = {
 	label?: string;
@@ -19,6 +20,8 @@ export const Input = ({
 	const { onChange, onBlur, name, type, form } = field.getInputProps();
 	const defaultValue = field.getInputProps().defaultValue as string;
 	const hasError = field.error() !== null;
+	const { t } = useTranslation();
+	const translatedError = hasError ? t(field.error() ?? "") : undefined;
 	return (
 		<_Input
 			label={label}
@@ -31,7 +34,7 @@ export const Input = ({
 			value={field.value()?.toString() ?? null}
 			form={form}
 			isInvalid={hasError}
-			errorMessage={field.error()}
+			errorMessage={translatedError}
 			endContent={
 				endContentText ? <EndContentText>{endContentText}</EndContentText> : ""
 			}

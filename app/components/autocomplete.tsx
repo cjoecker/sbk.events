@@ -30,15 +30,14 @@ export function AutoComplete({
 	const idField = useField(idScope);
 	const { t } = useTranslation();
 	const hasError = nameField.error() !== null || idField.error() !== null;
-	const errorTranslationKey = nameField.error() ?? idField.error() ?? "";
-	const errorMessage = t(errorTranslationKey);
+	const errorTranslationKey = nameField.error() ?? idField.error();
 	const defaultValue = nameField.defaultValue();
-
+	const translatedError = hasError ? t(errorTranslationKey ?? "") : undefined;
 	return (
 		<>
 			<_Autocomplete
 				label={label}
-				errorMessage={errorMessage}
+				errorMessage={translatedError}
 				isInvalid={hasError}
 				allowsCustomValue={true}
 				allowsEmptyCollection={false}
