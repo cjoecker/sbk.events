@@ -1,0 +1,10 @@
+{
+  "build": {
+    "env": {
+      "DATABASE_URL": "@database_url"
+    }
+  },
+  "post-build": {
+    "command": "npm run migrate:deploy"
+  }
+}
