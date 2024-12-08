@@ -1,7 +1,4 @@
-import { addDays, format, startOfDay } from "date-fns";
-
-import { CITY } from "~/constants/city";
-import { db } from "~/modules/db.server";
+import { Event, EventStatus } from "@prisma/client";
 import {
 	Body,
 	Column,
@@ -11,10 +8,16 @@ import {
 	Row,
 	Section,
 } from "@react-email/components";
-import { sendEmail } from "~/modules/email.server";
-import { Event, EventStatus } from "@prisma/client";
+import { addDays, format, startOfDay } from "date-fns";
 
-export async function getEventsByDay(city: string, isAdmin: boolean): Promise<EventDayDb[]> {
+import { CITY } from "~/constants/city";
+import { db } from "~/modules/db.server";
+import { sendEmail } from "~/modules/email.server";
+
+export async function getEventsByDay(
+	city: string,
+	isAdmin: boolean
+): Promise<EventDayDb[]> {
 	const events = await getUnfinishedEventsAndAfterNow(city, isAdmin);
 	const eventDays: EventDayDb[] = [];
 	for (const event of events) {
@@ -41,7 +44,10 @@ interface EventDayDb {
 
 type EventsDb = Awaited<ReturnType<typeof getUnfinishedEventsAndAfterNow>>;
 
-export async function getUnfinishedEventsAndAfterNow(city: string, isAdmin: boolean) {
+export async function getUnfinishedEventsAndAfterNow(
+	city: string,
+	isAdmin: boolean
+) {
 	const startOfToday = startOfDay(new Date());
 	const now = new Date();
 	const status = isAdmin ? {} : { status: EventStatus.PUBLISHED };
@@ -187,6 +193,7 @@ export function getDates(date: string, startTime: string, endTime: string) {
 	return { startDate, endDate };
 }
 
+// eslint-disable-next-line max-params
 export async function sendNewEventEmail(
 	event: Event,
 	organizerName: string,
@@ -228,12 +235,18 @@ export const NewEventEmail = ({ event }: NewEventEmailProps) => {
 	return (
 		<Html>
 			<Head />
-			<Body style={{textAlign:"left"}}>
-				<Section style={{ maxWidth: "600px", textAlign:"left" }}>
+			<Body style={{ textAlign: "left" }}>
+				<Section style={{ maxWidth: "600px", textAlign: "left" }}>
 					{data.map(([key, value]) => {
 						return (
 							<Row key={key}>
-								<Column style={{ textAlign: "right", paddingRight: "10px", width:"200px" }}>
+								<Column
+									style={{
+										textAlign: "right",
+										paddingRight: "10px",
+										width: "200px",
+									}}
+								>
 									<strong>{key}:</strong>
 								</Column>
 								<Column style={{ textAlign: "left" }}>

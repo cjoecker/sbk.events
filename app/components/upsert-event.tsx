@@ -4,7 +4,7 @@ import { useNavigate, useNavigation } from "@remix-run/react";
 import { useField } from "@rvf/react";
 import { useForm } from "@rvf/remix";
 import { withZod } from "@rvf/zod";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
@@ -102,8 +102,7 @@ export function UpsertEvent({
 			locationGoogleMapsUrlField.setTouched(true);
 		}
 	};
-	const sumError = form.formState.fieldErrors?.sumError;
-	console.log("sumError", sumError);
+	const sumError = form.formState.fieldErrors.sumError;
 	return (
 		<EnhancedDialog
 			title={t("createEvent")}

@@ -1,6 +1,6 @@
-import React, { ReactElement, useEffect, useState } from "react";
-import { useHydrated } from "remix-utils/use-hydrated";
 import { LottieComponentProps } from "lottie-react";
+import React, { useEffect, useState } from "react";
+import { useHydrated } from "remix-utils/use-hydrated";
 
 export const Lottie = ({ ...props }: LottieComponentProps) => {
 	const isHydrated = useHydrated();

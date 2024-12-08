@@ -1,10 +1,11 @@
-import React, { ReactElement, ReactNode, useEffect, useState } from "react";
-import { EnhancedDialog } from "~/components/enhanced-dialog";
-import { useTranslation } from "react-i18next";
 import { Button } from "@nextui-org/react";
 import { useNavigate } from "@remix-run/react";
-import AnimatedCheck from "~/images/animated-check.json";
+import React from "react";
+import { useTranslation } from "react-i18next";
+
+import { EnhancedDialog } from "~/components/enhanced-dialog";
 import { Lottie } from "~/components/lottie";
+import AnimatedCheck from "~/images/animated-check.json";
 
 export default function EventsCreateSuccess() {
 	const { t } = useTranslation();

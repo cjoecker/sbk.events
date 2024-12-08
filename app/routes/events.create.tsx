@@ -1,8 +1,11 @@
 import { SEOHandle } from "@nasa-gcn/remix-seo";
+import { EventStatus } from "@prisma/client";
 import { useLoaderData } from "@remix-run/react";
 import { validationError } from "@rvf/remix";
 import { ActionFunctionArgs, redirect } from "@vercel/remix";
+import { addDays } from "date-fns";
 import React from "react";
+import { z } from "zod";
 
 import {
 	eventSchema,
@@ -17,11 +20,8 @@ import {
 	sendNewEventEmail,
 	updateLoacationOnEventUpsert,
 } from "~/modules/events.server";
-import { assert } from "~/utils/validation";
-import { z } from "zod";
-import { addDays } from "date-fns";
 import { getSession } from "~/modules/session.server";
-import { EventStatus } from "@prisma/client";
+import { assert } from "~/utils/validation";
 
 export const handle: SEOHandle = {
 	getSitemapEntries: () => {
@@ -72,7 +72,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	const { startDate, endDate } = getDates(date, startTime, endTime);
 
 	const isAdmin = getIsAdmin();
-	const status = isAdmin ? EventStatus.PUBLISHED : EventStatus.PENDING_CREATION_APPROVAL;
+	const status = isAdmin
+		? EventStatus.PUBLISHED
+		: EventStatus.PENDING_CREATION_APPROVAL;
 
 	const newEvent = await db.event.create({
 		data: {

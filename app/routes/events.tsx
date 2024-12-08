@@ -1,5 +1,7 @@
 import { SEOHandle } from "@nasa-gcn/remix-seo";
 import { Button } from "@nextui-org/react";
+import { Switch } from "@nextui-org/switch";
+import { EventStatus } from "@prisma/client";
 import {
 	useLoaderData,
 	useNavigation,
@@ -24,7 +26,6 @@ import {
 } from "hugeicons-react";
 import { Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useHydrated } from "remix-utils/use-hydrated";
 
 import { FavouriteIconFilled } from "~/components/favourite-icon-filled";
 import { CITY } from "~/constants/city";
@@ -32,8 +33,6 @@ import { db } from "~/modules/db.server";
 import { getEventsByDay } from "~/modules/events.server";
 import { getSession } from "~/modules/session.server";
 import { json } from "~/utils/remix";
-import { Switch } from "@nextui-org/switch";
-import { EventStatus } from "@prisma/client";
 import { useTranslationWithMarkdown } from "~/utils/use-translation-with-markdown";
 
 const ICON_SIZE = 18;
@@ -71,13 +70,10 @@ export async function action({ request }: ActionFunctionArgs) {
 				status,
 			},
 		});
-		return json(
-			{ action: "publish", eventId, isPublished },
-		);
+		return json({ action: "publish", eventId, isPublished });
 	}
 
 	if (intent === "like") {
-
 		const hasLikedEvent = getHasLikedEvent(eventId);
 		const increment = hasLikedEvent ? -1 : 1;
 		const newEvent = await db.event.update({
@@ -172,7 +168,7 @@ export default function Events() {
 					);
 				})}
 			</ul>
-			<div className="mt-5 text-sm w-[90%] mx-auto text-center whitespace-pre-wrap">
+			<div className="mx-auto mt-5 w-[90%] whitespace-pre-wrap text-center text-sm">
 				{tWithMarkdown("allTheEventsAndClasses")}
 			</div>
 		</>
@@ -297,7 +293,7 @@ export const EventItem = ({
 	bachataPercentage,
 	kizombaPercentage,
 	likes,
-	status
+	status,
 }: EventItemProps) => {
 	const startTime = startDate.slice(11, 16);
 	const endTime = endDate.slice(11, 16);
@@ -311,7 +307,6 @@ export const EventItem = ({
 		const url = `/events/update/${id}`;
 		navigate(url);
 	};
-
 
 	return (
 		<div className="relative flex flex-col gap-y-1">
@@ -362,11 +357,11 @@ export const Separator = () => {
 	return <span className="h-[1px] w-full bg-gray-500" />;
 };
 
-export type PublishSwitchProps = {
+export interface PublishSwitchProps {
 	id: number;
 	status: EventStatus;
-};
-export const PublishSwitch = ({id, status}: PublishSwitchProps) => {
+}
+export const PublishSwitch = ({ id, status }: PublishSwitchProps) => {
 	const submit = useSubmit();
 	const isPublished = status === EventStatus.PUBLISHED;
 	const navigation = useNavigation();
@@ -376,18 +371,24 @@ export const PublishSwitch = ({id, status}: PublishSwitchProps) => {
 	const handlePublishSwitch = () => {
 		const newStatus = !isPublished;
 		submit(
-			{ eventId: id, isPublished:newStatus, intent: "publish" },
+			{ eventId: id, isPublished: newStatus, intent: "publish" },
 			{
 				method: "POST",
 				fetcherKey: "publish",
 			}
-		)
-	}
+		);
+	};
 	if (!isAdmin) return null;
 
 	return (
 		<div>
-			<Switch disabled={isLoading} defaultSelected color="primary" isSelected={isPublished} onClick={handlePublishSwitch} />
+			<Switch
+				disabled={isLoading}
+				defaultSelected
+				color="primary"
+				isSelected={isPublished}
+				onClick={handlePublishSwitch}
+			/>
 		</div>
 	);
 };

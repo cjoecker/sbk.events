@@ -31,6 +31,8 @@ export default {
 	totalMustBe100: "Gesamt muss 100 sein",
 	close: "Schließen",
 	eventCreated: "Event erstellt!",
-	eventSuccessfullyCreatedInfo: "Vielen Dank für das Einreichen! Normalerweise überprüfen wir Einreichungen innerhalb von zwei Stunden und garantieren eine Rückmeldung innerhalb von 24 Stunden. Dein Event wird bald online sein!",
-	allTheEventsAndClasses:"Kennst du ein Event, das hier nicht aufgeführt ist? [Füge es hinzu](/events/create), auch wenn du nicht der Veranstalter bist!\nHilf uns allen zu wissen, wo wir heute tanzen können!",
+	eventSuccessfullyCreatedInfo:
+		"Vielen Dank für das Einreichen! Normalerweise überprüfen wir Einreichungen innerhalb von zwei Stunden und garantieren eine Rückmeldung innerhalb von 24 Stunden. Dein Event wird bald online sein!",
+	allTheEventsAndClasses:
+		"Kennst du ein Event, das hier nicht aufgeführt ist? [Füge es hinzu](/events/create), auch wenn du nicht der Veranstalter bist!\nHilf uns allen zu wissen, wo wir heute tanzen können!",
 };

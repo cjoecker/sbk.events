@@ -16,7 +16,7 @@ export const { getSession: getCookieSession, commitSession } =
 			sameSite: "lax",
 			secrets: [process.env.COOKIE_SECRET ?? ""],
 			secure: true,
-			maxAge: 60 * 60 * 24 * 365
+			maxAge: 60 * 60 * 24 * 365,
 		},
 	});
 
@@ -53,7 +53,7 @@ export async function getSession(request: Request) {
 		getLikedEvents: () => {
 			return session.get("likedEvents") ?? [];
 		},
-		setCrudEventKey: (crudEventKey:string) => {
+		setCrudEventKey: (crudEventKey: string) => {
 			session.set("crudEventKey", crudEventKey);
 		},
 		getIsAdmin: () => {

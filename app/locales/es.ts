@@ -15,22 +15,20 @@ export default {
 	socials: "Sociales",
 	thisIsAnOpenSourceProject: "Este es un proyecto open-source.",
 
-
-
-eventName: "Nombre del evento",
-eventInformationUrl: "Link de información del evento",
-date: "Fecha",
-startTime: "Inicio",
-endTime: "Fin",
-location: "Ubicación",
-locationGoogleMapsUrl: "Enlace de Google Maps",
-organizer: "Organizador",
-salsaPercentage: "Porcentaje de salsa",
-bachataPercentage: "Porcentaje de bachata",
-kizombaPercentage: "Porcentaje de kizomba",
+	eventName: "Nombre del evento",
+	eventInformationUrl: "Link de información del evento",
+	date: "Fecha",
+	startTime: "Inicio",
+	endTime: "Fin",
+	location: "Ubicación",
+	locationGoogleMapsUrl: "Enlace de Google Maps",
+	organizer: "Organizador",
+	salsaPercentage: "Porcentaje de salsa",
+	bachataPercentage: "Porcentaje de bachata",
+	kizombaPercentage: "Porcentaje de kizomba",
 	createEvent: "Crear evento",
 
-	wrongValueType:"Valor incorrecto",
+	wrongValueType: "Valor incorrecto",
 	valueMustBeBetween: "El valor debe estar entre {{min}} y {{max}}",
 	wrongUrl: "Enlace incorrecto",
 	mandatoryField: "Campo obligatorio",
@@ -39,6 +37,8 @@ kizombaPercentage: "Porcentaje de kizomba",
 
 	close: "Cerrar",
 	eventCreated: "¡Evento creado!",
-	eventSuccessfullyCreatedInfo: "¡Gracias por enviar el evento! Normalmente revisamos las solicitudes en un plazo de dos horas y garantizamos una respuesta dentro de las 24 horas. ¡Pronto verás tu evento online!",
-	allTheEventsAndClasses:"¿Conoces algún evento que no está aquí? ¡[Agrégalo](/events/create) así no seas el organizador!\n¡Ayuda a que todos sepamos dónde bailar hoy!",
+	eventSuccessfullyCreatedInfo:
+		"¡Gracias por enviar el evento! Normalmente revisamos las solicitudes en un plazo de dos horas y garantizamos una respuesta dentro de las 24 horas. ¡Pronto verás tu evento online!",
+	allTheEventsAndClasses:
+		"¿Conoces algún evento que no está aquí? ¡[Agrégalo](/events/create) así no seas el organizador!\n¡Ayuda a que todos sepamos dónde bailar hoy!",
 };

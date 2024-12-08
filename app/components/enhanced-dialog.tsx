@@ -1,4 +1,10 @@
-import { Modal, ModalContent, ModalHeader, ModalBody,ModalFooter } from "@nextui-org/react";
+import {
+	Modal,
+	ModalContent,
+	ModalHeader,
+	ModalBody,
+	ModalFooter,
+} from "@nextui-org/react";
 import { ReactNode } from "react";
 
 export interface DialogDemoProps {
@@ -8,7 +14,12 @@ export interface DialogDemoProps {
 	footer?: ReactNode;
 }
 
-export function EnhancedDialog({ title, onClose, children, footer }: DialogDemoProps) {
+export function EnhancedDialog({
+	title,
+	onClose,
+	children,
+	footer,
+}: DialogDemoProps) {
 	return (
 		<Modal
 			defaultOpen

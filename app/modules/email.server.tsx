@@ -11,8 +11,6 @@ export async function sendEmail(htmlEmail: string) {
 		},
 	});
 
-
-
 	const info = await transporter.sendMail({
 		// from-to emails should be different to allow
 		// to add the sender to the contacts
@@ -22,5 +20,5 @@ export async function sendEmail(htmlEmail: string) {
 		html: htmlEmail,
 	});
 
-	console.log("Message sent: %s", JSON.stringify(info));
+	console.info("Email sent: %s", JSON.stringify(info));
 }
