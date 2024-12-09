@@ -10,6 +10,7 @@ import {
 	useNavigation,
 	useRouteError,
 } from "@remix-run/react";
+import { captureRemixErrorBoundaryError, withSentry } from "@sentry/remix";
 import { LoaderFunctionArgs, LinksFunction, MetaFunction } from "@vercel/remix";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -43,7 +44,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 		{
 			name: "viewport",
 			content:
-				"width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1",
+				"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no",
 		},
 		{
 			name: "theme-color",
@@ -69,7 +70,7 @@ export const links: LinksFunction = () => {
 		{ rel: "stylesheet", href: stylesheet },
 		{
 			rel: "preload",
-			as: "image/webp",
+			as: "image",
 			href: Background,
 		},
 		{
@@ -202,7 +203,7 @@ export const Footer = () => {
 	);
 };
 
-export default function App() {
+function App() {
 	const { locale } = useLoaderData<typeof loader>();
 	useChangeLanguage(locale);
 	const calendarLocale = locale === "en" ? "en-UK" : locale;
@@ -215,11 +216,15 @@ export default function App() {
 	);
 }
 
+export default withSentry(App);
+
 export function ErrorBoundary() {
 	const error = useRouteError();
 	useEffect(() => {
 		console.error("error", error);
 	}, [error]);
+
+	captureRemixErrorBoundaryError(error);
 
 	return (
 		<div>

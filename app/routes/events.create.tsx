@@ -1,19 +1,26 @@
 import { SEOHandle } from "@nasa-gcn/remix-seo";
+import { EventStatus } from "@prisma/client";
 import { useLoaderData } from "@remix-run/react";
 import { validationError } from "@rvf/remix";
 import { ActionFunctionArgs, redirect } from "@vercel/remix";
+import { addDays } from "date-fns";
 import React from "react";
+import { z } from "zod";
 
-import { UpsertEvent, upsertEventValidator } from "~/components/upsert-event";
+import {
+	eventSchema,
+	UpsertEvent,
+	upsertEventValidator,
+} from "~/components/upsert-event";
 import { CITY } from "~/constants/city";
 import { db } from "~/modules/db.server";
 import {
 	getAutocompleteOptions,
 	getDates,
+	sendNewEventEmail,
 	updateLoacationOnEventUpsert,
 } from "~/modules/events.server";
 import { getSession } from "~/modules/session.server";
-import { json } from "~/utils/remix";
 import { assert } from "~/utils/validation";
 
 export const handle: SEOHandle = {
@@ -28,12 +35,6 @@ export async function loader() {
 
 export const action = async ({ request }: ActionFunctionArgs) => {
 	const { getIsAdmin } = await getSession(request);
-
-	if (!getIsAdmin()) {
-		// eslint-disable-next-line @typescript-eslint/only-throw-error
-		throw json(null, 403);
-	}
-
 	const result = await upsertEventValidator.validate(await request.formData());
 	if (result.error) {
 		return validationError(result.error, result.submittedData);
@@ -54,6 +55,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		kizombaPercentage,
 	} = result.data;
 	const locationIdNumber = locationId ? Number.parseInt(locationId) : undefined;
+	const isNewLocation = !locationIdNumber;
+	const isNewOrganizer = !organizerId;
 
 	const organizerIdNumber = organizerId
 		? Number.parseInt(organizerId)
@@ -68,7 +71,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	await updateLoacationOnEventUpsert(locationIdNumber, locationGoogleMapsUrl);
 	const { startDate, endDate } = getDates(date, startTime, endTime);
 
-	await db.event.create({
+	const isAdmin = getIsAdmin();
+	const status = isAdmin
+		? EventStatus.PUBLISHED
+		: EventStatus.PENDING_CREATION_APPROVAL;
+
+	const newEvent = await db.event.create({
 		data: {
 			infoUrl,
 			name,
@@ -98,19 +106,44 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			salsaPercentage,
 			bachataPercentage,
 			kizombaPercentage,
+			status,
 		},
 	});
-	return redirect("/events");
+	if (!isAdmin) {
+		await sendNewEventEmail(
+			newEvent,
+			organizerName,
+			locationName,
+			locationGoogleMapsUrl,
+			isNewLocation,
+			isNewOrganizer
+		);
+	}
+
+	return redirect("/events/create-success");
 };
 
 export default function EventsCreate() {
 	const { locationOptions, organizerOptions, googleMapsUrls } =
 		useLoaderData<typeof loader>();
+	const tomorrow = addDays(new Date(), 1);
+	const tomorrowString = tomorrow.toISOString().split("T")[0];
+
 	return (
 		<UpsertEvent
 			locationOptions={locationOptions}
 			organizerOptions={organizerOptions}
 			googleMapsUrls={googleMapsUrls}
+			defaultValues={
+				{
+					salsaPercentage: 40,
+					bachataPercentage: 60,
+					kizombaPercentage: 0,
+					date: tomorrowString,
+					startTime: "21:00",
+					endTime: "01:00",
+				} as z.infer<typeof eventSchema>
+			}
 		/>
 	);
 }

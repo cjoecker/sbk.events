@@ -30,23 +30,27 @@ export function AutoComplete({
 	const idField = useField(idScope);
 	const { t } = useTranslation();
 	const hasError = nameField.error() !== null || idField.error() !== null;
-	const errorTranslationKey = nameField.error() ?? idField.error() ?? "";
-	const errorMessage = t(errorTranslationKey);
+	const errorTranslationKey = nameField.error() ?? idField.error();
 	const defaultValue = nameField.defaultValue();
-
+	const translatedError = hasError ? t(errorTranslationKey ?? "") : undefined;
 	return (
 		<>
 			<_Autocomplete
 				label={label}
-				errorMessage={errorMessage}
+				errorMessage={translatedError}
 				isInvalid={hasError}
 				allowsCustomValue={true}
 				allowsEmptyCollection={false}
 				defaultInputValue={defaultValue}
+				listboxProps={{
+					hideSelectedIcon: true,
+				}}
 				onSelectionChange={(id) => {
 					idField.setValue(id as string);
 					idField.setTouched(true);
 					nameField.setTouched(true);
+					nameField.onBlur();
+					idField.onBlur();
 					if (onSelectionChange) {
 						onSelectionChange(id as string);
 					}

@@ -15,9 +15,9 @@ export const handle: SEOHandle = {
 export const action = async ({ request }: ActionFunctionArgs) => {
 	const formData = await request.formData();
 	const key = formData.get("key") as string | undefined;
-	const { setIsAdmin, getHeaders } = await getSession(request);
-	if (key === process.env.CRUD_EVENT_KEY) {
-		setIsAdmin();
+	const { setCrudEventKey, getHeaders } = await getSession(request);
+	if (key && key === process.env.CRUD_EVENT_KEY) {
+		setCrudEventKey(key);
 		return redirect("/events", {
 			headers: await getHeaders(),
 		});

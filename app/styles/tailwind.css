@@ -8,7 +8,7 @@
 	font-family: "Libre Franklin";
 	font-style: normal;
 	font-weight: 200;
-	src: url("/fonts/libre-franklin-v18-latin-200.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+	src: url("../fonts/libre-franklin-v18-latin-200.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 }
 /* libre-franklin-regular - latin */
 @font-face {
@@ -16,7 +16,7 @@
 	font-family: "Libre Franklin";
 	font-style: normal;
 	font-weight: 400;
-	src: url("/fonts/libre-franklin-v18-latin-regular.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+	src: url("../fonts/libre-franklin-v18-latin-regular.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 }
 
 .glass-s-black {
@@ -25,6 +25,13 @@
 	backdrop-filter: blur(15px);
 	-webkit-backdrop-filter: blur(15px);
 }
+.glass-l-black {
+	background: rgba(0, 0, 0, 0.5);
+	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(15px);
+}
+
 .glass-s-grey {
 	background: rgba(40, 40, 40, 0.6);
 	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -38,4 +45,9 @@ ul {
 
 :root {
 	color-scheme: dark;
+}
+
+.markdown a {
+	color: #fdcf58;
+	text-decoration: underline;
 }

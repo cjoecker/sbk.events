@@ -4,7 +4,7 @@ import { addCookieToHeaders } from "~/utils/remix";
 
 interface SessionData {
 	likedEvents: number[];
-	isAdmin: boolean;
+	crudEventKey: string;
 }
 
 export const { getSession: getCookieSession, commitSession } =
@@ -15,9 +15,8 @@ export const { getSession: getCookieSession, commitSession } =
 			path: "/",
 			sameSite: "lax",
 			secrets: [process.env.COOKIE_SECRET ?? ""],
-			// secure: true,
-			// TODO make secure true after safari bug is fixed
-			// https://developer.apple.com/forums/thread/728137
+			secure: true,
+			maxAge: 60 * 60 * 24 * 365,
 		},
 	});
 
@@ -54,11 +53,11 @@ export async function getSession(request: Request) {
 		getLikedEvents: () => {
 			return session.get("likedEvents") ?? [];
 		},
-		setIsAdmin: () => {
-			session.set("isAdmin", true);
+		setCrudEventKey: (crudEventKey: string) => {
+			session.set("crudEventKey", crudEventKey);
 		},
 		getIsAdmin: () => {
-			return session.get("isAdmin") ?? false;
+			return session.get("crudEventKey") === process.env.CRUD_EVENT_KEY;
 		},
 		/**
 		 * This will initialize a Headers object if one is not provided.

@@ -1,10 +1,25 @@
-import { addDays, startOfDay } from "date-fns";
+import { Event, EventStatus } from "@prisma/client";
+import {
+	Body,
+	Column,
+	Head,
+	Html,
+	render,
+	Row,
+	Section,
+	Link,
+} from "@react-email/components";
+import { addDays, format, startOfDay } from "date-fns";
 
 import { CITY } from "~/constants/city";
 import { db } from "~/modules/db.server";
+import { sendEmail } from "~/modules/email.server";
 
-export async function getEventsByDay(city: string): Promise<EventDayDb[]> {
-	const events = await getUnfinishedEventsAndAfterNow(city);
+export async function getEventsByDay(
+	city: string,
+	isAdmin: boolean
+): Promise<EventDayDb[]> {
+	const events = await getUnfinishedEventsAndAfterNow(city, isAdmin);
 	const eventDays: EventDayDb[] = [];
 	for (const event of events) {
 		const eventDate = startOfDay(event.startDate);
@@ -27,11 +42,17 @@ interface EventDayDb {
 	date: Date;
 	events: EventsDb;
 }
+
 type EventsDb = Awaited<ReturnType<typeof getUnfinishedEventsAndAfterNow>>;
 
-export async function getUnfinishedEventsAndAfterNow(city: string) {
+export async function getUnfinishedEventsAndAfterNow(
+	city: string,
+	isAdmin: boolean
+) {
 	const startOfToday = startOfDay(new Date());
 	const now = new Date();
+	const status = isAdmin ? {} : { status: EventStatus.PUBLISHED };
+
 	return db.event.findMany({
 		orderBy: {
 			startDate: "asc",
@@ -42,6 +63,7 @@ export async function getUnfinishedEventsAndAfterNow(city: string) {
 					name: city,
 				},
 			},
+			...status,
 			OR: [
 				{
 					startDate: {
@@ -85,6 +107,7 @@ export async function getUnfinishedEventsAndAfterNow(city: string) {
 			bachataPercentage: true,
 			kizombaPercentage: true,
 			likes: true,
+			status: true,
 		},
 	});
 }
@@ -169,4 +192,113 @@ export function getDates(date: string, startTime: string, endTime: string) {
 		endDate = addDays(endDate, 1);
 	}
 	return { startDate, endDate };
+}
+
+// eslint-disable-next-line max-params
+export async function sendNewEventEmail(
+	event: Event,
+	organizerName: string,
+	locationName: string,
+	locationGoogleMapsUrl: string,
+	isNewLocation: boolean,
+	isNewOrganizer: boolean
+) {
+	const sbk = `${event.salsaPercentage}-${event.bachataPercentage}-${event.kizombaPercentage}`;
+	const startDate = format(event.startDate, "dd.MM.yyyy HH:mm");
+	const endDate = format(event.endDate, "dd.MM.yyyy HH:mm");
+
+	const emailEvent = {
+		name: event.name,
+		infoUrl: event.infoUrl,
+		startDate,
+		endDate,
+		isNewLocation,
+		locationId: event.locationId,
+		locationName: locationName,
+		goggleMapsUrl: locationGoogleMapsUrl,
+		isNewOrganizer,
+		organizerName: organizerName,
+		organizerId: event.organizerId,
+		sbk: sbk,
+	};
+
+	const htmlEmail = await render(<NewEventEmail event={emailEvent} />);
+	await sendEmail(htmlEmail, "➕ New event created");
+}
+
+interface NewEventEmailProps {
+	event: Record<string, unknown>;
+}
+
+export const NewEventEmail = ({ event }: NewEventEmailProps) => {
+	const data = Object.entries(event);
+
+	return (
+		<Html>
+			<Head />
+			<Body style={{ textAlign: "left" }}>
+				<Section style={{ maxWidth: "600px", textAlign: "left" }}>
+					{data.map(([key, value]) => {
+						return (
+							<Row key={key}>
+								<Column
+									style={{
+										textAlign: "right",
+										paddingRight: "10px",
+										width: "200px",
+									}}
+								>
+									<strong>{key}:</strong>
+								</Column>
+								<Column
+									style={{
+										textAlign: "left",
+										wordWrap: "break-word",
+										wordBreak: "break-all",
+									}}
+								>
+									{value?.toString()}
+								</Column>
+							</Row>
+						);
+					})}
+					<Row style={{ marginTop: "50px", textAlign: "center" }}>
+						<Link href="https://sbk.events/events">sbk.events</Link>
+					</Row>
+				</Section>
+			</Body>
+		</Html>
+	);
+};
+
+export async function publishEvent(eventId: number, isPublished: boolean) {
+	const status = isPublished ? EventStatus.PUBLISHED : EventStatus.DELETED;
+	await db.event.update({
+		where: { id: eventId },
+		data: {
+			status,
+		},
+	});
+}
+
+export async function setEventLike(eventId: number, hasLikedEvent: boolean) {
+	const increment = hasLikedEvent ? -1 : 1;
+	const newEvent = await db.event.update({
+		where: { id: eventId },
+		data: {
+			likes: {
+				increment,
+			},
+		},
+	});
+
+	if (newEvent.likes < 0) {
+		await db.event.update({
+			where: { id: eventId },
+			data: {
+				likes: 0,
+			},
+		});
+	}
+	return newEvent.likes;
 }

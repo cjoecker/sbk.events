@@ -1,4 +1,5 @@
 import { RemixServer } from "@remix-run/react";
+import * as Sentry from "@sentry/remix";
 import { handleRequest } from "@vercel/remix";
 import type { EntryContext } from "@vercel/remix";
 import { createInstance } from "i18next";
@@ -7,6 +8,10 @@ import { initReactI18next } from "react-i18next";
 import * as i18n from "./config/i18n";
 
 import i18nServer from "~/modules/i18n.server";
+
+export const handleError = Sentry.wrapHandleErrorWithSentry((error) => {
+	console.error("Sentry Error", error);
+});
 
 export default async function _handleRequest(
 	request: Request,

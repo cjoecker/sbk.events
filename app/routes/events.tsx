@@ -1,5 +1,6 @@
 import { SEOHandle } from "@nasa-gcn/remix-seo";
 import { Button } from "@nextui-org/react";
+import { Switch } from "@nextui-org/switch";
 import {
 	useLoaderData,
 	useNavigation,
@@ -24,14 +25,17 @@ import {
 } from "hugeicons-react";
 import { Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useHydrated } from "remix-utils/use-hydrated";
 
 import { FavouriteIconFilled } from "~/components/favourite-icon-filled";
 import { CITY } from "~/constants/city";
-import { db } from "~/modules/db.server";
-import { getEventsByDay } from "~/modules/events.server";
+import {
+	getEventsByDay,
+	publishEvent,
+	setEventLike,
+} from "~/modules/events.server";
 import { getSession } from "~/modules/session.server";
 import { json } from "~/utils/remix";
+import { useTranslationWithMarkdown } from "~/utils/use-translation-with-markdown";
 
 const ICON_SIZE = 18;
 
@@ -47,43 +51,35 @@ export const links: LinksFunction = () => {
 export async function loader({ request }: LoaderFunctionArgs) {
 	const { getIsAdmin } = await getSession(request);
 	const isAdmin = getIsAdmin();
-	const eventDays = await getEventsByDay(CITY);
+	const eventDays = await getEventsByDay(CITY, isAdmin);
 	const { getLikedEvents } = await getSession(request);
 	return { eventDays, likedEvents: getLikedEvents(), isAdmin };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-	const { getHasLikedEvent, likeEvent, getHeaders } = await getSession(request);
+	const { getHasLikedEvent, likeEvent, getHeaders, getIsAdmin } =
+		await getSession(request);
 
 	const body = new URLSearchParams(await request.text());
 	const eventId = Number(body.get("eventId"));
+	const intent = body.get("intent");
+	const isAdmin = getIsAdmin();
 
-	const hasLikedEvent = getHasLikedEvent(eventId);
-	const increment = hasLikedEvent ? -1 : 1;
-	const newEvent = await db.event.update({
-		where: { id: eventId },
-		data: {
-			likes: {
-				increment,
-			},
-		},
-	});
-
-	if (newEvent.likes < 0) {
-		await db.event.update({
-			where: { id: eventId },
-			data: {
-				likes: 0,
-			},
-		});
+	if (intent === "publish" && isAdmin) {
+		const isPublished = body.get("isPublished") === "true";
+		await publishEvent(eventId, isPublished);
+		return json({ action: "publish", eventId, isPublished });
 	}
 
-	likeEvent(eventId);
-
-	return json(
-		{ actionLikes: newEvent.likes, eventId },
-		{ headers: await getHeaders() }
-	);
+	if (intent === "like") {
+		const hasLikedEvent = getHasLikedEvent(eventId);
+		const likes = await setEventLike(eventId, hasLikedEvent);
+		likeEvent(eventId);
+		return json(
+			{ actionLikes: likes, eventId },
+			{ headers: await getHeaders() }
+		);
+	}
 }
 
 export const handle: SEOHandle = {
@@ -92,13 +88,6 @@ export const handle: SEOHandle = {
 	},
 };
 
-const containerAnimationVariants = {
-	visible: {
-		transition: {
-			staggerChildren: 0.2,
-		},
-	},
-};
 const childAnimationVariants = {
 	hidden: { opacity: 0, x: -20 },
 	visible: {
@@ -110,13 +99,12 @@ const childAnimationVariants = {
 
 export default function Events() {
 	const { eventDays } = useLoaderData<typeof loader>();
-	const isHydrated = useHydrated();
 	const { t } = useTranslation();
-	const { isAdmin } = useLoaderData<typeof loader>();
 	const navigate = useNavigate();
+	const { t: tWithMarkdown } = useTranslationWithMarkdown();
 
 	return (
-		<>
+		<div>
 			<Outlet />
 			<div className="flex w-full justify-between">
 				<Title />
@@ -125,51 +113,44 @@ export default function Events() {
 					Valencia
 				</h2>
 			</div>
-			{isAdmin && (
-				<Button
-					className="absolute bottom-2 right-2 z-40"
-					size={"lg"}
-					radius={"full"}
-					isIconOnly
-					color="primary"
-					aria-label={t("addEvent")}
-					onClick={() => {
-						navigate("/events/create");
-					}}
-				>
-					<Add01Icon />
-				</Button>
-			)}
-			{isHydrated && (
-				<motion.ul
-					className="mt-2 flex flex-col gap-y-2"
-					initial="hidden"
-					animate="visible"
-					variants={containerAnimationVariants}
-					viewport={{ once: true, amount: 0.3 }}
-				>
-					{eventDays.map((eventDay, index) => {
-						const dayBefore =
-							index > 0 ? new Date(eventDays[index - 1].date) : null;
-						const isNextMonth =
-							(dayBefore &&
-								dayBefore.getMonth() !== new Date(eventDay.date).getMonth()) ||
-							index === 0;
+			<Button
+				className="fixed bottom-2 right-3 z-40 h-14 w-14"
+				size={"lg"}
+				radius={"full"}
+				isIconOnly
+				color="primary"
+				aria-label={t("addEvent")}
+				onClick={() => {
+					navigate("/events/create");
+				}}
+			>
+				<Add01Icon />
+			</Button>
+			<ul className="mt-1 flex flex-col gap-y-2">
+				{eventDays.map((eventDay, index) => {
+					const dayBefore =
+						index > 0 ? new Date(eventDays[index - 1].date) : null;
+					const isNextMonth =
+						(dayBefore &&
+							dayBefore.getMonth() !== new Date(eventDay.date).getMonth()) ||
+						index === 0;
 
-						return (
-							<motion.li key={eventDay.date} variants={childAnimationVariants}>
-								{isNextMonth && <MonthName date={eventDay.date} />}
-								<EventDayItem
-									key={eventDay.date}
-									date={eventDay.date}
-									events={eventDay.events}
-								/>
-							</motion.li>
-						);
-					})}
-				</motion.ul>
-			)}
-		</>
+					return (
+						<motion.li key={eventDay.date} variants={childAnimationVariants}>
+							{isNextMonth && <MonthName date={eventDay.date} />}
+							<EventDayItem
+								key={eventDay.date}
+								date={eventDay.date}
+								events={eventDay.events}
+							/>
+						</motion.li>
+					);
+				})}
+			</ul>
+			<div className="mx-auto mt-5 w-[90%] whitespace-pre-wrap text-center text-sm">
+				{tWithMarkdown("allTheEventsAndClasses")}
+			</div>
+		</div>
 	);
 }
 
@@ -248,6 +229,7 @@ export const EventDayItem = ({ events, date }: EventDayItemProps) => {
 								bachataPercentage={event.bachataPercentage}
 								kizombaPercentage={event.kizombaPercentage}
 								likes={event.likes}
+								status={event.status}
 							/>
 							{!isLast && <Separator />}
 						</Fragment>
@@ -257,6 +239,8 @@ export const EventDayItem = ({ events, date }: EventDayItemProps) => {
 		</div>
 	);
 };
+
+type EventStatusClient = "PUBLISHED" | "PENDING_CREATION_APPROVAL" | "DELETED";
 
 interface EventItemProps {
 	id: number;
@@ -275,6 +259,7 @@ interface EventItemProps {
 	bachataPercentage: number;
 	kizombaPercentage: number;
 	likes: number;
+	status: EventStatusClient;
 }
 
 export const EventItem = ({
@@ -289,6 +274,7 @@ export const EventItem = ({
 	bachataPercentage,
 	kizombaPercentage,
 	likes,
+	status,
 }: EventItemProps) => {
 	const startTime = startDate.slice(11, 16);
 	const endTime = endDate.slice(11, 16);
@@ -302,6 +288,7 @@ export const EventItem = ({
 		const url = `/events/update/${id}`;
 		navigate(url);
 	};
+
 	return (
 		<div className="relative flex flex-col gap-y-1">
 			{isAdmin && (
@@ -342,12 +329,49 @@ export const EventItem = ({
 					eventId={id}
 				/>
 			</div>
+			<PublishSwitch id={id} status={status} />
 		</div>
 	);
 };
 
 export const Separator = () => {
 	return <span className="h-[1px] w-full bg-gray-500" />;
+};
+
+export interface PublishSwitchProps {
+	id: number;
+	status: EventStatusClient;
+}
+export const PublishSwitch = ({ id, status }: PublishSwitchProps) => {
+	const submit = useSubmit();
+	const isPublished = status === "PUBLISHED";
+	const navigation = useNavigation();
+	const isLoading = navigation.state !== "idle";
+	const { isAdmin } = useLoaderData<typeof loader>();
+
+	const handlePublishSwitch = () => {
+		const newStatus = !isPublished;
+		submit(
+			{ eventId: id, isPublished: newStatus, intent: "publish" },
+			{
+				method: "POST",
+				fetcherKey: "publish",
+			}
+		);
+	};
+	if (!isAdmin) return null;
+
+	return (
+		<div>
+			<Switch
+				disabled={isLoading}
+				defaultSelected
+				color="primary"
+				isSelected={isPublished}
+				onClick={handlePublishSwitch}
+			/>
+		</div>
+	);
 };
 
 export interface LikeButtonProps {
@@ -372,7 +396,7 @@ export const LikeButton = ({
 	const handleClick = () => {
 		if (isSubmitting) return;
 		submit(
-			{ eventId },
+			{ eventId, intent: "like" },
 			{
 				method: "POST",
 				fetcherKey: "like",
