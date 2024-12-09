@@ -110,7 +110,7 @@ export function UpsertEvent({
 
 	return (
 		<EnhancedDialog
-			title={t("createEvent")}
+			title={t("publishEvent")}
 			onClose={() => {
 				navigate("/events");
 			}}

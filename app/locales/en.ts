@@ -27,16 +27,15 @@ export default {
 	bachataPercentage: "Bachata percentage",
 	kizombaPercentage: "Kizomba percentage",
 	createEvent: "Create event",
-
 	wrongValueType: "Wrong value type",
 	valueMustBeBetween: "Value must be between {{min}} and {{max}}",
 	wrongUrl: "Wrong link",
 	mandatoryField: "Mandatory field",
 	socialMediaPosterEtc: "Social media poster, WhatsApp group, etc.",
 	totalMustBe100: "Total must be 100",
-
 	close: "Close",
 	eventCreated: "Event created!",
+	publishEvent: "Publish event",
 	eventSuccessfullyCreatedInfo:
 		"Thanks for submitting the event! We typically review submissions within two hours and guarantee a response within 24 hours. You’ll see your event online soon!",
 	allTheEventsAndClasses:

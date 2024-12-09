@@ -14,7 +14,6 @@ export default {
 	salsaBachataKizombaSocials: "Sociales de Salsa Bachata Kizomba",
 	socials: "Sociales",
 	thisIsAnOpenSourceProject: "Este es un proyecto open-source.",
-
 	eventName: "Nombre del evento",
 	eventInformationUrl: "Link de información del evento",
 	date: "Fecha",
@@ -27,14 +26,13 @@ export default {
 	bachataPercentage: "Porcentaje de bachata",
 	kizombaPercentage: "Porcentaje de kizomba",
 	createEvent: "Crear evento",
-
 	wrongValueType: "Valor incorrecto",
 	valueMustBeBetween: "El valor debe estar entre {{min}} y {{max}}",
 	wrongUrl: "Enlace incorrecto",
 	mandatoryField: "Campo obligatorio",
 	socialMediaPosterEtc: "Cartel de redes sociales, grupo de WhatsApp, etc.",
 	totalMustBe100: "El total debe ser 100",
-
+	publishEvent: "Publicar evento",
 	close: "Cerrar",
 	eventCreated: "¡Evento creado!",
 	eventSuccessfullyCreatedInfo:
