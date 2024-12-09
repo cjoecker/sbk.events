@@ -104,7 +104,7 @@ export function UpsertEvent({
 	const sumError = form.formState.fieldErrors.sumError;
 
 	useEffect(() => {
-		// show error when field is left
+		// show error on field blur
 		form.field("sumError" as never).setTouched(true);
 	}, [form]);
 
