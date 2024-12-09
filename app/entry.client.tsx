@@ -26,7 +26,7 @@ Sentry.init({
 			blockAllMedia: true,
 		}),
 	],
-
+	enabled: process.env.NODE_ENV === "production",
 	replaysSessionSampleRate: 0.1,
 	replaysOnErrorSampleRate: 1,
 });
