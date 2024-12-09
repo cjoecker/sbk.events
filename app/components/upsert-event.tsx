@@ -127,11 +127,12 @@ export function UpsertEvent({
 			}
 		>
 			<form className="flex flex-col gap-y-3 pb-2" {...form.getFormProps()}>
-				<Input label={t("eventName")} scope={form.scope("name")} />
+				<Input label={t("eventName")} scope={form.scope("name")} isRequired />
 				<Input
 					label={t("eventInformationUrl")}
 					scope={form.scope("infoUrl")}
 					description={t("socialMediaPosterEtc")}
+					isRequired
 				/>
 				<div className="flex gap-2">
 					<DatePicker
@@ -139,9 +140,10 @@ export function UpsertEvent({
 						label={t("date")}
 						scope={form.scope("date")}
 						minValue={today(getLocalTimeZone())}
+						isRequired
 					/>
-					<TimeInput label={t("startTime")} scope={form.scope("startTime")} />
-					<TimeInput label={t("endTime")} scope={form.scope("endTime")} />
+					<TimeInput label={t("startTime")} scope={form.scope("startTime")} isRequired />
+					<TimeInput label={t("endTime")} scope={form.scope("endTime")} isRequired />
 				</div>
 				<AutoComplete
 					label={t("location")}
@@ -151,10 +153,12 @@ export function UpsertEvent({
 					selectorIcon={null}
 					isClearable={false}
 					onSelectionChange={handleLocationSelected}
+					isRequired
 				/>
 				<Input
 					label={t("locationGoogleMapsUrl")}
 					scope={form.scope("locationGoogleMapsUrl")}
+					isRequired
 				/>
 				<AutoComplete
 					label={t("organizer")}
@@ -163,10 +167,11 @@ export function UpsertEvent({
 					options={organizerOptions}
 					selectorIcon={null}
 					isClearable={false}
+					isRequired
 				/>
 				<div className="flex flex-col gap-1">
 					<label className="text-sm text-default-500">
-						{t("salsaBachataKizomba")}
+						{t("salsaBachataKizomba")}<span className="text-danger ml-1">*</span>
 					</label>
 					<div className="flex gap-x-2">
 						<Input

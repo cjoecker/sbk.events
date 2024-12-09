@@ -5,7 +5,8 @@ import {
 	ModalBody,
 	ModalFooter, ScrollShadow
 } from "@nextui-org/react";
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
+import { Input } from "@nextui-org/input";
 
 export interface DialogDemoProps {
 	title: string;
