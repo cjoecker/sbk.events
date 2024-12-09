@@ -223,7 +223,7 @@ export async function sendNewEventEmail(
 	};
 
 	const htmlEmail = await render(<NewEventEmail event={emailEvent} />);
-	await sendEmail(htmlEmail);
+	await sendEmail(htmlEmail, "➕ New event created");
 }
 
 interface NewEventEmailProps {
@@ -250,13 +250,19 @@ export const NewEventEmail = ({ event }: NewEventEmailProps) => {
 								>
 									<strong>{key}:</strong>
 								</Column>
-								<Column style={{ textAlign: "left" }}>
+								<Column
+									style={{
+										textAlign: "left",
+										wordWrap: "break-word",
+										wordBreak: "break-all",
+									}}
+								>
 									{value?.toString()}
 								</Column>
 							</Row>
 						);
 					})}
-					<Row style={{ marginTop: "30px", textAlign: "center" }}>
+					<Row style={{ marginTop: "50px", textAlign: "center" }}>
 						<Link href="https://sbk.events/events">sbk.events</Link>
 					</Row>
 				</Section>

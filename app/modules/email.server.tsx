@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 
-export async function sendEmail(htmlEmail: string) {
+export async function sendEmail(htmlEmail: string, subject: string) {
 	const transporter = nodemailer.createTransport({
 		host: "smtp-relay.brevo.com",
 		port: 587,
@@ -14,9 +14,9 @@ export async function sendEmail(htmlEmail: string) {
 	const info = await transporter.sendMail({
 		// from-to emails should be different to allow
 		// to add the sender to the contacts
-		from: "\"SBK Events\" <alerts@sbk.events>",
+		from: "\"💃 SBK Events 🕺\" <alerts@sbk.events>",
 		to: process.env.ALERTS_RECIPIENT_EMAIL,
-		subject: "New event created",
+		subject: subject,
 		html: htmlEmail,
 	});
 
