@@ -3,7 +3,7 @@ import {
 	ModalContent,
 	ModalHeader,
 	ModalBody,
-	ModalFooter,
+	ModalFooter, ScrollShadow
 } from "@nextui-org/react";
 import { ReactNode } from "react";
 
@@ -33,8 +33,8 @@ export function EnhancedDialog({
 			}}
 		>
 			<ModalContent>
-				<ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
-				<ModalBody className="px-4">{children}</ModalBody>
+				<ModalHeader className="flex flex-col gap-1 pb-1 pl-5">{title}</ModalHeader>
+				<ModalBody className="px-4"><ScrollShadow>{children}</ScrollShadow></ModalBody>
 				{footer && <ModalFooter className="pt-0">{footer}</ModalFooter>}
 			</ModalContent>
 		</Modal>

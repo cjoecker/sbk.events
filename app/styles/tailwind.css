@@ -51,7 +51,3 @@ ul {
 	color: #fdcf58;
 	text-decoration: underline;
 }
-
-input, textarea, select {
-	touch-action: manipulation;
-}
