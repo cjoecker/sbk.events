@@ -142,8 +142,16 @@ export function UpsertEvent({
 						minValue={today(getLocalTimeZone())}
 						isRequired
 					/>
-					<TimeInput label={t("startTime")} scope={form.scope("startTime")} isRequired />
-					<TimeInput label={t("endTime")} scope={form.scope("endTime")} isRequired />
+					<TimeInput
+						label={t("startTime")}
+						scope={form.scope("startTime")}
+						isRequired
+					/>
+					<TimeInput
+						label={t("endTime")}
+						scope={form.scope("endTime")}
+						isRequired
+					/>
 				</div>
 				<AutoComplete
 					label={t("location")}
@@ -171,7 +179,8 @@ export function UpsertEvent({
 				/>
 				<div className="flex flex-col gap-1">
 					<label className="text-sm text-default-500">
-						{t("salsaBachataKizomba")}<span className="text-danger ml-1">*</span>
+						{t("salsaBachataKizomba")}
+						<span className="ml-1 text-danger">*</span>
 					</label>
 					<div className="flex gap-x-2">
 						<Input
