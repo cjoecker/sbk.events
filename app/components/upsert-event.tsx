@@ -75,11 +75,11 @@ interface UpsertEvent {
 }
 
 export function UpsertEvent({
-	                            locationOptions,
-	                            organizerOptions,
-	                            googleMapsUrls,
-	                            defaultValues,
-                            }: UpsertEvent) {
+	locationOptions,
+	organizerOptions,
+	googleMapsUrls,
+	defaultValues,
+}: UpsertEvent) {
 	const { t } = useTranslation();
 	const form = useForm({
 		method: "post",
