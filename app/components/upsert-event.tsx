@@ -106,6 +106,9 @@ export function UpsertEvent({
 	useEffect(() => {
 		// show error on field blur
 		form.field("sumError" as never).setTouched(true);
+		form.field("salsaPercentage" as never).setTouched(true);
+		form.field("bachataPercentage" as never).setTouched(true);
+		form.field("kizombaPercentage" as never).setTouched(true);
 	}, [form]);
 
 	return (
