@@ -39,4 +39,5 @@ export default {
 	title: "Titel",
 	content: "Inhalt",
 	save: "Speichern",
+	blog: "Blog",
 };

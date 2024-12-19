@@ -42,4 +42,5 @@ export default {
 	title: "Título",
 	content: "Contenido",
 	save: "Guardar",
+	blog: "Blog",
 };
