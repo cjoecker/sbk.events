@@ -18,7 +18,7 @@ import {
 	updateLoacationOnEventUpsert,
 } from "~/modules/events.server";
 import { getSession } from "~/modules/session.server";
-import { json } from "~/utils/remix";
+import { authenticateAdmin, json } from "~/utils/remix";
 import { assert } from "~/utils/validation";
 
 export const handle: SEOHandle = {
@@ -76,12 +76,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 }
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
-	const { getIsAdmin } = await getSession(request);
-
-	if (!getIsAdmin()) {
-		// eslint-disable-next-line @typescript-eslint/only-throw-error
-		throw json(null, 403);
-	}
+	await authenticateAdmin(request);
 
 	assert(params.id, "Id is required");
 	const id = Number(params.id);
