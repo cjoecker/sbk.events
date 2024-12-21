@@ -52,7 +52,6 @@ export async function getUnfinishedEventsAndAfterNow(
 	const startOfToday = startOfDay(new Date());
 	const now = new Date();
 	const status = isAdmin ? {} : { status: EventStatus.PUBLISHED };
-	console.log("events", await db.event.findMany());
 
 	return db.event.findMany({
 		orderBy: {
