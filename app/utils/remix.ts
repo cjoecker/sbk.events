@@ -1,9 +1,11 @@
 import { json as DeprecatedJSON } from "@vercel/remix";
 
+import { getSession } from "~/modules/session.server";
+
 // there seems not to be a good alternative for deprecated json
 // https://github.com/remix-run/react-router/discussions/12257
 
-// eslint-disable-next-line @typescript-eslint/no-deprecated, unicorn/prefer-export-from
+// eslint-disable-next-line @typescript-eslint/no-deprecated
 export const json = DeprecatedJSON;
 
 export function getDomainUrl(request: Request) {
@@ -28,4 +30,13 @@ export function addCookieToHeaders(
 		headers["Set-Cookie"] = value;
 	}
 	return headers;
+}
+
+export async function authenticateAdmin(request: Request) {
+	const { getIsAdmin } = await getSession(request);
+
+	if (!getIsAdmin()) {
+		// eslint-disable-next-line @typescript-eslint/only-throw-error
+		throw json(null, 403);
+	}
 }

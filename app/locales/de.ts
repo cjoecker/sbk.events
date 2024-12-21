@@ -36,4 +36,10 @@ export default {
 		"Vielen Dank für das Einreichen! Normalerweise überprüfen wir Einreichungen innerhalb von zwei Stunden und garantieren eine Rückmeldung innerhalb von 24 Stunden. Dein Event wird bald online sein!",
 	allTheEventsAndClasses:
 		"Kennst du ein Event, das hier nicht aufgeführt ist? [Füge es hinzu](/events/create), auch wenn du nicht der Veranstalter bist!\nHilf uns allen zu wissen, wo wir heute tanzen können!",
+	title: "Titel",
+	content: "Inhalt",
+	save: "Speichern",
+	blog: "Blog",
+	posts: "Beiträge",
+	eventsInValencia: "Veranstaltungen in Valencia",
 };

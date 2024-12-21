@@ -134,13 +134,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				<script
 					dangerouslySetInnerHTML={{
 						__html: `
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-942TBH82GN', {
-        page_path: window.location.pathname,
-        });
-    `,
+        var host = window.location.hostname;
+				if(host != "localhost")
+				{
+				    window.dataLayer = window.dataLayer || [];
+				    function gtag(){dataLayer.push(arguments);}
+				    gtag('js', new Date());
+				    gtag('config', 'G-942TBH82GN', {
+				    page_path: window.location.pathname,
+				    });
+				}
+         `,
 					}}
 				/>
 			</head>
@@ -162,7 +166,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				)}
 				<div className="h-full overflow-y-auto overflow-x-hidden">
 					<div className="mx-auto flex h-full max-w-2xl flex-col p-2">
-						<main className="mx-2 mb-8 flex-1">{children}</main>
+						<main className="mb-8 mt-2 flex-1">{children}</main>
 						<Footer />
 					</div>
 				</div>
@@ -173,7 +177,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 	);
 }
 
-export const Footer = () => {
+function Footer() {
 	const { t } = useTranslation();
 	return (
 		<footer className="mt-10 flex w-full flex-col pb-2 text-sm">
@@ -201,7 +205,7 @@ export const Footer = () => {
 			</div>
 		</footer>
 	);
-};
+}
 
 function App() {
 	const { locale } = useLoaderData<typeof loader>();

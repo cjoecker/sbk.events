@@ -58,3 +58,11 @@ model City {
   name      String
   locations Location[]
 }
+
+model BlogPost {
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  slug      String   @id @unique
+  title     String
+  content   String   @db.Text
+}

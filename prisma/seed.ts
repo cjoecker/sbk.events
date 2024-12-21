@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { EventStatus, PrismaClient } from "@prisma/client";
 import { addDays, addHours, addMonths, addYears } from "date-fns";
 
 import { db } from "~/modules/db.server";
@@ -73,6 +73,7 @@ async function main() {
 			bachataPercentage: 30,
 			kizombaPercentage: 20,
 			likes: 2,
+			status: EventStatus.PUBLISHED,
 		},
 	});
 
@@ -94,6 +95,7 @@ async function main() {
 			bachataPercentage: 50,
 			kizombaPercentage: 30,
 			likes: 3,
+			status: EventStatus.PUBLISHED,
 		},
 	});
 
@@ -115,6 +117,7 @@ async function main() {
 			bachataPercentage: 50,
 			kizombaPercentage: 30,
 			likes: 3,
+			status: EventStatus.PUBLISHED,
 		},
 	});
 
@@ -137,6 +140,7 @@ async function main() {
 			bachataPercentage: 30,
 			kizombaPercentage: 20,
 			likes: 2,
+			status: EventStatus.PUBLISHED,
 		},
 	});
 
@@ -158,6 +162,7 @@ async function main() {
 			bachataPercentage: 50,
 			kizombaPercentage: 30,
 			likes: 3,
+			status: EventStatus.PUBLISHED,
 		},
 	});
 
@@ -179,6 +184,7 @@ async function main() {
 			bachataPercentage: 50,
 			kizombaPercentage: 30,
 			likes: 3,
+			status: EventStatus.PUBLISHED,
 		},
 	});
 

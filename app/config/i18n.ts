@@ -17,7 +17,7 @@ export const resources = {
 	de: { translation: deTranslation },
 };
 
-const dateFnsLocales: Record<string, Locale> = {
+export const dateFnsLocales: Record<string, Locale> = {
 	es,
 	de,
 	en: enUS,
