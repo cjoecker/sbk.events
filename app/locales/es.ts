@@ -43,4 +43,5 @@ export default {
 	content: "Contenido",
 	save: "Guardar",
 	blog: "Blog",
+	posts: "Publicaciones",
 };

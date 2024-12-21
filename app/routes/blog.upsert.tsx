@@ -4,7 +4,6 @@ import { authenticateAdmin } from "~/utils/remix";
 import { useEffect, useState } from "react";
 import { Input } from "~/components/input";
 import { useForm, validationError } from "@rvf/remix";
-import { eventSchema, upsertEventValidator } from "~/components/upsert-event";
 import { z } from "zod";
 import { withZod } from "@rvf/zod";
 import { Textarea } from "~/components/test-area";
@@ -13,6 +12,7 @@ import { Button } from "@nextui-org/react";
 import { db } from "~/modules/db.server";
 import { BlogPost } from "~/components/blog-post";
 import { getKebabCaseFromNormalCase } from "~/utils/misc";
+import { useNavigate } from "@remix-run/react";
 
 export const blogPostSchema = z.object({
 	title: z.string().trim(),
@@ -26,12 +26,25 @@ export const handle: SEOHandle = {
 	},
 };
 
-export async function loader({ request, params }: LoaderFunctionArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
 	await authenticateAdmin(request);
-	return null;
+	const searchParams = new URL(request.url).searchParams;
+	const slug = searchParams.get("slug");
+
+	if(!slug){
+		return null;
+	}
+
+	const blogPost = await db.blogPost.findFirst({
+		where: {
+			slug,
+		},
+	});
+
+	return { blogPost };
 }
 
-export async function action({ request, params }: ActionFunctionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
 	await authenticateAdmin(request);
 
 	const result = await blogPostValidator.validate(await request.formData());
@@ -41,9 +54,16 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 	const slug = getKebabCaseFromNormalCase(result.data.title);
 
-	await db.blogPost.create({
-		data: {
+	await db.blogPost.upsert({
+		where: {
 			slug,
+		},
+		create: {
+			slug,
+			title: result.data.title,
+			content: result.data.content,
+		},
+		update: {
 			title: result.data.title,
 			content: result.data.content,
 		},
@@ -60,6 +80,7 @@ export default function BlogPage() {
 	});
 	const title = form.field("title").value() as string | undefined;
 	const content = form.field("content").value() as string | undefined;
+	const navigate = useNavigate()
 
 	useEffect(() => {
 		if(typeof title === "string"){
@@ -82,18 +103,21 @@ export default function BlogPage() {
 			}
 	}, []);
 
-
-
 	return (
-		<div>
-			<form className="max-2xl flex flex-col gap-2" {...form.getFormProps()}>
+		<div className="relative">
+			<form className="max-2xl flex flex-col gap-2 mb-2 sticky top-0 z-10 glass-l-black p-2" {...form.getFormProps()}>
 				<Input scope={form.scope("title")} label={t("title")} />
 				<Textarea
 					className="w-full"
 					label={t("content")}
 					scope={form.scope("content")}
 				/>
-				<div className="ml-auto">
+				<div className="flex justify-between">
+					<Button onClick={()=>{
+						navigate("/blog/posts")
+					}} >
+						{t("posts")}
+					</Button>
 					<Button type="submit" color={"primary"}>
 						{t("save")}
 					</Button>

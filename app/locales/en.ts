@@ -44,4 +44,5 @@ export default {
 	content: "Content",
 	save: "Save",
 	blog: "Blog",
+	posts: "Posts",
 };
