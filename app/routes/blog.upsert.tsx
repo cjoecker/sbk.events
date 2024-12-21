@@ -1,6 +1,6 @@
 import { SEOHandle } from "@nasa-gcn/remix-seo";
 import { Button } from "@nextui-org/react";
-import { useNavigate } from "@remix-run/react";
+import { useLoaderData, useNavigate } from "@remix-run/react";
 import { useForm, validationError } from "@rvf/remix";
 import { withZod } from "@rvf/zod";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
@@ -81,9 +81,14 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function BlogPage() {
 	const { t } = useTranslation();
+	const loaderData = useLoaderData<typeof loader>();
 	const form = useForm({
 		method: "post",
 		validator: blogPostValidator,
+		defaultValues: {
+			title: loaderData?.blogPost?.title ?? "",
+			content: loaderData?.blogPost?.content ?? "",
+		},
 	});
 	const title = form.field("title").value() as string | undefined;
 	const content = form.field("content").value() as string | undefined;
@@ -100,6 +105,9 @@ export default function BlogPage() {
 	}, [title, content]);
 
 	useEffectUnsafe(() => {
+		if (loaderData) {
+			return;
+		}
 		const title = localStorage.getItem("blog-title");
 		const content = localStorage.getItem("blog-content");
 		if (title) {
