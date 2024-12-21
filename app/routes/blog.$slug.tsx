@@ -35,15 +35,10 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 export async function loader({ params }: LoaderFunctionArgs) {
 	const slug = params.slug;
 	assert(slug, "blog post slug is required");
-	const cacheTag = `blog_post_${slug.replaceAll("-", "_")}`;
 
 	const blogPost = await db.blogPost.findFirst({
 		where: {
 			slug,
-		},
-		cacheStrategy: {
-			ttl: 60 * 60 * 24 * 365,
-			tags: [cacheTag],
 		},
 	});
 

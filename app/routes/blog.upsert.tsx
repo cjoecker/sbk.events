@@ -3,7 +3,11 @@ import { Button } from "@nextui-org/react";
 import { useLoaderData, useNavigate } from "@remix-run/react";
 import { useForm, validationError } from "@rvf/remix";
 import { withZod } from "@rvf/zod";
-import { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
+import {
+	ActionFunctionArgs,
+	LoaderFunctionArgs,
+	redirect,
+} from "@vercel/remix";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
@@ -71,12 +75,7 @@ export async function action({ request }: ActionFunctionArgs) {
 		},
 	});
 
-	const cacheTag = `blog_post_${slug.replaceAll("-", "_")}`;
-	await db.$accelerate.invalidate({
-		tags: ["blog_posts", cacheTag],
-	});
-
-	return null;
+	return redirect(`/blog/${slug}`);
 }
 
 export default function BlogPage() {

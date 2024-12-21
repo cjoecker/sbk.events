@@ -1,6 +1,7 @@
+import { Button } from "@nextui-org/react";
 import { useLoaderData, useNavigate } from "@remix-run/react";
 import { LoaderFunctionArgs } from "@vercel/remix";
-import { ArrowRight01Icon, Edit02Icon } from "hugeicons-react";
+import { Add01Icon, ArrowRight01Icon, Edit02Icon } from "hugeicons-react";
 import { useTranslation } from "react-i18next";
 
 import { db } from "~/modules/db.server";
@@ -19,10 +20,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 		orderBy: {
 			updatedAt: "desc",
 		},
-		cacheStrategy: {
-			ttl: 60 * 60 * 24 * 365,
-			tags: ["blog_posts"],
-		},
 	});
 	return {
 		posts,
@@ -36,7 +33,22 @@ export default function BlogPosts() {
 	const { formatDateToText } = useFormatDate();
 	const navigate = useNavigate();
 	return (
-		<div>
+		<div className="relative">
+			{isAdmin && (
+				<Button
+					className="fixed bottom-2 right-3 z-40 h-14 w-14"
+					size={"lg"}
+					radius={"full"}
+					isIconOnly
+					color="primary"
+					aria-label={t("addEvent")}
+					onClick={() => {
+						navigate("/blog/upsert");
+					}}
+				>
+					<Add01Icon />
+				</Button>
+			)}
 			<h1 className="mb-1 text-2xl font-bold">{t("blog")}</h1>
 			<ul className="glass-s-grey">
 				{posts.map((post) => {
