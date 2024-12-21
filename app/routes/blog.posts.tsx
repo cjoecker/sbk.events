@@ -1,7 +1,5 @@
 import { LoaderFunctionArgs } from "@vercel/remix";
-import { assert } from "~/utils/validation";
 import { useLoaderData } from "@remix-run/react";
-import * as importedContent from "../blogs/mejores-sitios-bailar-valencia-2025.md";
 import { db } from "~/modules/db.server";
 import { useTranslation } from "react-i18next";
 import { useFormatDate } from "~/utils/use-format-date";
@@ -29,7 +27,7 @@ export default function BlogPosts() {
 	const { formatDateToText } = useFormatDate();
 	return (
 		<div>
-			<h2 className="mb-1 text-2xl font-bold">{t("blog")}</h2>
+			<h1 className="mb-1 text-2xl font-bold">{t("blog")}</h1>
 			<ul className="glass-s-grey">
 				{posts.map((post) => {
 					const slug = getKebabCaseFromNormalCase(post.title);

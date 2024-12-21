@@ -106,6 +106,13 @@ export default function Events() {
 	return (
 		<div>
 			<Outlet />
+			<div className="flex w-full justify-between">
+				<Title />
+				<h2 className="my-auto flex text-xl">
+					<Location01Icon size={25} className=" mt-0.5" />
+					Valencia
+				</h2>
+			</div>
 			<Button
 				className="fixed bottom-2 right-3 z-40 h-14 w-14"
 				size={"lg"}
@@ -119,7 +126,7 @@ export default function Events() {
 			>
 				<Add01Icon />
 			</Button>
-			<ul className="flex flex-col gap-y-2">
+			<ul className="mt-1 flex flex-col gap-y-2">
 				{eventDays.map((eventDay, index) => {
 					const dayBefore =
 						index > 0 ? new Date(eventDays[index - 1].date) : null;
@@ -147,7 +154,38 @@ export default function Events() {
 	);
 }
 
-
+export const Title = () => {
+	const { t } = useTranslation();
+	const ariaLabel = t("salsaBachataKizombaSocials");
+	const socials = t("socials");
+	const socialsArray = [...socials];
+	const sbk = t("salsaBachataKizomba");
+	const sbkArray = sbk.split(" ");
+	return (
+		<h1 className="flex w-48 flex-col font-bold" aria-label={ariaLabel}>
+			<span className="flex w-full justify-between text-4xl uppercase">
+				{socialsArray.map((letter, index) => {
+					return (
+						<span key={index} className="inline-block">
+							{letter}
+							{/*TODO check if google adds space after Socials with &#8203; */}
+							{index === socialsArray.length - 1 && <>&#8203;</>}
+						</span>
+					);
+				})}
+			</span>
+			<span className="-mt-2 flex justify-between">
+				{sbkArray.map((word, index) => {
+					return (
+						<span key={index} className="inline-block">
+							{word}
+						</span>
+					);
+				})}
+			</span>
+		</h1>
+	);
+};
 
 export interface MonthNameProps {
 	date: string;
