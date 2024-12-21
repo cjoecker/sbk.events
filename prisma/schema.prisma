@@ -62,7 +62,7 @@ model City {
 model BlogPost {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  id        Int      @id @default(autoincrement())
+  slug      String   @id @unique
   title     String
   content   String   @db.Text
 }

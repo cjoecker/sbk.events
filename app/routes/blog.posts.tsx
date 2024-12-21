@@ -6,6 +6,7 @@ import { db } from "~/modules/db.server";
 import { useTranslation } from "react-i18next";
 import { useFormatDate } from "~/utils/use-format-date";
 import { ArrowRight01Icon } from "hugeicons-react";
+import { getKebabCaseFromNormalCase } from "~/utils/misc";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
 	const posts = await db.blogPost.findMany({
@@ -31,11 +32,13 @@ export default function BlogPosts() {
 			<h2 className="mb-1 text-2xl font-bold">{t("blog")}</h2>
 			<ul className="glass-s-grey">
 				{posts.map((post) => {
+					const slug = getKebabCaseFromNormalCase(post.title);
+					const href = `/blog/${slug}`;
 					return (
 						<li
 							key={post.title}
-							className="flex cursor-pointer p-2 hover:bg-gray-600/40"
 						>
+							<a href={href} className="flex cursor-pointer p-2 hover:bg-gray-600/40" >
 							<div className="flex flex-col w-full">
 								<h2 className="font-bold">{post.title}</h2>
 								<div className="text-sm text-gray-300">
@@ -43,6 +46,7 @@ export default function BlogPosts() {
 								</div>
 							</div>
 							<ArrowRight01Icon className="my-auto ml-2" />
+							</a>
 						</li>
 					);
 				})}

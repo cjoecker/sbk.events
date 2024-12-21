@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@nextui-org/react";
 import { db } from "~/modules/db.server";
 import { BlogPost } from "~/components/blog-post";
+import { getKebabCaseFromNormalCase } from "~/utils/misc";
 
 export const blogPostSchema = z.object({
 	title: z.string().trim(),
@@ -38,8 +39,11 @@ export async function action({ request, params }: ActionFunctionArgs) {
 		return validationError(result.error, result.submittedData);
 	}
 
+	const slug = getKebabCaseFromNormalCase(result.data.title);
+
 	await db.blogPost.create({
 		data: {
+			slug,
 			title: result.data.title,
 			content: result.data.content,
 		},
