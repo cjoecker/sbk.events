@@ -52,7 +52,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 	const { getIsAdmin } = await getSession(request);
 	const isAdmin = getIsAdmin();
 	const eventDays = await getEventsByDay(CITY, isAdmin);
-	console.log("eventDays", eventDays);
 	const { getLikedEvents } = await getSession(request);
 	return { eventDays, likedEvents: getLikedEvents(), isAdmin };
 }
