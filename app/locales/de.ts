@@ -41,4 +41,5 @@ export default {
 	save: "Speichern",
 	blog: "Blog",
 	posts: "Beiträge",
+	eventsInValencia: "Veranstaltungen in Valencia",
 };
