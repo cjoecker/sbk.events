@@ -6,6 +6,13 @@ import { useTranslation } from "react-i18next";
 import { EnhancedDialog } from "~/components/enhanced-dialog";
 import { Lottie } from "~/components/lottie";
 import AnimatedCheck from "~/images/animated-check.json";
+import { SEOHandle } from "@nasa-gcn/remix-seo";
+
+export const handle: SEOHandle = {
+	getSitemapEntries: () => {
+		return null;
+	},
+};
 
 export default function EventsCreateSuccess() {
 	const { t } = useTranslation();

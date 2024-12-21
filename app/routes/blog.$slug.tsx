@@ -3,6 +3,18 @@ import { assert } from "~/utils/validation";
 import { useLoaderData } from "@remix-run/react";
 import { db } from "~/modules/db.server";
 import { BlogPost } from "~/components/blog-post";
+import { SEOHandle } from "@nasa-gcn/remix-seo";
+import { serverOnly$ } from "vite-env-only/macros";
+
+export const handle: SEOHandle = {
+	getSitemapEntries: serverOnly$(async (request) => {
+		const posts = await db.blogPost.findMany();
+		return posts
+			.map((post) => {
+				return { route: `/blog/${post.slug}`, priority: 0.9 }
+			})
+	}),
+};
 
 
 export async function loader({ params }: LoaderFunctionArgs) {
