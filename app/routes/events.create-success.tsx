@@ -14,6 +14,7 @@ export const handle: SEOHandle = {
 	},
 };
 
+
 export default function EventsCreateSuccess() {
 	const { t } = useTranslation();
 

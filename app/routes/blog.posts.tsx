@@ -17,7 +17,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
 		},
 		orderBy: {
 			updatedAt: "desc",
-		}
+		},
+		cacheStrategy: {
+			ttl: 60*60*24*365,
+			tags: ["blog_posts"],
+		},
 	});
 	return {
 		posts,

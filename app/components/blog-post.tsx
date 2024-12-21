@@ -1,5 +1,6 @@
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { format } from "date-fns";
 
 export type BlogPostProps = {
 	title: string | undefined;
@@ -7,7 +8,7 @@ export type BlogPostProps = {
 	date: string;
 };
 export const BlogPost = ({ title, content, date }: BlogPostProps) => {
-	const formattedDate = new Date(date).toLocaleDateString();
+	const formattedDate = format(new Date(date), "MMMM dd, yyyy");
 	return (
 		<div className="glass-l-black p-2 z-0">
 			<h1 className="text-3xl font-bold mt-1">{title}</h1>

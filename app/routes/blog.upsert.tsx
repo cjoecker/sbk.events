@@ -69,6 +69,11 @@ export async function action({ request }: ActionFunctionArgs) {
 		},
 	});
 
+	const cacheTag = `blog_post_${slug.replaceAll('-', '_')}`;
+	await db.$accelerate.invalidate({
+		tags: ["blog_posts",cacheTag],
+	});
+
 	return null;
 }
 
