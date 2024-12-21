@@ -1,11 +1,12 @@
-import { LoaderFunctionArgs } from "@vercel/remix";
 import { useLoaderData, useNavigate } from "@remix-run/react";
-import { db } from "~/modules/db.server";
-import { useTranslation } from "react-i18next";
-import { useFormatDate } from "~/utils/use-format-date";
+import { LoaderFunctionArgs } from "@vercel/remix";
 import { ArrowRight01Icon, Edit02Icon } from "hugeicons-react";
-import { getKebabCaseFromNormalCase } from "~/utils/misc";
+import { useTranslation } from "react-i18next";
+
+import { db } from "~/modules/db.server";
 import { getSession } from "~/modules/session.server";
+import { getKebabCaseFromNormalCase } from "~/utils/misc";
+import { useFormatDate } from "~/utils/use-format-date";
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	const { getIsAdmin } = await getSession(request);
@@ -19,13 +20,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
 			updatedAt: "desc",
 		},
 		cacheStrategy: {
-			ttl: 60*60*24*365,
+			ttl: 60 * 60 * 24 * 365,
 			tags: ["blog_posts"],
 		},
 	});
 	return {
 		posts,
-		isAdmin
+		isAdmin,
 	};
 }
 
@@ -42,15 +43,12 @@ export default function BlogPosts() {
 					const slug = getKebabCaseFromNormalCase(post.title);
 					const href = `/blog/${slug}`;
 					return (
-						<li
-							className="relative"
-							key={post.title}
-						>
+						<li className="relative" key={post.title}>
 							{isAdmin && (
 								<button
 									className="absolute right-1 top-1"
 									aria-label={t("editEvent")}
-									onClick={()=>{
+									onClick={() => {
 										const slug = getKebabCaseFromNormalCase(post.title);
 										navigate(`/blog/upsert?slug=${slug}`);
 									}}
@@ -58,14 +56,17 @@ export default function BlogPosts() {
 									<Edit02Icon size={18} />
 								</button>
 							)}
-							<a href={href} className="flex cursor-pointer p-2 hover:bg-gray-600/40" >
-							<div className="flex flex-col w-full">
-								<h2 className="font-bold">{post.title}</h2>
-								<div className="text-sm text-gray-300">
-									{formatDateToText(post.updatedAt)}
+							<a
+								href={href}
+								className="flex cursor-pointer p-2 hover:bg-gray-600/40"
+							>
+								<div className="flex w-full flex-col">
+									<h2 className="font-bold">{post.title}</h2>
+									<div className="text-sm text-gray-300">
+										{formatDateToText(post.updatedAt)}
+									</div>
 								</div>
-							</div>
-							<ArrowRight01Icon className="my-auto ml-2" />
+								<ArrowRight01Icon className="my-auto ml-2" />
 							</a>
 						</li>
 					);

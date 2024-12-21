@@ -1,19 +1,15 @@
-import { InputProps, TextAreaProps } from "@nextui-org/react";
+import { Textarea as _Textarea } from "@nextui-org/input";
+import { TextAreaProps } from "@nextui-org/react";
 import { FormScope, useField } from "@rvf/react";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Textarea as _Textarea } from "@nextui-org/input";
 
 export type _TextAreaProps = {
 	label?: string;
 	scope: FormScope<string | number>;
 } & TextAreaProps;
 
-export const Textarea = ({
-	label,
-	scope,
-	...props
-}: _TextAreaProps) => {
+export const Textarea = ({ label, scope, ...props }: _TextAreaProps) => {
 	const field = useField(scope);
 	const { onChange, onBlur, name, type, form } = field.getInputProps();
 	const defaultValue = field.getInputProps().defaultValue as string;

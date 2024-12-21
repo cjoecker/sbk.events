@@ -24,7 +24,6 @@ import LibreFranklinBoldFont from "~/fonts/libre-franklin-v18-latin-regular.woff
 import Background from "~/images/background.webp";
 import stylesheet from "~/styles/tailwind.css?url";
 import { json } from "~/utils/remix";
-import { Location01Icon } from "hugeicons-react";
 
 export const handle = { i18n: ["translation"] };
 
@@ -178,8 +177,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
 	);
 }
 
-
-
 function Footer() {
 	const { t } = useTranslation();
 	return (
@@ -208,8 +205,7 @@ function Footer() {
 			</div>
 		</footer>
 	);
-};
-
+}
 
 function App() {
 	const { locale } = useLoaderData<typeof loader>();

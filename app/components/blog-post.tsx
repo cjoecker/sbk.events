@@ -1,20 +1,22 @@
+import { format } from "date-fns";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { format } from "date-fns";
 
-export type BlogPostProps = {
+export interface BlogPostProps {
 	title: string | undefined;
 	content: string | undefined;
 	date: string;
-};
+}
 export const BlogPost = ({ title, content, date }: BlogPostProps) => {
 	const formattedDate = format(new Date(date), "MMMM dd, yyyy");
 	return (
-		<div className="glass-l-black p-2 z-0">
-			<h1 className="text-3xl font-bold mt-1">{title}</h1>
+		<div className="glass-l-black z-0 p-2">
+			<h1 className="mt-1 text-3xl font-bold">{title}</h1>
 			<div className="text-md text-gray-300">{formattedDate}</div>
 			<div className="mt-4">
-				<Markdown className="markdown" remarkPlugins={[remarkGfm]}>{content}</Markdown>
+				<Markdown className="markdown" remarkPlugins={[remarkGfm]}>
+					{content}
+				</Markdown>
 			</div>
 		</div>
 	);

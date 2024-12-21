@@ -1,18 +1,19 @@
-import { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { SEOHandle } from "@nasa-gcn/remix-seo";
-import { authenticateAdmin } from "~/utils/remix";
-import { useEffect, useState } from "react";
-import { Input } from "~/components/input";
-import { useForm, validationError } from "@rvf/remix";
-import { z } from "zod";
-import { withZod } from "@rvf/zod";
-import { Textarea } from "~/components/test-area";
-import { useTranslation } from "react-i18next";
 import { Button } from "@nextui-org/react";
-import { db } from "~/modules/db.server";
-import { BlogPost } from "~/components/blog-post";
-import { getKebabCaseFromNormalCase } from "~/utils/misc";
 import { useNavigate } from "@remix-run/react";
+import { useForm, validationError } from "@rvf/remix";
+import { withZod } from "@rvf/zod";
+import { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
+import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { z } from "zod";
+
+import { BlogPost } from "~/components/blog-post";
+import { Input } from "~/components/input";
+import { Textarea } from "~/components/test-area";
+import { db } from "~/modules/db.server";
+import { getKebabCaseFromNormalCase } from "~/utils/misc";
+import { authenticateAdmin, useEffectUnsafe } from "~/utils/remix";
 
 export const blogPostSchema = z.object({
 	title: z.string().trim(),
@@ -31,7 +32,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 	const searchParams = new URL(request.url).searchParams;
 	const slug = searchParams.get("slug");
 
-	if(!slug){
+	if (!slug) {
 		return null;
 	}
 
@@ -69,9 +70,9 @@ export async function action({ request }: ActionFunctionArgs) {
 		},
 	});
 
-	const cacheTag = `blog_post_${slug.replaceAll('-', '_')}`;
+	const cacheTag = `blog_post_${slug.replaceAll("-", "_")}`;
 	await db.$accelerate.invalidate({
-		tags: ["blog_posts",cacheTag],
+		tags: ["blog_posts", cacheTag],
 	});
 
 	return null;
@@ -85,19 +86,19 @@ export default function BlogPage() {
 	});
 	const title = form.field("title").value() as string | undefined;
 	const content = form.field("content").value() as string | undefined;
-	const navigate = useNavigate()
+	const navigate = useNavigate();
 
 	useEffect(() => {
-		if(typeof title === "string"){
+		if (typeof title === "string") {
 			localStorage.setItem("blog-title", title);
 		}
 
-		if(typeof content === "string"){
+		if (typeof content === "string") {
 			localStorage.setItem("blog-content", content);
 		}
 	}, [title, content]);
 
-	useEffect(() => {
+	useEffectUnsafe(() => {
 		const title = localStorage.getItem("blog-title");
 		const content = localStorage.getItem("blog-content");
 		if (title) {
@@ -105,12 +106,15 @@ export default function BlogPage() {
 		}
 		if (content) {
 			form.field("content").setValue(content);
-			}
+		}
 	}, []);
 
 	return (
 		<div className="relative">
-			<form className="max-2xl flex flex-col gap-2 mb-2 sticky top-0 z-10 glass-l-black p-2" {...form.getFormProps()}>
+			<form
+				className="max-2xl glass-l-black sticky top-0 z-10 mb-2 flex flex-col gap-2 p-2"
+				{...form.getFormProps()}
+			>
 				<Input scope={form.scope("title")} label={t("title")} />
 				<Textarea
 					className="w-full"
@@ -118,9 +122,11 @@ export default function BlogPage() {
 					scope={form.scope("content")}
 				/>
 				<div className="flex justify-between">
-					<Button onClick={()=>{
-						navigate("/blog/posts")
-					}} >
+					<Button
+						onClick={() => {
+							navigate("/blog/posts");
+						}}
+					>
 						{t("posts")}
 					</Button>
 					<Button type="submit" color={"primary"}>

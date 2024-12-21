@@ -1,3 +1,4 @@
+import { SEOHandle } from "@nasa-gcn/remix-seo";
 import { Button } from "@nextui-org/react";
 import { useNavigate } from "@remix-run/react";
 import React from "react";
@@ -6,14 +7,12 @@ import { useTranslation } from "react-i18next";
 import { EnhancedDialog } from "~/components/enhanced-dialog";
 import { Lottie } from "~/components/lottie";
 import AnimatedCheck from "~/images/animated-check.json";
-import { SEOHandle } from "@nasa-gcn/remix-seo";
 
 export const handle: SEOHandle = {
 	getSitemapEntries: () => {
 		return null;
 	},
 };
-
 
 export default function EventsCreateSuccess() {
 	const { t } = useTranslation();

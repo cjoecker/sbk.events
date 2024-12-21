@@ -1,10 +1,11 @@
 import { json as DeprecatedJSON } from "@vercel/remix";
+
 import { getSession } from "~/modules/session.server";
 
 // there seems not to be a good alternative for deprecated json
 // https://github.com/remix-run/react-router/discussions/12257
 
-// eslint-disable-next-line @typescript-eslint/no-deprecated, unicorn/prefer-export-from
+// eslint-disable-next-line @typescript-eslint/no-deprecated
 export const json = DeprecatedJSON;
 
 export function getDomainUrl(request: Request) {
@@ -39,3 +40,12 @@ export async function authenticateAdmin(request: Request) {
 		throw json(null, 403);
 	}
 }
+
+/**
+ * Renames some common hooks, so we can use an "unsafe" version,
+ * in which the linting doesn't check the dependency array.
+ *
+ * Please use with care, as this can easily lead to bugs
+ */
+
+export { useEffect as useEffectUnsafe, useMemo as useMemoUnsafe } from "react";

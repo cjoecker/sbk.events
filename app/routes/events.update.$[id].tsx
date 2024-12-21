@@ -17,8 +17,7 @@ import {
 	getDates,
 	updateLoacationOnEventUpsert,
 } from "~/modules/events.server";
-import { getSession } from "~/modules/session.server";
-import { authenticateAdmin, json } from "~/utils/remix";
+import { authenticateAdmin } from "~/utils/remix";
 import { assert } from "~/utils/validation";
 
 export const handle: SEOHandle = {
