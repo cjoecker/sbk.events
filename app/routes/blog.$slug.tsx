@@ -1,6 +1,6 @@
 import { SEOHandle } from "@nasa-gcn/remix-seo";
 import { useLoaderData } from "@remix-run/react";
-import { LoaderFunctionArgs } from "@vercel/remix";
+import { LoaderFunctionArgs, MetaFunction } from "@vercel/remix";
 import { serverOnly$ } from "vite-env-only/macros";
 
 import { BlogPost } from "~/components/blog-post";
@@ -14,6 +14,22 @@ export const handle: SEOHandle = {
 			return { route: `/blog/${post.slug}`, priority: 0.9 };
 		});
 	}),
+};
+
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+	// cut until the next . after 200 characters
+	const description = data?.blogPost.content
+		.slice(0, 200)
+		.replace(/[^.]*$/, "");
+	return [
+		{
+			title: `${data?.blogPost.title} | sbk.events`,
+		},
+		{
+			name: "description",
+			content: description,
+		},
+	];
 };
 
 export async function loader({ params }: LoaderFunctionArgs) {
