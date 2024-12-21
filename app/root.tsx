@@ -134,13 +134,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				<script
 					dangerouslySetInnerHTML={{
 						__html: `
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-942TBH82GN', {
-        page_path: window.location.pathname,
-        });
-    `,
+        var host = window.location.hostname;
+				if(host != "localhost")
+				{
+				    window.dataLayer = window.dataLayer || [];
+				    function gtag(){dataLayer.push(arguments);}
+				    gtag('js', new Date());
+				    gtag('config', 'G-942TBH82GN', {
+				    page_path: window.location.pathname,
+				    });
+				}
+         `,
 					}}
 				/>
 			</head>
