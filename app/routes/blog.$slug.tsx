@@ -1,10 +1,14 @@
 import { SEOHandle } from "@nasa-gcn/remix-seo";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, useNavigate } from "@remix-run/react";
 import { LoaderFunctionArgs, MetaFunction } from "@vercel/remix";
+import { Edit02Icon } from "hugeicons-react";
+import { useTranslation } from "react-i18next";
 import { serverOnly$ } from "vite-env-only/macros";
 
 import { BlogPost } from "~/components/blog-post";
 import { db } from "~/modules/db.server";
+import { getSession } from "~/modules/session.server";
+import { getKebabCaseFromNormalCase } from "~/utils/misc";
 import { assert } from "~/utils/validation";
 
 export const handle: SEOHandle = {
@@ -32,7 +36,9 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 	];
 };
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ params, request }: LoaderFunctionArgs) {
+	const { getIsAdmin } = await getSession(request);
+	const isAdmin = getIsAdmin();
 	const slug = params.slug;
 	assert(slug, "blog post slug is required");
 
@@ -48,6 +54,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 	}
 
 	return {
+		isAdmin,
 		blogPost,
 		headers: {
 			"Cache-Control": `public, max-age=60, s-maxage=${60 * 60 * 24}`,
@@ -56,12 +63,28 @@ export async function loader({ params }: LoaderFunctionArgs) {
 }
 
 export default function BlogPage() {
-	const { blogPost } = useLoaderData<typeof loader>();
+	const { blogPost, isAdmin } = useLoaderData<typeof loader>();
+	const { t } = useTranslation();
+	const navigate = useNavigate();
 	return (
-		<BlogPost
-			title={blogPost.title}
-			content={blogPost.content}
-			date={blogPost.updatedAt}
-		/>
+		<div className="relative">
+			{isAdmin && (
+				<button
+					className="absolute right-1 top-1 z-10"
+					aria-label={t("editEvent")}
+					onClick={() => {
+						const slug = getKebabCaseFromNormalCase(blogPost.title);
+						navigate(`/blog/upsert?slug=${slug}`);
+					}}
+				>
+					<Edit02Icon size={18} />
+				</button>
+			)}
+			<BlogPost
+				title={blogPost.title}
+				content={blogPost.content}
+				date={blogPost.updatedAt}
+			/>
+		</div>
 	);
 }

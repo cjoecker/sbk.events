@@ -1,7 +1,7 @@
 import { Button } from "@nextui-org/react";
 import { useLoaderData, useNavigate } from "@remix-run/react";
 import { LoaderFunctionArgs } from "@vercel/remix";
-import { Add01Icon, ArrowRight01Icon, Edit02Icon } from "hugeicons-react";
+import { Add01Icon, ArrowRight01Icon } from "hugeicons-react";
 import { useTranslation } from "react-i18next";
 
 import { db } from "~/modules/db.server";
@@ -50,24 +50,12 @@ export default function BlogPosts() {
 				</Button>
 			)}
 			<h1 className="mb-1 text-2xl font-bold">{t("blog")}</h1>
-			<ul className="glass-s-grey">
+			<ul className="glass-s-black divide-y-1 divide-white/30">
 				{posts.map((post) => {
 					const slug = getKebabCaseFromNormalCase(post.title);
 					const href = `/blog/${slug}`;
 					return (
-						<li className="relative" key={post.title}>
-							{isAdmin && (
-								<button
-									className="absolute right-1 top-1"
-									aria-label={t("editEvent")}
-									onClick={() => {
-										const slug = getKebabCaseFromNormalCase(post.title);
-										navigate(`/blog/upsert?slug=${slug}`);
-									}}
-								>
-									<Edit02Icon size={18} />
-								</button>
-							)}
+						<li key={post.title}>
 							<a
 								href={href}
 								className="flex cursor-pointer p-2 hover:bg-gray-600/40"

@@ -75,7 +75,7 @@ export async function action({ request }: ActionFunctionArgs) {
 		},
 	});
 
-	return redirect(`/blog/${slug}`);
+	return redirect(`/blog/upsert?slug=${slug}`);
 }
 
 export default function BlogPage() {
