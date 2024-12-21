@@ -13,7 +13,8 @@ import { Input } from "~/components/input";
 import { Textarea } from "~/components/test-area";
 import { db } from "~/modules/db.server";
 import { getKebabCaseFromNormalCase } from "~/utils/misc";
-import { authenticateAdmin, useEffectUnsafe } from "~/utils/remix";
+import { authenticateAdmin } from "~/utils/remix";
+import { useEffectUnsafe } from "~/utils/unsafe-hooks";
 
 export const blogPostSchema = z.object({
 	title: z.string().trim(),
