@@ -28,7 +28,7 @@ export default function BlogPosts() {
 	const { formatDateToText } = useFormatDate();
 	return (
 		<div>
-			<h2 className="mb-2 text-xl font-bold">{t("blog")}</h2>
+			<h2 className="mb-1 text-2xl font-bold">{t("blog")}</h2>
 			<ul className="glass-s-grey">
 				{posts.map((post) => {
 					return (

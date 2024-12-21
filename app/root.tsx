@@ -24,6 +24,7 @@ import LibreFranklinBoldFont from "~/fonts/libre-franklin-v18-latin-regular.woff
 import Background from "~/images/background.webp";
 import stylesheet from "~/styles/tailwind.css?url";
 import { json } from "~/utils/remix";
+import { Location01Icon } from "hugeicons-react";
 
 export const handle = { i18n: ["translation"] };
 
@@ -166,7 +167,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				)}
 				<div className="h-full overflow-y-auto overflow-x-hidden">
 					<div className="mx-auto flex h-full max-w-2xl flex-col p-2">
-						<main className="mx-2 mb-8 flex-1">{children}</main>
+						<Header />
+						<main className="mb-8 mt-6 flex-1">{children}</main>
 						<Footer />
 					</div>
 				</div>
@@ -177,7 +179,52 @@ export function Layout({ children }: { children: React.ReactNode }) {
 	);
 }
 
-export const Footer = () => {
+function Header() {
+	return (
+		<header className="flex w-full justify-between">
+			<Title />
+			<h2 className="my-auto flex text-xl">
+				<Location01Icon size={25} className=" mt-0.5" />
+				Valencia
+			</h2>
+		</header>
+	);
+}
+
+export const Title = () => {
+	const { t } = useTranslation();
+	const ariaLabel = t("salsaBachataKizombaSocials");
+	const socials = t("socials");
+	const socialsArray = [...socials];
+	const sbk = t("salsaBachataKizomba");
+	const sbkArray = sbk.split(" ");
+	return (
+		<h1 className="flex w-48 flex-col font-bold" aria-label={ariaLabel}>
+			<span className="flex w-full justify-between text-4xl uppercase">
+				{socialsArray.map((letter, index) => {
+					return (
+						<span key={index} className="inline-block">
+							{letter}
+							{/*TODO check if google adds space after Socials with &#8203; */}
+							{index === socialsArray.length - 1 && <>&#8203;</>}
+						</span>
+					);
+				})}
+			</span>
+			<span className="-mt-2 flex justify-between">
+				{sbkArray.map((word, index) => {
+					return (
+						<span key={index} className="inline-block">
+							{word}
+						</span>
+					);
+				})}
+			</span>
+		</h1>
+	);
+};
+
+function Footer() {
 	const { t } = useTranslation();
 	return (
 		<footer className="mt-10 flex w-full flex-col pb-2 text-sm">
@@ -206,6 +253,7 @@ export const Footer = () => {
 		</footer>
 	);
 };
+
 
 function App() {
 	const { locale } = useLoaderData<typeof loader>();
