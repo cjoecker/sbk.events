@@ -70,6 +70,7 @@ export async function action({ request }: ActionFunctionArgs) {
 			content: result.data.content,
 		},
 		update: {
+			slug,
 			title: result.data.title,
 			content: result.data.content,
 		},
