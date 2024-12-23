@@ -125,6 +125,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 	return (
 		<html lang={locale} className="dark">
 			<head>
+				<meta charSet="utf-8" />
 				<Meta />
 				<Links />
 				<script
