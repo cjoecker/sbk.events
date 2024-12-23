@@ -24,33 +24,12 @@ import LibreFranklinBoldFont from "~/fonts/libre-franklin-v18-latin-regular.woff
 import Background from "~/images/background.webp";
 import stylesheet from "~/styles/tailwind.css?url";
 import { json } from "~/utils/remix";
+import { getMetas } from "~/utils/seo";
 
 export const handle = { i18n: ["translation"] };
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
-	return [
-		{
-			title: data?.pageTitle,
-		},
-		{ charset: "utf-8" },
-		{
-			name: "description",
-			content: data?.pageDescription,
-		},
-		{
-			name: "keywords",
-			content: data?.pageKeywords,
-		},
-		{
-			name: "viewport",
-			content:
-				"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no",
-		},
-		{
-			name: "theme-color",
-			content: "#000a1d",
-		},
-	];
+	return getMetas(data?.pageTitle, data?.pageDescription, data?.pageKeywords);
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -125,7 +104,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
 	return (
 		<html lang={locale} className="dark">
 			<head>
-				<meta charSet="utf-8" />
 				<Meta />
 				<Links />
 				<script

@@ -7,8 +7,10 @@ import { serverOnly$ } from "vite-env-only/macros";
 
 import { BlogPost } from "~/components/blog-post";
 import { db } from "~/modules/db.server";
+import i18nServer from "~/modules/i18n.server";
 import { getSession } from "~/modules/session.server";
 import { getKebabCaseFromNormalCase } from "~/utils/misc";
+import { getMetas } from "~/utils/seo";
 import { assert } from "~/utils/validation";
 
 export const handle: SEOHandle = {
@@ -25,15 +27,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 	const description = data?.blogPost.content
 		.slice(0, 200)
 		.replace(/[^.]*$/, "");
-	return [
-		{
-			title: `${data?.blogPost.title} | sbk.events`,
-		},
-		{
-			name: "description",
-			content: description,
-		},
-	];
+	return [...getMetas(data?.blogPost.title, description, data?.pageKeywords)];
 };
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
@@ -41,6 +35,8 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	const isAdmin = getIsAdmin();
 	const slug = params.slug;
 	assert(slug, "blog post slug is required");
+	const t = await i18nServer.getFixedT(request);
+	const pageKeywords = t("pageKeywords");
 
 	const blogPost = await db.blogPost.findFirst({
 		where: {
@@ -56,6 +52,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	return {
 		isAdmin,
 		blogPost,
+		pageKeywords,
 		headers: {
 			"Cache-Control": `public, max-age=60, s-maxage=${60 * 60 * 24}`,
 		},
