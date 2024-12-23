@@ -1,0 +1,99 @@
+{
+  "pkgName": "sbk.events",
+  "cacheId": "valencia.scrap.ts(Valencia)",
+  "aiTasks": [
+    {
+      "prompt": "scroll through the feed click on all the images with salsa bachata kizomba events. Then go back to the feed an continue scrolling",
+      "tasks": [
+        {
+          "type": "plan",
+          "pageContext": {
+            "url": "https://www.facebook.com/groups/salsa.hannover",
+            "size": {
+              "width": 1280,
+              "height": 800,
+              "dpr": 1
+            }
+          },
+          "prompt": "scroll through the feed click on all the images with salsa bachata kizomba events. Then go back to the feed an continue scrolling",
+          "response": {
+            "actions": [
+              {
+                "thought": "Scroll through the feed to find images related to salsa, bachata, or kizomba events.",
+                "type": "Scroll",
+                "param": {
+                  "direction": "down",
+                  "scrollType": "once",
+                  "distance": null
+                },
+                "locate": {
+                  "id": "dac63fd4",
+                  "prompt": "the feed container"
+                }
+              }
+            ],
+            "taskWillBeAccomplished": false,
+            "furtherPlan": {
+              "whatHaveDone": "Scrolled through the feed once.",
+              "whatToDoNext": "Identify and click on images related to salsa, bachata, or kizomba events, then return to the feed and continue scrolling."
+            },
+            "error": null
+          }
+        },
+        {
+          "type": "locate",
+          "pageContext": {
+            "url": "https://www.facebook.com/groups/salsa.hannover",
+            "size": {
+              "width": 1280,
+              "height": 800,
+              "dpr": 1
+            }
+          },
+          "prompt": "the feed container",
+          "response": {
+            "errors": [],
+            "elements": [
+              {
+                "reason": "The feed container is typically a large container element that holds the main content of a post or feed. In this context, it is likely to be a container element that encompasses the post content, including text and images. The element with ID 'cd36ff0e' is a container that starts at the top of the post, making it the most likely candidate for the feed container.",
+                "text": "",
+                "id": "cd36ff0e"
+              }
+            ]
+          }
+        },
+        {
+          "type": "plan",
+          "pageContext": {
+            "url": "https://www.facebook.com/groups/salsa.hannover",
+            "size": {
+              "width": 1280,
+              "height": 800,
+              "dpr": 1
+            }
+          },
+          "prompt": "Identify and click on images related to salsa, bachata, or kizomba events, then return to the feed and continue scrolling.",
+          "response": {
+            "actions": [
+              {
+                "thought": "Identify and click on the image related to salsa, bachata, or kizomba events.",
+                "type": "Tap",
+                "param": null,
+                "locate": {
+                  "id": "378e6be9",
+                  "prompt": "an image related to salsa, bachata, or kizomba events"
+                }
+              }
+            ],
+            "taskWillBeAccomplished": false,
+            "furtherPlan": {
+              "whatHaveDone": "Clicked on an image related to salsa, bachata, or kizomba events.",
+              "whatToDoNext": "Return to the feed and continue scrolling."
+            },
+            "error": null
+          }
+        }
+      ]
+    }
+  ]
+}
