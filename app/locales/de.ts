@@ -42,4 +42,6 @@ export default {
 	blog: "Blog",
 	posts: "Beiträge",
 	eventsInValencia: "Veranstaltungen in Valencia",
+	oneTime: "Einmal",
+	weekly: "Wöchentlich",
 };

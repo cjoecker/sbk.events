@@ -1,7 +1,7 @@
 import { getLocalTimeZone, today } from "@internationalized/date";
 import { Button } from "@nextui-org/react";
 import { useNavigate, useNavigation } from "@remix-run/react";
-import { useField } from "@rvf/react";
+import { FormScope, useField } from "@rvf/react";
 import { useForm } from "@rvf/remix";
 import { withZod } from "@rvf/zod";
 import React, { useEffect } from "react";
@@ -14,6 +14,9 @@ import { EnhancedDialog } from "~/components/enhanced-dialog";
 import { Input } from "~/components/input";
 import { TimeInput } from "~/components/time-input";
 import { intWithinRange } from "~/utils/validation";
+import { EventFrequency } from "@prisma/client";
+import { Select } from "~/components/select";
+
 
 export const eventSchema = z
 	.object({
@@ -30,6 +33,7 @@ export const eventSchema = z
 		salsaPercentage: intWithinRange(0, 100),
 		bachataPercentage: intWithinRange(0, 100),
 		kizombaPercentage: intWithinRange(0, 100),
+		frequency: z.nativeEnum(EventFrequency).optional(),
 	})
 	.superRefine((val, ctx) => {
 		if (
@@ -180,6 +184,14 @@ export function UpsertEvent({
 					isClearable={false}
 					isRequired
 				/>
+				<Select
+					label={t("frequency")}
+					scope={form.scope("frequency") as FormScope<EventFrequency>}
+					options={[
+						{ id: "ONE_TIME", name: t("oneTime") },
+						{ id: "WEEKLY", name: t("weekly") },
+					]}
+					/>
 				<div className="flex flex-col gap-1">
 					<label className="text-sm text-default-500">
 						{t("salsaBachataKizomba")}
