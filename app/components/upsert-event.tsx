@@ -33,7 +33,9 @@ export const eventSchema = z
 		salsaPercentage: intWithinRange(0, 100),
 		bachataPercentage: intWithinRange(0, 100),
 		kizombaPercentage: intWithinRange(0, 100),
-		frequency: z.nativeEnum(EventFrequency).optional(),
+		frequency: z.enum(["ONE_TIME", "WEEKLY"],{
+			message: "mandatoryField"
+		})
 	})
 	.superRefine((val, ctx) => {
 		if (
@@ -185,6 +187,7 @@ export function UpsertEvent({
 					isRequired
 				/>
 				<Select
+					isRequired
 					label={t("frequency")}
 					scope={form.scope("frequency") as FormScope<EventFrequency>}
 					options={[

@@ -47,4 +47,5 @@ export default {
 	eventsInValencia: "Eventos en Valencia",
 	oneTime: "Una vez",
 	weekly: "Semanal",
+	frequency: "Frecuencia",
 };

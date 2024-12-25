@@ -53,6 +53,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		salsaPercentage,
 		bachataPercentage,
 		kizombaPercentage,
+		frequency
 	} = result.data;
 	const locationIdNumber = locationId ? Number.parseInt(locationId) : undefined;
 	const isNewLocation = !locationIdNumber;
@@ -107,6 +108,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			bachataPercentage,
 			kizombaPercentage,
 			status,
+			frequency
 		},
 	});
 	if (!isAdmin) {
@@ -142,6 +144,7 @@ export default function EventsCreate() {
 					date: tomorrowString,
 					startTime: "21:00",
 					endTime: "01:00",
+					frequency: "ONE_TIME",
 				} as z.infer<typeof eventSchema>
 			}
 		/>
