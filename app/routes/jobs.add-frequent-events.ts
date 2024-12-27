@@ -10,7 +10,8 @@ type NewEvent = Omit<Event, "id" | "createdAt" | "updatedAt"> &{
 };
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
-	const today = startOfWeek(new Date());
+	const today = startOfDay(new Date());
+	const todayWeekDay = today.getDay();
 	const twoWeeksAgo = addDays(today, -14);
 
 	const lastFrequentEvents = await db.event.findMany({
@@ -33,10 +34,9 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
 	for (const event of lastFrequentEvents) {
 		const eventStartWeekDay = event.startDate.getDay();
-
 		const nextEventStartDate = addDays(
 			today,
-			eventStartWeekDay
+			Math.abs(eventStartWeekDay - todayWeekDay)
 		);
 		const nextEventStartDateTime = new Date(
 			nextEventStartDate.getFullYear(),
@@ -52,18 +52,18 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 				e.organizerId === event.organizerId
 			);
 		});
+
 		const eventAlreadyExistsInNewEvents = newEvents.some((e) => {
 			return (
 				e.startDate.getTime() === nextEventStartDateTime.getTime() &&
 				e.organizerId === event.organizerId
 			);
 		});
-		console.log("\n\nname", event.name);
-		console.log("eventAlreadyExistsInNewEvents", eventAlreadyExistsInNewEvents);
-		console.log("eventAlreadyExists", eventAlreadyExists);
+
 		if (!eventAlreadyExists && !eventAlreadyExistsInNewEvents) {
 			const eventEndWeekDay = event.startDate.getDay();
-			const nextEventEndDate = addDays(today, eventEndWeekDay - today.getDay());
+			const nextEventEndDate = addDays(today,
+				Math.abs(eventEndWeekDay - todayWeekDay));
 			const nextEventEndDateTime = new Date(
 				nextEventEndDate.getFullYear(),
 				nextEventEndDate.getMonth(),
