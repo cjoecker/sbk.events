@@ -1,0 +1,10 @@
+{
+  "builds": [
+    {
+      "src": "/jobs/add-frequent-events",
+      "use": "@vercel/node"
+    }
+  ],
+  "version": 2,
+  "cron": "0 2 * * 0"
+}
