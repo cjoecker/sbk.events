@@ -9,9 +9,8 @@ type NewEvent = Omit<Event, "id" | "createdAt" | "updatedAt"> &{
 	updatedAt: undefined;
 };
 
-export const loader = async ({ request, params }: LoaderFunctionArgs) => {
+export const loader = async () => {
 	const today = startOfDay(new Date());
-	const todayWeekDay = today.getDay();
 	const twoWeeksAgo = addDays(today, -14);
 
 	const lastFrequentEvents = await db.event.findMany({
@@ -34,10 +33,15 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
 	for (const event of lastFrequentEvents) {
 		const eventStartWeekDay = event.startDate.getDay();
-		const nextEventStartDate = addDays(
-			today,
-			Math.abs(eventStartWeekDay - todayWeekDay)
-		);
+		const todayWeekDay = today.getDay();
+		let daysToAdd = eventStartWeekDay - todayWeekDay;
+		if (daysToAdd <= 0) {
+			daysToAdd += 7;
+		}
+
+		const nextEventStartDate = addDays(today, daysToAdd);
+
+
 		const nextEventStartDateTime = new Date(
 			nextEventStartDate.getFullYear(),
 			nextEventStartDate.getMonth(),
@@ -61,9 +65,13 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 		});
 
 		if (!eventAlreadyExists && !eventAlreadyExistsInNewEvents) {
-			const eventEndWeekDay = event.startDate.getDay();
-			const nextEventEndDate = addDays(today,
-				Math.abs(eventEndWeekDay - todayWeekDay));
+			const eventEndWeekday = event.endDate.getDay();
+			let daysToAdd = eventEndWeekday - todayWeekDay;
+			if (daysToAdd <= 0) {
+				daysToAdd += 7;
+			}
+			const nextEventEndDate = addDays(today, daysToAdd);
+
 			const nextEventEndDateTime = new Date(
 				nextEventEndDate.getFullYear(),
 				nextEventEndDate.getMonth(),
@@ -83,7 +91,6 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 			});
 		}
 	}
-	console.log("\n\nnewEvents", newEvents);
 	await db.event.createMany({
 		data: newEvents,
 	});
