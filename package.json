@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"build": "prisma generate --no-engine && prisma migrate deploy && remix vite:build",
-		"dev": "remix vite:dev",
+		"dev": "docker-compose up -d && remix vite:dev",
 		"start": "vercel dev",
 		"typecheck": "tsc",
 		"check:all": "pnpm lint . && pnpm format --check . && pnpm check-types",

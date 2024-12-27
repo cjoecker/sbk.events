@@ -1,0 +1,16 @@
+services:
+  postgres-local:
+    image: postgres
+    container_name: sbk-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: local
+    ports:
+      - "4855:5432"
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
