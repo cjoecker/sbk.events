@@ -47,7 +47,7 @@ describe("add frequent events job", () => {
 					...eventMock,
 					startDate: new Date("2025-01-13 21:30"),
 					endDate: new Date("2025-01-14 03:00"),
-					frequency: EventFrequency.ONE_TIME,
+					frequency: EventFrequency.ONCE,
 				},
 			],
 		});

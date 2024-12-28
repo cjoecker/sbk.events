@@ -46,7 +46,7 @@ export default {
 	blog: "Blog",
 	posts: "Posts",
 	eventsInValencia: "Events in Valencia",
-	oneTime: "One time",
+	once: "One time",
 	weekly: "Weekly",
 	frequency: "Frequency",
 };

@@ -34,7 +34,7 @@ enum EventStatus {
 }
 
 enum EventFrequency {
-  ONE_TIME
+  ONCE
   WEEKLY
 }
 

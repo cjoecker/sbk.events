@@ -32,7 +32,7 @@ export const eventSchema = z
 		salsaPercentage: intWithinRange(0, 100),
 		bachataPercentage: intWithinRange(0, 100),
 		kizombaPercentage: intWithinRange(0, 100),
-		frequency: z.enum(["ONE_TIME", "WEEKLY"], {
+		frequency: z.enum(["ONCE", "WEEKLY"], {
 			message: "mandatoryField",
 		}),
 	})
@@ -190,7 +190,7 @@ export function UpsertEvent({
 					label={t("frequency")}
 					scope={form.scope("frequency") as FormScope<EventFrequency>}
 					options={[
-						{ id: "ONE_TIME", name: t("oneTime") },
+						{ id: "ONCE", name: t("once") },
 						{ id: "WEEKLY", name: t("weekly") },
 					]}
 				/>

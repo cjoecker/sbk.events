@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "EventFrequency" AS ENUM ('ONE_TIME', 'WEEKLY');
+CREATE TYPE "EventFrequency" AS ENUM ('ONCE', 'WEEKLY');
 
 -- AlterTable
-ALTER TABLE "Event" ADD COLUMN     "frequency" "EventFrequency" NOT NULL DEFAULT 'ONE_TIME';
+ALTER TABLE "Event" ADD COLUMN     "frequency" "EventFrequency" NOT NULL DEFAULT 'ONCE';

@@ -144,7 +144,7 @@ export default function EventsCreate() {
 					date: tomorrowString,
 					startTime: "21:00",
 					endTime: "01:00",
-					frequency: "ONE_TIME",
+					frequency: "ONCE",
 				} as z.infer<typeof eventSchema>
 			}
 		/>
