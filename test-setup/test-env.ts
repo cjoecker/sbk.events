@@ -3,7 +3,6 @@ import "./db.ts";
 import "@testing-library/jest-dom/vitest";
 import deTranslation from "~/locales/en";
 
-
 vi.mock("react-i18next", () => {
 	return {
 		useTranslation: () => {
@@ -27,4 +26,3 @@ vi.mock("react-i18next", () => {
 		},
 	};
 });
-

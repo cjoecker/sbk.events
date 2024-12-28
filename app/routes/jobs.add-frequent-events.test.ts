@@ -1,25 +1,28 @@
-import { loader } from "~/routes/jobs.add-frequent-events";
-import { db } from "~/modules/db.server";
-import { Without } from "type-fest/source/merge-exclusive";
 import { EventFrequency, EventStatus, Event } from "@prisma/client";
-import { addDays, addHours } from "date-fns";
-import { mockDateAdvancingTime, restoreDateAdvancingTime } from "../../test-setup/utils";
+import { addDays } from "date-fns";
 
-const eventMock: Omit<Event, "id" | "createdAt" | "updatedAt"> =
-	{
-		infoUrl: "https://salsa.com",
-		name: "Salsa Event",
-		startDate: new Date(),
-		endDate: new Date(),
-		salsaPercentage: 50,
-		bachataPercentage: 30,
-		kizombaPercentage: 20,
-		likes: 2,
-		status: EventStatus.PUBLISHED,
-		frequency: EventFrequency.WEEKLY,
-		locationId: 1,
-		organizerId:1,
-	};
+import {
+	mockDateAdvancingTime,
+	restoreDateAdvancingTime,
+} from "../../test-setup/utils";
+
+import { db } from "~/modules/db.server";
+import { loader } from "~/routes/jobs.add-frequent-events";
+
+const eventMock: Omit<Event, "id" | "createdAt" | "updatedAt"> = {
+	infoUrl: "https://salsa.com",
+	name: "Salsa Event",
+	startDate: new Date(),
+	endDate: new Date(),
+	salsaPercentage: 50,
+	bachataPercentage: 30,
+	kizombaPercentage: 20,
+	likes: 2,
+	status: EventStatus.PUBLISHED,
+	frequency: EventFrequency.WEEKLY,
+	locationId: 1,
+	organizerId: 1,
+};
 
 describe("add frequent events job", () => {
 	afterEach(async () => {
@@ -34,7 +37,7 @@ describe("add frequent events job", () => {
 
 		await setup();
 		await db.event.createMany({
-			data:[
+			data: [
 				{
 					...eventMock,
 					startDate: eventStartDate,
@@ -45,9 +48,9 @@ describe("add frequent events job", () => {
 					startDate: new Date("2025-01-13 21:30"),
 					endDate: new Date("2025-01-14 03:00"),
 					frequency: EventFrequency.ONE_TIME,
-				}
-			]
-		})
+				},
+			],
+		});
 		await loader();
 		const events = await db.event.findMany({
 			orderBy: {
@@ -60,15 +63,14 @@ describe("add frequent events job", () => {
 		expect(events[2].endDate.getDate()).toBe(eventEndDate.getDate() + 7);
 	});
 	test("create frequent event for all days of the week", async () => {
-		const date = "2025-01-16 12:32:34"
+		const date = "2025-01-16 12:32:34";
 		// thursday
 		mockDateAdvancingTime(date);
 		const today = new Date(date);
 
-
 		await setup();
 		await db.event.createMany({
-			data:[
+			data: [
 				{
 					...eventMock,
 					// Wed
@@ -117,8 +119,8 @@ describe("add frequent events job", () => {
 					startDate: new Date("2025-01-15 03:00"),
 					endDate: new Date("2025-01-16 03:00"),
 				},
-			]
-		})
+			],
+		});
 		await loader();
 		const events = await db.event.findMany({
 			orderBy: {
@@ -139,21 +141,21 @@ describe("add frequent events job", () => {
 		expect(events[5].startDate.getDate()).toBe(addDays(today, 6).getDate());
 		expect(events[6].startDate.getDate()).toBe(addDays(today, 7).getDate());
 	});
-	test("ignore events older than one week",async () => {
+	test("ignore events older than one week", async () => {
 		// thursday
 		mockDateAdvancingTime("2025-01-16 12:32:34");
 		const eventStartDate = new Date("2025-01-12 21:30");
 
 		await setup();
 		await db.event.createMany({
-			data:[
+			data: [
 				{
 					...eventMock,
 					startDate: addDays(eventStartDate, -15),
 					endDate: new Date("2025-01-13 03:00"),
 				},
-			]
-		})
+			],
+		});
 		await loader();
 		const events = await db.event.findMany({
 			orderBy: {
@@ -161,7 +163,7 @@ describe("add frequent events job", () => {
 			},
 		});
 		expect(events.length).toBe(1);
-	})
+	});
 	test("ignore events that already exist", async () => {
 		// thursday
 		mockDateAdvancingTime("2025-01-16 12:32:34");
@@ -169,7 +171,7 @@ describe("add frequent events job", () => {
 
 		await setup();
 		await db.event.createMany({
-			data:[
+			data: [
 				{
 					...eventMock,
 					startDate: eventStartDate,
@@ -178,8 +180,8 @@ describe("add frequent events job", () => {
 					...eventMock,
 					startDate: addDays(eventStartDate, 7),
 				},
-			]
-		})
+			],
+		});
 		await loader();
 		await loader();
 		const events = await db.event.findMany({
@@ -196,7 +198,7 @@ describe("add frequent events job", () => {
 
 		await setup();
 		await db.event.createMany({
-			data:[
+			data: [
 				{
 					...eventMock,
 					startDate: eventStartDate,
@@ -209,8 +211,8 @@ describe("add frequent events job", () => {
 					...eventMock,
 					startDate: addDays(eventStartDate, -14),
 				},
-			]
-		})
+			],
+		});
 		await loader();
 		const events = await db.event.findMany({
 			orderBy: {
@@ -227,7 +229,7 @@ describe("add frequent events job", () => {
 
 		await setup();
 		await db.event.createMany({
-			data:[
+			data: [
 				{
 					...eventMock,
 					startDate: eventStartDate,
@@ -236,8 +238,8 @@ describe("add frequent events job", () => {
 					...eventMock,
 					startDate: addDays(eventStartDate, -14),
 				},
-			]
-		})
+			],
+		});
 		await loader();
 		const events = await db.event.findMany({
 			orderBy: {
@@ -249,7 +251,7 @@ describe("add frequent events job", () => {
 	});
 });
 
-async function setup(){
+async function setup() {
 	await db.organizer.upsert({
 		where: { id: 1 },
 		update: {},

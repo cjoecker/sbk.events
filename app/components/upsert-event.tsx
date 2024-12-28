@@ -1,5 +1,6 @@
 import { getLocalTimeZone, today } from "@internationalized/date";
 import { Button } from "@nextui-org/react";
+import { EventFrequency } from "@prisma/client";
 import { useNavigate, useNavigation } from "@remix-run/react";
 import { FormScope, useField } from "@rvf/react";
 import { useForm } from "@rvf/remix";
@@ -12,11 +13,9 @@ import { AutoComplete } from "~/components/autocomplete";
 import { DatePicker } from "~/components/date-picker";
 import { EnhancedDialog } from "~/components/enhanced-dialog";
 import { Input } from "~/components/input";
+import { Select } from "~/components/select";
 import { TimeInput } from "~/components/time-input";
 import { intWithinRange } from "~/utils/validation";
-import { EventFrequency } from "@prisma/client";
-import { Select } from "~/components/select";
-
 
 export const eventSchema = z
 	.object({
@@ -33,9 +32,9 @@ export const eventSchema = z
 		salsaPercentage: intWithinRange(0, 100),
 		bachataPercentage: intWithinRange(0, 100),
 		kizombaPercentage: intWithinRange(0, 100),
-		frequency: z.enum(["ONE_TIME", "WEEKLY"],{
-			message: "mandatoryField"
-		})
+		frequency: z.enum(["ONE_TIME", "WEEKLY"], {
+			message: "mandatoryField",
+		}),
 	})
 	.superRefine((val, ctx) => {
 		if (
@@ -194,7 +193,7 @@ export function UpsertEvent({
 						{ id: "ONE_TIME", name: t("oneTime") },
 						{ id: "WEEKLY", name: t("weekly") },
 					]}
-					/>
+				/>
 				<div className="flex flex-col gap-1">
 					<label className="text-sm text-default-500">
 						{t("salsaBachataKizomba")}

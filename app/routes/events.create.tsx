@@ -53,7 +53,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		salsaPercentage,
 		bachataPercentage,
 		kizombaPercentage,
-		frequency
+		frequency,
 	} = result.data;
 	const locationIdNumber = locationId ? Number.parseInt(locationId) : undefined;
 	const isNewLocation = !locationIdNumber;
@@ -108,7 +108,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			bachataPercentage,
 			kizombaPercentage,
 			status,
-			frequency
+			frequency,
 		},
 	});
 	if (!isAdmin) {

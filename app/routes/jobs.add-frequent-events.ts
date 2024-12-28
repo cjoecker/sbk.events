@@ -1,9 +1,9 @@
-import { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
-import { addDays, startOfDay, startOfWeek } from "date-fns";
-import { db } from "~/modules/db.server";
 import { EventFrequency, EventStatus, Event } from "@prisma/client";
+import { addDays, startOfDay } from "date-fns";
 
-type NewEvent = Omit<Event, "id" | "createdAt" | "updatedAt"> &{
+import { db } from "~/modules/db.server";
+
+type NewEvent = Omit<Event, "id" | "createdAt" | "updatedAt"> & {
 	id: undefined;
 	createdAt: undefined;
 	updatedAt: undefined;
@@ -40,7 +40,6 @@ export const loader = async () => {
 		}
 
 		const nextEventStartDate = addDays(today, daysToAdd);
-
 
 		const nextEventStartDateTime = new Date(
 			nextEventStartDate.getFullYear(),

@@ -100,7 +100,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 		salsaPercentage,
 		bachataPercentage,
 		kizombaPercentage,
-		frequency
+		frequency,
 	} = result.data;
 	const locationIdNumber = locationId ? Number.parseInt(locationId) : undefined;
 
@@ -150,7 +150,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 			salsaPercentage,
 			bachataPercentage,
 			kizombaPercentage,
-			frequency
+			frequency,
 		},
 	});
 	return redirect("/events");
