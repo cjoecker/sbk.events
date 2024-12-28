@@ -24,7 +24,7 @@ model Event {
   kizombaPercentage Int
   likes             Int            @default(0)
   status            EventStatus    @default(PENDING_CREATION_APPROVAL)
-  frequency         EventFrequency @default(ONE_TIME)
+  frequency         EventFrequency @default(ONCE)
 }
 
 enum EventStatus {
