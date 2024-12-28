@@ -48,4 +48,5 @@ export default {
 	once: "Una vez",
 	weekly: "Semanal",
 	frequency: "Frecuencia",
+	openInNewTab: "Abrir en nueva pestaña",
 };
