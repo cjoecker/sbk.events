@@ -49,7 +49,7 @@ export const loader = async () => {
 			event.startDate.getMinutes()
 		);
 
-		const eventAlreadyExists = futureEvents.some((e) => {
+		const eventAlreadyExistsInFutureEvents = futureEvents.some((e) => {
 			return (
 				e.startDate.getTime() === nextEventStartDateTime.getTime() &&
 				e.organizerId === event.organizerId
@@ -63,7 +63,7 @@ export const loader = async () => {
 			);
 		});
 
-		if (!eventAlreadyExists && !eventAlreadyExistsInNewEvents) {
+		if (!eventAlreadyExistsInFutureEvents && !eventAlreadyExistsInNewEvents) {
 			const eventEndWeekday = event.endDate.getDay();
 			let daysToAdd = eventEndWeekday - todayWeekDay;
 			if (daysToAdd <= 0) {

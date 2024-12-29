@@ -1,7 +1,7 @@
 import { Select as _Select, SelectItem } from "@nextui-org/react";
 import { SelectProps } from "@nextui-org/react";
 import { FormScope, useField } from "@rvf/react";
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export type _SelectProps = {
@@ -15,7 +15,7 @@ export const Select = ({ label, scope, options, ...props }: _SelectProps) => {
 	const { onChange, onBlur, name, form } = field.getInputProps();
 
 	const defaultValue = field.getInputProps().defaultValue as string;
-	const [value, setValue] = React.useState(new Set([defaultValue]));
+	const [value, setValue] = useState(new Set([defaultValue]));
 	const hasError = field.error() !== null;
 	const { t } = useTranslation();
 	const translatedError = hasError ? t(field.error() ?? "") : undefined;
