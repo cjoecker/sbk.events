@@ -12,7 +12,7 @@ import {
 } from "@remix-run/react";
 import { captureRemixErrorBoundaryError, withSentry } from "@sentry/remix";
 import { LoaderFunctionArgs, LinksFunction, MetaFunction } from "@vercel/remix";
-import { useEffect } from "react";
+import { ReactNode, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useChangeLanguage } from "remix-i18next/react";
 
@@ -94,7 +94,7 @@ export const links: LinksFunction = () => {
 	];
 };
 
-export function Layout({ children }: { children: React.ReactNode }) {
+export function Layout({ children }: { children: ReactNode }) {
 	const loaderData = useLoaderData<typeof loader>();
 	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 	const locale = loaderData?.locale ?? fallbackLng;

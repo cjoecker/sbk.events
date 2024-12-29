@@ -1,0 +1,8 @@
+{
+	"crons": [
+		{
+			"path": "/jobs/add-frequent-events",
+			"schedule": "0 2 * * 0"
+		}
+	]
+}

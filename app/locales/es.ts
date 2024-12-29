@@ -45,4 +45,8 @@ export default {
 	blog: "Blog",
 	posts: "Publicaciones",
 	eventsInValencia: "Eventos en Valencia",
+	once: "Una vez",
+	weekly: "Semanal",
+	frequency: "Frecuencia",
+	openInNewTab: "Abrir en nueva pestaña",
 };

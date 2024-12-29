@@ -10,6 +10,7 @@ export default defineConfig({
 		envOnlyMacros(),
 		remix({
 			presets: [vercelPreset()],
+			ignoredRouteFiles: ["**/*.test.*"],
 		}),
 		tsconfigPaths(),
 		sentryVitePlugin({

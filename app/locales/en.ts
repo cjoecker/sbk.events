@@ -46,4 +46,8 @@ export default {
 	blog: "Blog",
 	posts: "Posts",
 	eventsInValencia: "Events in Valencia",
+	once: "One time",
+	weekly: "Weekly",
+	frequency: "Frequency",
+	openInNewTab: "Open in new tab",
 };

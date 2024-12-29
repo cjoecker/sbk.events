@@ -1,9 +1,12 @@
 import { getLocalTimeZone, today } from "@internationalized/date";
 import { Button } from "@nextui-org/react";
+import { EventFrequency } from "@prisma/client";
 import { useNavigate, useNavigation } from "@remix-run/react";
-import { useField } from "@rvf/react";
+import { FormScope, useField } from "@rvf/react";
 import { useForm } from "@rvf/remix";
 import { withZod } from "@rvf/zod";
+import clsx from "clsx";
+import { LinkSquare02Icon } from "hugeicons-react";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
@@ -12,6 +15,7 @@ import { AutoComplete } from "~/components/autocomplete";
 import { DatePicker } from "~/components/date-picker";
 import { EnhancedDialog } from "~/components/enhanced-dialog";
 import { Input } from "~/components/input";
+import { Select } from "~/components/select";
 import { TimeInput } from "~/components/time-input";
 import { intWithinRange } from "~/utils/validation";
 
@@ -30,6 +34,9 @@ export const eventSchema = z
 		salsaPercentage: intWithinRange(0, 100),
 		bachataPercentage: intWithinRange(0, 100),
 		kizombaPercentage: intWithinRange(0, 100),
+		frequency: z.enum(["ONCE", "WEEKLY"], {
+			message: "mandatoryField",
+		}),
 	})
 	.superRefine((val, ctx) => {
 		if (
@@ -103,6 +110,12 @@ export function UpsertEvent({
 	};
 	const sumError = form.formState.fieldErrors.sumError;
 
+	const isLinkButtonDisabled =
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+		form.field("infoUrl").value()?.length === 0 ||
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+		form.field("infoUrl").value() === undefined;
+
 	useEffect(() => {
 		// show error on field blur
 		form.field("sumError" as never).setTouched(true);
@@ -136,6 +149,25 @@ export function UpsertEvent({
 					scope={form.scope("infoUrl")}
 					description={t("socialMediaPosterEtc")}
 					isRequired
+					endContent={
+						<a
+							aria-label={t("openInNewTab")}
+							className={`focus:outline-none ${
+								isLinkButtonDisabled ? "opacity-40" : "cursor-pointer"
+							}`}
+							type="button"
+							href={form.field("infoUrl").value()}
+							target="_blank"
+							rel="noreferrer"
+						>
+							<LinkSquare02Icon
+								size={18}
+								className={`pointer-events-none ${clsx(
+									isLinkButtonDisabled && "opacity-30"
+								)}`}
+							/>
+						</a>
+					}
 				/>
 				<div className="flex gap-2">
 					<DatePicker
@@ -179,6 +211,15 @@ export function UpsertEvent({
 					selectorIcon={null}
 					isClearable={false}
 					isRequired
+				/>
+				<Select
+					isRequired
+					label={t("frequency")}
+					scope={form.scope("frequency") as FormScope<EventFrequency>}
+					options={[
+						{ id: "ONCE", name: t("once") },
+						{ id: "WEEKLY", name: t("weekly") },
+					]}
 				/>
 				<div className="flex flex-col gap-1">
 					<label className="text-sm text-default-500">

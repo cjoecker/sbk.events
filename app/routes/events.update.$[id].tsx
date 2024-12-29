@@ -46,6 +46,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 			salsaPercentage: true,
 			bachataPercentage: true,
 			kizombaPercentage: true,
+			frequency: true,
 		},
 	});
 	assert(event, "Event not found");
@@ -66,6 +67,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 		salsaPercentage: event.salsaPercentage,
 		bachataPercentage: event.bachataPercentage,
 		kizombaPercentage: event.kizombaPercentage,
+		frequency: event.frequency,
 	};
 	const autocompleteOptions = await getAutocompleteOptions();
 	return {
@@ -98,6 +100,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 		salsaPercentage,
 		bachataPercentage,
 		kizombaPercentage,
+		frequency,
 	} = result.data;
 	const locationIdNumber = locationId ? Number.parseInt(locationId) : undefined;
 
@@ -147,6 +150,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 			salsaPercentage,
 			bachataPercentage,
 			kizombaPercentage,
+			frequency,
 		},
 	});
 	return redirect("/events");
