@@ -65,6 +65,7 @@ export default tseslint.config(
 			"e2e-tests/.auth/",
 			"eslint.config.js",
 			"postcss.config.js",
+			".venv",
 		],
 	},
 	{
