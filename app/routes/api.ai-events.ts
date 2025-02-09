@@ -90,9 +90,6 @@ For your task, you should generate an event object following this guide:
 - The image and message you get might or might not be related to a social event. It can be a random image.
 - The message should only contain information about a single event for one day. If not, the confidence level should be lower than 50.
 - The information cannot be about a congress or festival. It must be a social event.
-- The event might exist already. If it does, you should return a confidence level lower than 50. 
-This are the future events already in the database:
-{{ futureEventNames }}
 
 2. **Date, start and end time**: 
 - We are in the year ${new Date().getFullYear()} 
@@ -112,18 +109,18 @@ E.g. if the title says something like "Salsa Something", you can assume 100% sal
 3. **Salsa, bachata and kizomba percentages**: 
 - The event name should be in Title Clase.
 
-4. **Organize Name**:
+4. **Location Name**:
+- Prefer the locations names as they are saved in the database.
+- If the location you recognized is not in the list, is ok to return a new organizer that is not in the list.
+- This are the locations area already saved in the database:
+{{ locationNames }}
+
+5. **Organize Name**:
 - Prefer the organizers names as they are saved in the database.
 - If the organizer you recognized is not in the list, is ok to return a new organizer that is not in the list.
 - If you cannot recognize the organizer, use the location name as organizer. 
 - This is the organizers already saved in the database:
 {{ organizerNames }}
-
-5. **Organize Name**:
-- Prefer the locations names as they are saved in the database.
-- If the location you recognized is not in the list, is ok to return a new organizer that is not in the list.
-- This are the locations area already saved in the database:
-{{ locationNames }}
 
 {{ socialMediaMessage }}
 `;
@@ -308,29 +305,6 @@ async function getLocationNames() {
 		.join("");
 }
 
-async function getFutureEventNames() {
-	const futureEvents = await db.event.findMany({
-		where: {
-			startDate: {
-				gte: new Date(),
-			},
-			location: {
-				city: {
-					name: CITY,
-				},
-			},
-		},
-		select: { organizer: true, startDate: true },
-	});
-	return futureEvents
-		.map((event) => {
-			return `${format(event.startDate, "dd/MM/yy hh:mm")} - ${
-				event.organizer.name
-			} \n`;
-		})
-		.join("");
-}
-
 async function getMessagesContent(
 	details: string | undefined,
 	image: string | undefined
@@ -342,12 +316,10 @@ async function getMessagesContent(
 
 	const organizerNames = await getOrganizerNames();
 	const locationNames = await getLocationNames();
-	const futureEventNames = await getFutureEventNames();
 
 	const messageParameters = {
 		organizerNames,
 		locationNames,
-		futureEventNames,
 		socialMediaMessage,
 	};
 
