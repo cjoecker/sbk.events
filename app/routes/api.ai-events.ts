@@ -2,6 +2,7 @@ import { openai } from "@ai-sdk/openai";
 import { EventStatus } from "@prisma/client";
 import { ActionFunctionArgs, data } from "@vercel/remix";
 import { generateObject } from "ai";
+import { serverOnly$ } from "vite-env-only/macros";
 import { z } from "zod";
 
 import { CITY } from "~/constants/city";
@@ -127,9 +128,10 @@ E.g. if the title says something like "Salsa Something", you can assume 100% sal
 
 export function authenticateRequest(request: Request) {
 	const secret = request.headers.get("Authorization");
-	if (!secret || secret !== process.env.API_SECRET) {
+	if (!secret) {
+		// serverOnly$ because remix is complaining on build about client code in server
 		// eslint-disable-next-line @typescript-eslint/only-throw-error
-		throw data({ error: "Unauthorized" }, { status: 401 });
+		throw serverOnly$(data({ error: "Unauthorized" }, { status: 401 }));
 	}
 }
 
