@@ -128,7 +128,7 @@ E.g. if the title says something like "Salsa Something", you can assume 100% sal
 
 export function authenticateRequest(request: Request) {
 	const secret = request.headers.get("Authorization");
-	if (!secret) {
+	if (!secret || secret !== process.env.API_SECRET) {
 		// serverOnly$ because remix is complaining on build about client code in server
 		// eslint-disable-next-line @typescript-eslint/only-throw-error
 		throw serverOnly$(data({ error: "Unauthorized" }, { status: 401 }));
