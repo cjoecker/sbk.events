@@ -1,6 +1,6 @@
 import { openai } from "@ai-sdk/openai";
 import { EventStatus } from "@prisma/client";
-import { ActionFunctionArgs, json } from "@vercel/remix";
+import { ActionFunctionArgs, data } from "@vercel/remix";
 import { generateObject } from "ai";
 import { z } from "zod";
 
@@ -128,13 +128,13 @@ E.g. if the title says something like "Salsa Something", you can assume 100% sal
 export function authenticateRequest(request: Request) {
 	const secret = request.headers.get("Authorization");
 	if (!secret || secret !== process.env.API_SECRET) {
-		// eslint-disable-next-line @typescript-eslint/only-throw-error,@typescript-eslint/no-deprecated
-		throw json({ error: "Unauthorized" }, { status: 401 });
+		// eslint-disable-next-line @typescript-eslint/only-throw-error
+		throw data({ error: "Unauthorized" }, { status: 401 });
 	}
 }
 
 const aiEventSchema = z.object({
-	confidenceLevel: z.number().min(0).max(100),
+	confidenceLevel: intWithinRange(0, 100),
 	name: z.string().trim().min(1),
 	organizerName: z.string().min(1),
 	date: z.string(),
