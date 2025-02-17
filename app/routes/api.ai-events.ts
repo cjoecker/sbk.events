@@ -47,19 +47,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			error,
 		};
 	}
-	const { alreadyExists, isSetToPublished } = await eventAlreadyExists(
+	await deleteExistingEvent(
 		object.date,
 		object.startTime,
 		object.locationName
 	);
-	if (alreadyExists) {
-		const error = `Event from ${object.organizerName} at ${object.date} already exists`;
-		console.info(error);
-		return {
-			alreadyExists,
-			isSetToPublished,
-		};
-	}
 
 	const savedEvent = await saveEvent(object, data.infoUrl);
 
@@ -237,15 +229,11 @@ async function saveEvent(aiEvent: AiEvent, infoUrl: string) {
 	});
 }
 
-async function eventAlreadyExists(
+async function deleteExistingEvent(
 	date: string,
 	time: string,
-	locationName: string
+	locationName: string,
 ) {
-	const response = {
-		alreadyExists: false,
-		isSetToPublished: false,
-	};
 	const startDate = new Date(`${date}T${time}Z`);
 	const event = await db.event.findFirst({
 		where: {
@@ -264,18 +252,11 @@ async function eventAlreadyExists(
 	});
 	const exists = !!event;
 	if (exists && event.status !== EventStatus.PUBLISHED) {
-		await db.event.update({
+		await db.event.delete({
 			where: { id: event.id },
-			data: { status: EventStatus.PUBLISHED },
 		});
-		response.isSetToPublished = true;
-		console.info(
-			`Event from ${locationName} at ${date} was not published. Now it is published`
-		);
+		console.info("Deleted existing event duplicate");
 	}
-	response.alreadyExists = exists;
-
-	return response;
 }
 
 async function getOrganizerNames() {
