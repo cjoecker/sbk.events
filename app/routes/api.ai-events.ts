@@ -97,6 +97,7 @@ For your task, you must generate an event object following this guide:
 - If there is no end time, assume the event ends at 3:00 if it starts at night.
 - If the event starts in the morning or evening, assume it ends 3 hours after the last activity mentioned or the start time.
 - If there is the time for the workshops/classes, give me the as start time the time for the party.
+- If an event starts after midnight but close to 00:00, say the start time is 23:30.
 - Give the date as YYYY-MM-DD. 
 - Give the time as HH:MM.
 
